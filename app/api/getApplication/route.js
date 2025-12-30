@@ -10,7 +10,7 @@ export async function GET(req) {
         if (docSnap.exists()) {
           return new Response(JSON.stringify({success: true, data: docSnap.data()}), {status: 200})
         } else {
-          return new Response(JSON.stringify({success: false, error: "Cannot find user"}), {status: 500})
+          return new Response(JSON.stringify({success: false, error: "Cannot find user"}), {status: 404})
         }
 
     } catch (error) {
