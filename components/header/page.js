@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,11 +13,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { SignInButton, SignedIn, SignedOut } from '@clerk/nextjs';
+import { SignedIn, SignedOut } from '@clerk/nextjs';
 
 const sections = ['About', 'Tracks', 'Sponsors/Partners', 'FAQs'];
 
 function Header() {
+  const router = useRouter();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -38,6 +40,11 @@ function Header() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const handleLoginClick = () => {
+    handleCloseNavMenu();
+    router.push('/sign-in');
   };
 
   return (
@@ -134,44 +141,42 @@ function Header() {
               ))}
               <SignedOut>
                 <Box sx={{ p: 1, display: 'flex', justifyContent: 'center' }}>
-                  <SignInButton mode="modal">
-                    <Button
-                      disableRipple
-                      variant="outlined"
-                      onClick={handleCloseNavMenu}
-                      sx={{
+                  <Button
+                    disableRipple
+                    variant="outlined"
+                    onClick={handleLoginClick}
+                    sx={{
+                      color: 'black',
+                      borderColor: 'black',
+                      borderWidth: '2px',
+                      borderRadius: '8px',
+                      fontFamily: 'var(--font-cinzel-bold)',
+                      fontWeight: 700,
+                      textTransform: 'none',
+                      width: '100%',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
                         color: 'black',
                         borderColor: 'black',
                         borderWidth: '2px',
-                        borderRadius: '8px',
-                        fontFamily: 'var(--font-cinzel-bold)',
-                        fontWeight: 700,
-                        textTransform: 'none',
-                        width: '100%',
-                        '&:hover': {
-                          backgroundColor: 'transparent',
-                          color: 'black',
-                          borderColor: 'black',
-                          borderWidth: '2px',
-                        },
-                        '&:focus': {
-                          outline: 'none',
-                          backgroundColor: 'transparent',
-                          color: 'black',
-                          borderColor: 'black',
-                          borderWidth: '2px',
-                        },
-                        '&:active': {
-                          backgroundColor: 'transparent',
-                          color: 'black',
-                          borderColor: 'black',
-                          borderWidth: '2px',
-                        },
-                      }}
-                    >
-                      Login
-                    </Button>
-                  </SignInButton>
+                      },
+                      '&:focus': {
+                        outline: 'none',
+                        backgroundColor: 'transparent',
+                        color: 'black',
+                        borderColor: 'black',
+                        borderWidth: '2px',
+                      },
+                      '&:active': {
+                        backgroundColor: 'transparent',
+                        color: 'black',
+                        borderColor: 'black',
+                        borderWidth: '2px',
+                      },
+                    }}
+                  >
+                    Login
+                  </Button>
                 </Box>
               </SignedOut>
             </Menu>
@@ -231,43 +236,42 @@ function Header() {
               </Button>
             ))}
             <SignedOut>
-              <SignInButton mode="modal">
-                <Button
-                  disableRipple
-                  variant="outlined"
-                  sx={{
-                    my: 2,
+              <Button
+                disableRipple
+                variant="outlined"
+                onClick={handleLoginClick}
+                sx={{
+                  my: 2,
+                  color: 'black',
+                  borderColor: 'black',
+                  borderWidth: '2px',
+                  borderRadius: '8px',
+                  fontFamily: 'var(--font-cinzel-bold)',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
                     color: 'black',
                     borderColor: 'black',
                     borderWidth: '2px',
-                    borderRadius: '8px',
-                    fontFamily: 'var(--font-cinzel-bold)',
-                    fontWeight: 700,
-                    textTransform: 'none',
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                      color: 'black',
-                      borderColor: 'black',
-                      borderWidth: '2px',
-                    },
-                    '&:focus': {
-                      outline: 'none',
-                      backgroundColor: 'transparent',
-                      color: 'black',
-                      borderColor: 'black',
-                      borderWidth: '2px',
-                    },
-                    '&:active': {
-                      backgroundColor: 'transparent',
-                      color: 'black',
-                      borderColor: 'black',
-                      borderWidth: '2px',
-                    },
-                  }}
-                >
-                  Login
-                </Button>
-              </SignInButton>
+                  },
+                  '&:focus': {
+                    outline: 'none',
+                    backgroundColor: 'transparent',
+                    color: 'black',
+                    borderColor: 'black',
+                    borderWidth: '2px',
+                  },
+                  '&:active': {
+                    backgroundColor: 'transparent',
+                    color: 'black',
+                    borderColor: 'black',
+                    borderWidth: '2px',
+                  },
+                }}
+              >
+                Login
+              </Button>
             </SignedOut>
           </Box>
         </Toolbar>
