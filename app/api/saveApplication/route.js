@@ -10,15 +10,18 @@ export async function POST(req) {
           'userId', 
           'firstName', 
           'lastName', 
-          'email', 
-          'phone', 
           'age', 
-          'country', 
-          'gender', 
-          'ethnicity', 
+          'phone', 
+          'email', 
           'school', 
           'major', 
+          'gradYear',
           'levelOfStudy', 
+          'country', 
+          'gender', 
+          'numHackathon',
+          // 'resume',
+          'ethnicity', 
           'shirtSize', 
           'disclaimer', 
           'codeOfConduct', 
@@ -44,21 +47,25 @@ export async function POST(req) {
         const newUserObject = {
             firstName: data.firstName,
             lastName: data.lastName,
+            age: data.age,
+            phone: data.phone,
             email: data.email,
-            gender: data.gender,
-            ethnicity: data.ethnicity,
             school: data.school,
             major: data.major,
+            gradYear: data.gradYear,
             levelOfStudy: data.levelOfStudy,
+            country: data.country,
+            gender: data.gender,
+            numHackathon: data.numHackathon,
+            ethnicity: data.ethnicity,
             shirtSize: data.shirtSize,
             disclaimer: data.disclaimer,
             codeOfConduct: data.codeOfConduct,
             privacyPolicy: data.privacyPolicy,
             otherSchool: data.otherSchool || '',
-            firstHackathon: data.firstHackathon || false,
+            firstHackathon: data.numHackathon === 0 || false,
             dietaryRestrictions: data.dietaryRestrictions || [],
             otherAccommodations: data.otherAccommodations || '',
-            fileName: data.fileName || '',
             notifications: data.notifications || false
         };
 
@@ -66,12 +73,12 @@ export async function POST(req) {
         await setDoc(userRef, newUserObject);
 
         return new Response(JSON.stringify({
-            message: 'User status created/updated successfully',
+            message: 'User application created/updated successfully',
             data: {userId: data.userId}
         }), {status: 200});
 
     } catch (error) {
-        console.error('Detailed error creating/updating user status:', error);
+        console.error('Error creating/updating user application:', error);
         return new Response(JSON.stringify({
             error: 'Error updating user status',
             details: error.message
