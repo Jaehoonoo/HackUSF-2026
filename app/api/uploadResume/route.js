@@ -22,12 +22,20 @@ export async function POST(request) {
     console.log(`File Type: ${resume.type}`)
 
     // check file constraints
-    if (resume.size / (1024 * 1024) > 1 || (resume.type !== "application\/pdf" && resume.type !== "application\/docx")) {
+    if (resume.size / (1024 * 1024) > 1 ) {
       return NextResponse.json(
         { 
-          error: "Resume file does not meet constraints",
-          fileType: resume.type,
+          error: "Resume file too large (Max 1MB)",
           fileSize: resume.size
+         },
+         { status: 400 }
+      )
+    }
+    if (resume.type !== "application\/pdf" && resume.type !== "application\/docx") {
+      return NextResponse.json(
+        { 
+          error: "Resume file has to be pdf or docx",
+          fileType: resume.type,
          },
          { status: 400 }
       )
