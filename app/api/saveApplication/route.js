@@ -1,5 +1,6 @@
-import {doc, setDoc, updateDoc} from "firebase/firestore";
+import {doc, setDoc, updateDoc, getDoc} from "firebase/firestore";
 import {db} from "@/firebase";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try {
@@ -43,6 +44,7 @@ export async function POST(req) {
 
 
         const userRef = doc(db, 'users', data.userId)
+        const userSnap = await getDoc(userRef)
 
         const newUserObject = {
             firstName: data.firstName,
@@ -70,7 +72,11 @@ export async function POST(req) {
         };
 
         // setDoc creates doc if doesnt exist, and updates doc if exists
-        await setDoc(userRef, newUserObject);
+        if (userSnap.exists()) {
+          await setDoc(userRef, newUserObject);
+        } else {
+          return NextResponse.json({error: "User does not exist"}, {status: 404})
+        }
 
         return new Response(JSON.stringify({
             message: 'User application created/updated successfully',
