@@ -1,107 +1,61 @@
-import {db} from "@/firebase"; // Firestore database instance
-import {doc, updateDoc} from "firebase/firestore";
+import { NextResponse } from 'next/server'
+import { getSignedUrlForUpload } from '@/utils/r2'
 
-import {writeFile, mkdir, unlink} from "fs/promises";
-import {createReadStream, existsSync} from "fs";
-import path from "path";
+// this endpoint accepts formData that contains:
+// userId: user's unique ID
+// userName: {First Name} {Last Name}
+// resume: resume binary file
 
-import initializeGoogleServiceAccount from "@/googleserviceaccount";
 
-// Initialize Google Drive client
-const drive = initializeGoogleServiceAccount();
-
-const FOLDER_ID = process.env.NEXT_PUBLIC_FOLDER_ID
+// a user's resume will be stored a file called "{First Name} {Last Name} - {userId}"
+// this ensures consistency between users and offers a systematic way to update resumes
 
 export async function POST(request) {
-    try {
-        // Use /tmp directory which is writable in Vercel
-        const uploadsDir = path.join("/tmp", "uploads");
-        if (!existsSync(uploadsDir)) {
-            await mkdir(uploadsDir, {recursive: true});
-        }
+  try {
+    const formData = await request.formData();
+    const userId = formData.get("userId")
+    const userName = formData.get("userName") // user's First Last name
+    const resume = formData.get("resume")
 
-        const formData = await request.formData();
-        const userId = formData.get("userId");
-        const file = formData.get("resume");
+    // console.log(typeof(resume))
+    console.log(`Uploading resume\nuserName: ${userName}\nuserId: ${userId}`)
+    console.log(`File Type: ${resume.type}`)
 
-        if (!file || !userId) {
-            return new Response(
-                JSON.stringify({error: "Missing file or userId"}),
-                {status: 400}
-            );
-        }
-
-        if (file.size > 500 * 1024) {
-            return new Response(
-                JSON.stringify({error: "File size exceeds 500KB limit"}),
-                {status: 400}
-            );
-        }
-
-        // Get file details
-        const fileName = file.name;
-        const mimeType = file.type;
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        // Save to /tmp directory
-        const filePath = path.join(uploadsDir, fileName);
-        await writeFile(filePath, buffer);
-
-        // Log for debugging
-        console.log(`File saved to ${filePath}, size: ${buffer.length} bytes`);
-
-        // Initialize Drive just before using it (to catch auth errors)
-        const drive = initializeGoogleServiceAccount();
-        console.log("Google Drive client initialized successfully");
-
-        const fileMetadata = {
-            name: fileName,
-            parents: [process.env.NEXT_PUBLIC_FOLDER_ID],
-        };
-
-        const media = {
-            mimeType: mimeType,
-            body: createReadStream(filePath),
-        };
-
-        console.log("Attempting to upload to Google Drive...");
-        const uploadResponse = await drive.files.create({
-            requestBody: fileMetadata,
-            media: media,
-            fields: "id, webViewLink",
-        });
-
-        console.log("File uploaded to Google Drive successfully");
-        const fileUrl = uploadResponse.data.webViewLink;
-
-        // Update Firestore
-        const userRef = doc(db, "users", userId);
-        await updateDoc(userRef, {resumeURL: fileUrl});
-        console.log("Firestore updated successfully");
-
-        // Delete temp file
-        await unlink(filePath);
-
-        return new Response(
-            JSON.stringify({
-                message: 'File uploaded successfully!',
-                fileUrl
-            }),
-            {status: 200}
-        );
-    } catch (error) {
-        console.error("Error during file upload:", error.message);
-        console.error("Stack trace:", error.stack);
-
-        // More detailed error response
-        return new Response(
-            JSON.stringify({
-                error: error.message,
-                stack: error.stack,
-                location: "File upload API route"
-            }),
-            {status: 500}
-        );
+    // check file constraints
+    if (resume.size / (1024 * 1024) > 1 || (resume.type !== "application\/pdf" && resume.type !== "application\/docx")) {
+      return NextResponse.json(
+        { 
+          error: "Resume file does not meet constraints",
+          fileType: resume.type,
+          fileSize: resume.size
+         },
+         { status: 400 }
+      )
     }
+
+    // create address at which resume is saved
+    // will overwrite old file with new file
+    const signedUrl = await getSignedUrlForUpload(`${userName} - ${userId}`, resume.type)
+
+    // write resume's content to address
+    await fetch(signedUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': resume.type,
+      },
+      body: resume,
+      duplex: "half"
+    });  
+
+    return NextResponse.json({
+      message: "Resume upload success!",
+      fileUrl: signedUrl
+    })
+
+  } catch (e) {
+    return NextResponse.json(
+      { error: `Error uploading Resume: ${e}`},
+      { status: 500 }
+    )
+  }
 }
