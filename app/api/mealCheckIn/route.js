@@ -3,8 +3,9 @@ import { adminDb } from "@/firebaseadmin";
 export async function POST(req) {
   try {
     const body = await req.json();
+    console.log(body);
     const { userId, currentMealGroup, currentMeal } = body;
-    const validMeals = ["breakfast", "lunch1", "lunch2", "dinner"];
+    const validMeals = ["breakfast", "lunch1", "lunch2", "dinner", "midnightSnack"];
 
     if (!userId || typeof userId !== "string" ||
       !currentMealGroup || typeof currentMealGroup !== "string" ||
@@ -35,12 +36,12 @@ export async function POST(req) {
     }
 
     const userData = docSnapshot.data();
-    const userLunchGroup = userData.lunchGroup;
+    const userMealGroup = userData.mealGroup;
 
-    if (userLunchGroup !== currentLunchGroup) {
+    if (userMealGroup !== currentMealGroup) {
       return new Response(JSON.stringify({
         success: false,
-        message: `Not ${userData.firstName} ${userData.lastName}'s lunch group`
+        message: `Not ${userData.firstName} ${userData.lastName}'s meal group`
       }), { status: 200 });
     }
 

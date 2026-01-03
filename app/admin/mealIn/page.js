@@ -22,22 +22,20 @@ export default function MealPage() {
   const [mealInResult, setMealInResult] = useState(null);
 
   const markAsMealed = async (userId, currentMeal, currentMealGroup) => {
-    // try {
-    //   const response = await fetch(`/api/lunchCheckIn`, {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       userId: userId,
-    //       currentMeal: currentMeal,
-    //       currentMealGroup: currentMealGroup
-    //     })
-    //   });
-    //   return await response.json();
-    // } catch (error) {
-    //   console.error("Error marking user as Mealed:", error);
-    //   return null;
-    // }
-    window.alert(`UserId: ${userId}`);
-    return null;
+    try {
+      const response = await fetch(`/api/mealCheckIn`, {
+        method: "POST",
+        body: JSON.stringify({
+          userId: userId,
+          currentMeal: currentMeal,
+          currentMealGroup: currentMealGroup
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Error marking user as Mealed:", error);
+      return null;
+    }
   };
 
   // This function will be called when QR is successfully scanned
@@ -74,10 +72,12 @@ export default function MealPage() {
   // Handle dropdown changes
   const handleMealChange = (event) => {
     setCurrentMeal(event.target.value);
+    // setMealInResult(null);
   };
 
   const handleGroupChange = (event) => {
     setCurrentMealGroup(event.target.value);
+    // setMealInResult(null);
   };
 
   return (
@@ -116,21 +116,22 @@ export default function MealPage() {
               variant="outlined">
               <MenuItem value="lunch1">Lunch 1</MenuItem>
               <MenuItem value="dinner">Dinner</MenuItem>
+              <MenuItem value="midnightSnack">MidnightSnack</MenuItem>
               <MenuItem value="breakfast">Breakfast</MenuItem>
               <MenuItem value="lunch2">Lunch 2</MenuItem>
             </Select>
           </FormControl>
 
           <FormControl fullWidth>
-            <InputLabel id="meal-group-label">Meal Group</InputLabel>
+            <InputLabel id="meal-group-label">Group Name</InputLabel>
             <Select
               labelId="meal-group-label"
               id="group"
-              label="Meal Group"
+              label="Group Name"
               value={currentMealGroup}
               onChange={handleGroupChange}
               variant="outlined">
-              <MenuItem value="Priority">Priority</MenuItem>
+              <MenuItem value="Gods">Gods</MenuItem>
               <MenuItem value="Group 1">Group 1</MenuItem>
               <MenuItem value="Group 2">Group 2</MenuItem>
               <MenuItem value="Group 3">Group 3</MenuItem>
@@ -139,7 +140,7 @@ export default function MealPage() {
         </Box>
 
         {/* Status Messages */}
-        {(!currentMeal || !currentLunchGroup) && (
+        {(!currentMeal || !currentMealGroup) && (
           <Alert severity="info" sx={{ width: "100%" }}>
             Please select both meal type and location group before scanning
           </Alert>

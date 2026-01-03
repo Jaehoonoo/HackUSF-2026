@@ -3,7 +3,7 @@ import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import { Box, Button, CircularProgress } from '@mui/material';
 import Image from 'next/image';
 
-const QRScannerComponent = ({ onScanSuccess, onScanError }) => {
+const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0 }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState(null);
   const [error, setError] = useState(null);
@@ -17,6 +17,20 @@ const QRScannerComponent = ({ onScanSuccess, onScanError }) => {
   const ignoreScanRef = useRef(false);
   const lastScannedRef = useRef(null);
   const scanningInProgressRef = useRef(false);
+
+  const resetScannerState = () => {
+    setScanResult(null);
+    setError(null);
+    setIsPaused(false);
+    setLastFrameUrl('');
+    ignoreScanRef.current = false;
+    lastScannedRef.current = null;
+    scanningInProgressRef.current = false;
+
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  };
 
 
 
@@ -37,6 +51,7 @@ const QRScannerComponent = ({ onScanSuccess, onScanError }) => {
     };
   }, []);
 
+
   // Find and store the video element after scanner starts
   useEffect(() => {
     if (isScanning) {
@@ -49,6 +64,11 @@ const QRScannerComponent = ({ onScanSuccess, onScanError }) => {
       }, 500);
     }
   }, [isScanning]);
+
+  useEffect(() => {
+    if (resetSignal === 0) return;
+    resetScannerState();
+  }, [resetSignal]);
 
   // Function to capture current frame
   const captureFrame = () => {
