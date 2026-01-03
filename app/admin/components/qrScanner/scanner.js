@@ -3,7 +3,7 @@ import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import { Box, Button, CircularProgress } from '@mui/material';
 import Image from 'next/image';
 
-const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0 }) => {
+const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanContextKey = "" }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState(null);
   const [error, setError] = useState(null);
@@ -17,6 +17,8 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0 }) => 
   const ignoreScanRef = useRef(false);
   const lastScannedRef = useRef(null);
   const scanningInProgressRef = useRef(false);
+  const onScanSuccessRef = useRef(onScanSuccess);
+  const onScanErrorRef = useRef(onScanError);
 
   const resetScannerState = () => {
     setScanResult(null);
@@ -69,6 +71,19 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0 }) => 
     if (resetSignal === 0) return;
     resetScannerState();
   }, [resetSignal]);
+
+  useEffect(() => {
+    if (!scanContextKey) return;
+    resetScannerState();
+  }, [scanContextKey]);
+
+  useEffect(() => {
+    onScanSuccessRef.current = onScanSuccess;
+  }, [onScanSuccess]);
+
+  useEffect(() => {
+    onScanErrorRef.current = onScanError;
+  }, [onScanError]);
 
   // Function to capture current frame
   const captureFrame = () => {
@@ -160,8 +175,8 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0 }) => 
         lastScannedRef.current = decodedText;
         setScanResult(decodedText);
 
-        if (onScanSuccess) {
-          onScanSuccess(decodedText);
+        if (onScanSuccessRef.current) {
+          onScanSuccessRef.current(decodedText);
         }
       }
 
@@ -176,8 +191,8 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0 }) => 
 
 
     const handleError = (error) => {
-      if (onScanError) {
-        onScanError(error);
+      if (onScanErrorRef.current) {
+        onScanErrorRef.current(error);
       }
     };
 
