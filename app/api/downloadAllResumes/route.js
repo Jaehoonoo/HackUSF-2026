@@ -1,61 +1,43 @@
-import { NextRequest } from "next/server";
-import {
-  ListObjectsV2Command,
-  GetObjectCommand,
-} from "@aws-sdk/client-s3";
-import { S3 } from "@/utils/r2";
+import { 
+  listFiles,
+  getFile
+} from "@/utils/r2";
 import archiver from "archiver";
 import { PassThrough } from "stream";
+import { NextResponse } from "next/server";
 
-const BUCKET = process.env.R2_BUCKET;
 
-export async function GET(req) {
-  const zipStream = new PassThrough();
-  const archive = archiver("zip", { zlib: { level: 9 } });
+export async function GET() {
+  try {
+    const zipStream = new PassThrough();
+    const archive = archiver("zip", { zlib: { level: 9 } });
 
-  archive.pipe(zipStream);
+    archive.pipe(zipStream);
 
-  (async () => {
-    let continuationToken;
+    const filesList = await listFiles()
+    // console.log(filesList)
 
-    try {
-      do {
-        const list = await S3.send(
-          new ListObjectsV2Command({
-            Bucket: BUCKET,
-            ContinuationToken: continuationToken,
-          })
-        );
+    for (const obj of filesList) {
+      const response = await getFile(obj.Key)
+      const {Key, ContentType, Body} = response
+      // console.log(file)
 
-        for (const obj of list.Contents ?? []) {
-          if (!obj.Key) continue;
-
-          const res = await S3.send(
-            new GetObjectCommand({
-              Bucket: BUCKET,
-              Key: obj.Key,
-            })
-          );
-
-          // 👇 This preserves the file name + extension
-          archive.append(res.Body, {
-            name: obj.Key + res.ContentType.replace("application/", "."),
-          });
-        }
-
-        continuationToken = list.NextContinuationToken;
-      } while (continuationToken);
-
-      await archive.finalize();
-    } catch (err) {
-      archive.destroy(err);
+      archive.append(Body, {
+        name: Key + ContentType.replace("application/", "."),
+      });
     }
-  })();
 
-  return new Response(zipStream, {
-    headers: {
-      "Content-Type": "application/zip",
-      "Content-Disposition": `attachment; filename="r2-bucket-download.zip"`,
-    },
-  });
+    await archive.finalize();
+
+    return new Response(zipStream, {
+      headers: {
+        "Content-Type": "application/zip",
+        "Content-Disposition": `attachment; filename="hackusf_resumes.zip"`,
+      },
+    });
+
+  } catch (e) {
+    console.log(e)
+    NextResponse.json({ error: e }, { status: 500 })
+  }
 }

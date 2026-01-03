@@ -87,6 +87,25 @@ export async function listFiles(prefix = '') {
   }
 }
 
+export async function getFile(key) {
+  const command = new GetObjectCommand({
+    Bucket: R2_BUCKET,
+    Key: key
+  })
+
+  try {
+    const response = await S3.send(command)
+    return {
+      Key: key,
+      Body: response.Body,
+      ContentType: response.ContentType
+    }
+  } catch (error) {
+    console.error('Error getting file:', error)
+    throw error
+  }
+}
+
 export async function deleteFile(key) {
   const command = new DeleteObjectCommand({
     Bucket: R2_BUCKET,
