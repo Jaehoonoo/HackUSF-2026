@@ -27,3 +27,28 @@
 .cl-socialButtonsBlockButton {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
+
+/* Yui- profile-page styling */
+.profile-page {
+  font-family: 'Abhaya Libre', serif;
+  --paper: #FBF1DA;
+  --ink: #4B2E1A;
+  background-image: linear-gradient(
+    180deg,
+    var(--paper) 0%,
+    var(--paper) 70%,
+    #F1DEB0 100%
+  );
+}
+
+.profile-page .hackusf-card {
+  background: white;
+  border: 5px solid var(--ink);
+  border-radius: 16px;
+}
+
+.profile-page .hackusf-button {
+  font-family: 'Poppins', sans-serif;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+}

@@ -13,7 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { SignedIn, SignedOut } from '@clerk/nextjs';
+import { SignedOut } from '@clerk/nextjs';
 
 const sections = ['About', 'Tracks', 'Sponsors/Partners', 'FAQs'];
 

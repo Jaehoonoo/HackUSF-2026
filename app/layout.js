@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono, Cinzel } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import ThemeRegistry from "./ThemeRegistry";
+import CreateProfileOnSignIn from "@/components/AuthClient/page";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +33,8 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${cinzelBold.variable} antialiased`}
         >
-          {children}
+          <CreateProfileOnSignIn />
+          <ThemeRegistry>{children}</ThemeRegistry>
         </body>
       </html>
     </ClerkProvider>
