@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { Paper, Typography, Box, Button } from "@mui/material";
 import { doc, getDoc } from "firebase/firestore";
@@ -52,27 +52,88 @@ const normalizeStatus = (value) => {
 export default function ApplicationProgress() {
   const { userId, isLoaded } = useAuth();
   const [status, setStatus] = useState("empty");
+  const [rsvp, setRsvp] = useState(false);
+  const [isRsvpLoading, setIsRsvpLoading] = useState(false);
+  const [rsvpError, setRsvpError] = useState("");
+  const cachedProfileRef = useRef({ userId: null, status: "empty", rsvp: false });
+  const isFinalized = (nextStatus, nextRsvp) =>
+    nextStatus === "accepted" && nextRsvp;
 
   useEffect(() => {
     if (!isLoaded) return;
     if (!userId) {
       setStatus("empty");
+      setRsvp(false);
       return;
     }
 
     const fetchStatus = async () => {
       try {
+        const cachedStatus = cachedProfileRef.current.status;
+        const cachedRsvp = cachedProfileRef.current.rsvp;
+        if (
+          cachedProfileRef.current.userId === userId &&
+          isFinalized(cachedStatus, cachedRsvp)
+        ) {
+          setStatus(cachedStatus);
+          setRsvp(cachedRsvp);
+          return;
+        }
+
         const docRef = doc(db, "users", userId);
         const snap = await getDoc(docRef);
-        const nextStatus = snap.exists() ? snap.data().status || "" : "";
-        setStatus(normalizeStatus(nextStatus));
+        const data = snap.exists() ? snap.data() : null;
+        const nextStatus = normalizeStatus(data?.status || "");
+        const nextRsvp = Boolean(data?.rsvp);
+        setStatus(nextStatus);
+        setRsvp(nextRsvp);
+        if (isFinalized(nextStatus, nextRsvp)) {
+          cachedProfileRef.current = {
+            userId,
+            status: nextStatus,
+            rsvp: nextRsvp,
+          };
+        }
       } catch (error) {
         setStatus("empty");
+        setRsvp(false);
       }
     };
 
     fetchStatus();
   }, [isLoaded, userId]);
+
+  const handleRsvpConfirm = async () => {
+    if (!userId) return;
+    setIsRsvpLoading(true);
+    setRsvpError("");
+
+    try {
+      const response = await fetch("/api/confirmRSVP", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, rsvp: true }),
+      });
+      const payload = await response.json();
+
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.message || "Unable to confirm RSVP");
+      }
+
+      setRsvp(true);
+      if (isFinalized(status, true)) {
+        cachedProfileRef.current = {
+          userId,
+          status,
+          rsvp: true,
+        };
+      }
+    } catch (error) {
+      setRsvpError(error.message || "Unable to confirm RSVP");
+    } finally {
+      setIsRsvpLoading(false);
+    }
+  };
 
   const content = useMemo(
     () => STATUS_CONTENT[normalizeStatus(status)],
@@ -131,7 +192,48 @@ export default function ApplicationProgress() {
         ) : null}
       </Box>
 
-      <AcceptedQrCode isVisible={status === "accepted"} userId={userId} />
+      {status === "accepted" && !rsvp ? (
+        <Box
+          sx={{
+            mt: 3,
+            p: { xs: 2.5, sm: 3 },
+            borderRadius: 6,
+            border: "2px solid #4A7BA7",
+            bgcolor: "rgba(74, 123, 167, 0.12)",
+            textAlign: "center",
+          }}
+        >
+          <Typography sx={{ fontWeight: 700, fontSize: "1.15rem", mb: 1 }}>
+            RSVP required to unlock your QR code
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Let us know you are coming so we can save your spot at HackUSF 2026.
+          </Typography>
+          {rsvpError ? (
+            <Typography variant="body2" sx={{ color: "#C6473E", mb: 2 }}>
+              {rsvpError}
+            </Typography>
+          ) : null}
+          <Button
+            variant="contained"
+            onClick={handleRsvpConfirm}
+            disabled={isRsvpLoading}
+            sx={{
+              bgcolor: "#4A7BA7",
+              border: "2px solid var(--ink)",
+              borderRadius: 12,
+              px: 3,
+              "&:hover": {
+                bgcolor: "#3E6B94",
+              },
+            }}
+          >
+            {isRsvpLoading ? "Confirming..." : "Confirm RSVP"}
+          </Button>
+        </Box>
+      ) : null}
+
+      <AcceptedQrCode isVisible={status === "accepted" && rsvp} userId={userId} />
     </Paper>
   );
 }
