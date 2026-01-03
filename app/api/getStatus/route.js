@@ -1,16 +1,18 @@
 import { auth } from "@clerk/nextjs/server";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase";
+import { createHash } from "crypto";
 
-// Application review period: March 2 - March 27, 2025 EST
-const REVIEW_START_DATE = new Date('2025-03-02T00:00:00-05:00');
-const REVIEW_END_DATE = new Date('2025-03-27T23:59:59-05:00');
+// Application review period: March 2 - March 27, 2026 EST
+const REVIEW_START_DATE = new Date('2026-03-02T00:00:00-05:00');
+const REVIEW_END_DATE = new Date('2026-03-27T23:59:59-05:00');
+
 
 export async function GET(req) {
     try {
-        // Get authenticated user ID from Clerk
-        const { userId } = await auth();
-        
+        // Gets userId from frontend request body
+        const userId = new URL(req.url, `http://${req.headers.get('host')}`).searchParams.get('userId');
+
         if (!userId) {
             return new Response(
                 JSON.stringify({ error: "Unauthorized" }), 
