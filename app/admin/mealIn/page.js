@@ -165,6 +165,7 @@ export default function MealPage() {
         <Box sx={{ width: "100%", marginTop: 1 }}>
           <QRScannerComponent
             onScanSuccess={handleScanSuccess}
+            scanContextKey={`${currentMeal}|${currentMealGroup}`}
           // onScanError={handleScanError}
           />
         </Box>
