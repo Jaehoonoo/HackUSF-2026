@@ -24,10 +24,20 @@ export async function POST(req) {
         }
 
         const userData = userSnap.data();
+        
+        // check if user is accepted 
+        if(userData.status !== "accepted"){
+            return new Response(JSON.stringify({success: false, message: `${userData.firstName} ${userData.lastName} was not accepted`}), {status : 500})
+        }
+
+        // Check if user confirmed attendance/RSVP
+        if(userData.rsvp !== true){
+            return new Response(JSON.stringify({success: false, message: `${userData.firstName} ${userData.lastName} did not confirm attendance/RSVP`}), {status : 500})
+        }
 
         // Prevent duplicate check-ins
         if (userData.checkedIn){
-            return new Response(JSON.stringify({ success: false, message: `${userData.firstName} ${userData.lastName} is already checked in` }), { status: 200 });
+            return new Response(JSON.stringify({ success: false, message: `${userData.firstName} ${userData.lastName} is already checked in` }), { status: 500 });
 
         }   
 
@@ -38,6 +48,7 @@ export async function POST(req) {
                 breakfast: false,
                 lunch1: false,
                 dinner: false,
+                midnightSnack: false,
                 lunch2: false,
             },
         });
