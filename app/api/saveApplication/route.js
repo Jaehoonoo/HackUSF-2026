@@ -58,7 +58,7 @@ export async function POST(req) {
       levelOfStudy: data.levelOfStudy,
       country: data.country,
       gender: data.gender,
-      numHackathon: data.numHackathon,
+      numHackathons: data.numHackathons,
       ethnicity: data.ethnicity,
       shirtSize: data.shirtSize,
       disclaimer: data.disclaimer,
@@ -71,11 +71,17 @@ export async function POST(req) {
       notifications: data.notifications || false
     };
 
-    // setDoc creates doc if doesnt exist, and updates doc if exists
+    // updateDoc updates the fields for the user profile
     if (userSnap.exists()) {
-      await setDoc(userRef, newUserObject);
+      await updateDoc(userRef, newUserObject);
     } else {
       return NextResponse.json({ error: "User does not exist" }, { status: 404 })
+    }
+
+    if (userSnap.exists()) {
+      if (data.status === "" ){
+        await updateDoc(userRef, { status: "pending" });
+      }
     }
 
     return new Response(JSON.stringify({
