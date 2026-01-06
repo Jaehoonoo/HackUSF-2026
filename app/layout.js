@@ -24,6 +24,11 @@ export const metadata = {
   title: "HackUSF 2026",
   description:
     "Join USF GDSC Hackathon 2026! Innovate and compete in HackUSF at the University of South Florida. Build projects, win prizes, and network.",
+  icons: {
+    icon: '/gdsclogo.webp',
+    shortcut: '/gdsclogo.webp',
+    apple: '/gdsclogo.webp',
+  },
 };
 
 export default function RootLayout({ children }) {
