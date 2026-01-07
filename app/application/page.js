@@ -25,6 +25,7 @@ import {
   Checkbox,
   FormHelperText
 } from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import ProfileHeader from "../profile/components/ProfileHeader";
 import GradientDivider from "../profile/components/GradientDivider";
@@ -52,7 +53,13 @@ const Application = () => {
     gender: "",
     race: "",
     numHackathons: "",
-    socials: "",
+    socials: {
+      linkedin: "",
+      github: "",
+      website: "",
+      devpost: "",
+      other: ""
+    },
     codeOfConduct: false,
     privacyPolicy: false,
     newsletter: false,
@@ -91,9 +98,34 @@ const Application = () => {
         if (!data.schoolOther) {
           data.schoolOther = "";
         }
-        // Ensure socials is a string if it was an object
-        if (typeof data.socials === 'object' && data.socials !== null) {
-          data.socials = "";
+        // Handle socials - convert array or object to the expected structure
+        if (Array.isArray(data.socials)) {
+          // If it's an array, convert to object structure
+          data.socials = {
+            linkedin: "",
+            github: "",
+            website: "",
+            devpost: "",
+            other: ""
+          };
+        } else if (typeof data.socials === 'object' && data.socials !== null) {
+          // If it's already an object, ensure all fields exist
+          data.socials = {
+            linkedin: data.socials.linkedin || "",
+            github: data.socials.github || "",
+            website: data.socials.website || "",
+            devpost: data.socials.devpost || "",
+            other: data.socials.other || ""
+          };
+        } else {
+          // If it's a string or doesn't exist, initialize as empty object
+          data.socials = {
+            linkedin: "",
+            github: "",
+            website: "",
+            devpost: "",
+            other: ""
+          };
         }
         // Convert numeric fields to strings for input fields
         if (typeof data.age === 'number') {
@@ -138,6 +170,16 @@ const Application = () => {
     if (errors.major) {
       setErrors({ ...errors, major: "" });
     }
+  };
+
+  const handleSocialsChange = (platform) => (event) => {
+    setFormData({
+      ...formData,
+      socials: {
+        ...socials,
+        [platform]: event.target.value
+      }
+    });
   };
 
   const validatePhone = (phoneNumber) => {
@@ -443,14 +485,60 @@ const Application = () => {
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
               />
 
-              <TextField
-                fullWidth
-                label="Social Links (optional)"
-                value={socials}
-                onChange={makeHandleChange("socials")}
-                placeholder="LinkedIn, Github, personal website, Devpost, etc."
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
-              />
+              <Box>
+                <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
+                  Social Links (optional)
+                </Typography>
+                <Box sx={{ 
+                  display: "grid", 
+                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  gap: 2 
+                }}>
+                  <TextField
+                    fullWidth
+                    label="LinkedIn"
+                    value={socials.linkedin || ""}
+                    onChange={handleSocialsChange("linkedin")}
+                    placeholder="https://linkedin.com/in/yourprofile"
+                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="GitHub"
+                    value={socials.github || ""}
+                    onChange={handleSocialsChange("github")}
+                    placeholder="https://github.com/yourusername"
+                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Personal Website"
+                    value={socials.website || ""}
+                    onChange={handleSocialsChange("website")}
+                    placeholder="https://yourwebsite.com"
+                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Devpost"
+                    value={socials.devpost || ""}
+                    onChange={handleSocialsChange("devpost")}
+                    placeholder="https://devpost.com/yourusername"
+                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Other"
+                    value={socials.other || ""}
+                    onChange={handleSocialsChange("other")}
+                    placeholder="Any other social links"
+                    sx={{ 
+                      gridColumn: { xs: "1", sm: "1 / -1" },
+                      "& .MuiOutlinedInput-root": { borderRadius: 2 } 
+                    }}
+                  />
+                </Box>
+              </Box>
 
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <FormControl error={!!errors.codeOfConduct} required>
@@ -497,21 +585,88 @@ const Application = () => {
               </Box>
 
               <Box>
-                <Typography variant="body1" sx={{ mb: 1, fontWeight: 500 }}>
+                <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
                   Resume
                 </Typography>
-                <input
-                  type="file"
-                  accept=".pdf, .docx"
-                  onChange={handleFileChange}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    fontSize: "14px"
+                <Box
+                  sx={{
+                    border: "2px dashed",
+                    borderColor: resume ? "#4A7BA7" : "#ccc",
+                    borderRadius: 2,
+                    p: 3,
+                    textAlign: "center",
+                    bgcolor: resume ? "rgba(74, 123, 167, 0.05)" : "transparent",
+                    transition: "all 0.2s ease",
+                    "&:hover": {
+                      borderColor: "#4A7BA7",
+                      bgcolor: "rgba(74, 123, 167, 0.05)",
+                    },
                   }}
-                />
+                >
+                  <input
+                    type="file"
+                    accept=".pdf, .docx"
+                    onChange={handleFileChange}
+                    id="resume-upload"
+                    style={{ display: "none" }}
+                  />
+                  <label htmlFor="resume-upload">
+                    <Button
+                      component="span"
+                      variant="outlined"
+                      startIcon={<UploadFileIcon />}
+                      sx={{
+                        mb: resume ? 2 : 0,
+                        borderColor: "#4A7BA7",
+                        color: "#4A7BA7",
+                        border: "2px solid",
+                        borderRadius: 12,
+                        px: 3,
+                        py: 1,
+                        textTransform: "none",
+                        fontWeight: 600,
+                        "&:hover": {
+                          borderColor: "#3E6B94",
+                          bgcolor: "rgba(74, 123, 167, 0.1)",
+                        },
+                      }}
+                    >
+                      Choose File
+                    </Button>
+                  </label>
+                  {resume && (
+                    <Box sx={{ mt: 2 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "#4A7BA7",
+                          fontWeight: 500,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: 1,
+                        }}
+                      >
+                        <UploadFileIcon sx={{ fontSize: 20 }} />
+                        {resumeName || resume.name}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: "#666", mt: 0.5, display: "block" }}
+                      >
+                        PDF or DOCX files only
+                      </Typography>
+                    </Box>
+                  )}
+                  {!resume && (
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "#666", mt: 2 }}
+                    >
+                      PDF or DOCX files only
+                    </Typography>
+                  )}
+                </Box>
               </Box>
 
               <Button
