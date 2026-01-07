@@ -36,6 +36,8 @@ const Application = () => {
     gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter, eighteen } = formData
   console.log(formData)
 
+  // TODO: get email from clerk
+
   // get userId
   const { userId } = useAuth();
   console.log(userId);
@@ -99,8 +101,93 @@ const Application = () => {
     <form onSubmit={handleSubmit}>
       <input 
         type="text"
-        content={firstName}
+        value={firstName}
         onChange={makeHandleChange("firstName")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={lastName}
+        onChange={makeHandleChange("lastName")}
+      />
+      <br></br>
+      {/* TODO: Check if 18 */}
+      <input 
+        type="text"
+        value={age}
+        onChange={makeHandleChange("age")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={phone}
+        onChange={makeHandleChange("phone")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={school}
+        onChange={makeHandleChange("school")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={major}
+        onChange={makeHandleChange("major")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={levelOfStudy}
+        onChange={makeHandleChange("levelOfStudy")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={country}
+        onChange={makeHandleChange("country")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={gender}
+        onChange={makeHandleChange("gender")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={race}
+        onChange={makeHandleChange("race")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={numHackathons}
+        onChange={makeHandleChange("numHackathons")}
+      />
+      <br></br>
+      <input 
+        type="text"
+        value={socials}
+        onChange={makeHandleChange("socials")}
+      />
+      <br></br>
+      <input 
+        type="checkbox"
+        value={codeOfConduct}
+        onChange={makeHandleChange("codeOfConduct")}
+      />
+      <br></br>
+      <input 
+        type="checkbox"
+        value={privacyPolicy}
+        onChange={makeHandleChange("privacyPolicy")}
+      />
+      <br></br>
+      <input 
+        type="checkbox"
+        value={newsletter}
+        onChange={makeHandleChange("newsletter")}
       />
       <br></br>
       <input
@@ -116,5 +203,4 @@ const Application = () => {
     </form>
   )
 }
-
 export default Application
