@@ -31,7 +31,7 @@ export async function POST(req) {
 
     let missingFields = []
     for (const field of requiredFields) {
-      if (data[field] != null) missingFields.push(field);
+      if (data[field] == null) missingFields.push(field);
     }
 
     if (missingFields.length) {

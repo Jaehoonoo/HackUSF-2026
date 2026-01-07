@@ -9,6 +9,8 @@ import {
   useAuth
 } from "@clerk/nextjs";
 
+// TODO: redirect application status page to here
+
 const Application = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -49,6 +51,7 @@ const Application = () => {
     .then(result => result.success && result && setFormData(result.data)) 
   }, [userId]);
 
+
   // TODO: handle social media field
   const makeHandleChange = key => event => {
     const { type, checked } = event.target;
@@ -58,12 +61,39 @@ const Application = () => {
     else setFormData({ ...formData, [key]: event.target.value});
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // const resumeData = new FormData()
+    // resumeData.append("userId", userId)
+    // resumeData.append("userName", `${formData.firstName} ${formData.lastName}`)
+    // resumeData.append("resume", resume)
+
+    // const uploadResumeResponse = await fetch('/api/uploadResume', {
+    //   method: 'POST',
+    //   body: resumeData,
+    // });
+
+    // if (!uploadResumeResponse.ok) throw new Error("Uploading resume failed!")
+
+    const saveApplicationResponse = await fetch("/api/saveApplication", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, ...formData }),
+    })
+
+    if (!saveApplicationResponse.ok) throw new Error("Saving application failed!")
+  }
+
   return (
-    <div>
-      <input
-        onChange={makeHandleChange("firstName")}
-      />
-    </div>
+    <form onSubmit={handleSubmit}>
+      <button
+        type="submit"
+      >
+      submit </button>
+    </form>
   )
 }
 
