@@ -12,6 +12,8 @@ import {
 // TODO: redirect application status page to here
 
 const Application = () => {
+  const [resume, setResume] = useState(null) //resume file
+  const [resumeName, setResumeName] = useState(null) //resume file name
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,13 +26,14 @@ const Application = () => {
     gender: "",
     race: "",
     numHackathons: "",
-    resume: "",
     socials: {},
     codeOfConduct: false,
     privacyPolicy: false,
     newsletter: false,
     eighteen: false
   })
+  const { firstName, lastName, age, phone, school, major, levelOfStudy, country,
+    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter, eighteen } = formData
   console.log(formData)
 
   // get userId
@@ -61,20 +64,25 @@ const Application = () => {
     else setFormData({ ...formData, [key]: event.target.value});
   };
 
+  const handleFileChange = event => {
+    setResume(event.target.files[0]);
+    setResumeName(event.target.files[0].name)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // const resumeData = new FormData()
-    // resumeData.append("userId", userId)
-    // resumeData.append("userName", `${formData.firstName} ${formData.lastName}`)
-    // resumeData.append("resume", resume)
+    const resumeData = new FormData()
+    resumeData.append("userId", userId)
+    resumeData.append("userName", `${formData.firstName} ${formData.lastName}`)
+    resumeData.append("resume", resume)
 
-    // const uploadResumeResponse = await fetch('/api/uploadResume', {
-    //   method: 'POST',
-    //   body: resumeData,
-    // });
+    const uploadResumeResponse = await fetch('/api/uploadResume', {
+      method: 'POST',
+      body: resumeData,
+    });
 
-    // if (!uploadResumeResponse.ok) throw new Error("Uploading resume failed!")
+    if (!uploadResumeResponse.ok) throw new Error("Uploading resume failed!")
 
     const saveApplicationResponse = await fetch("/api/saveApplication", {
       method: 'POST',
@@ -89,6 +97,18 @@ const Application = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <input 
+        type="text"
+        content={firstName}
+        onChange={makeHandleChange("firstName")}
+      />
+      <br></br>
+      <input
+        type="file"
+        accept=".pdf, .docx"
+        onChange={handleFileChange}
+      />
+      <br></br>
       <button
         type="submit"
       >
