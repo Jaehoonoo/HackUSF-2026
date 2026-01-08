@@ -3,7 +3,6 @@ import { adminDb } from "@/firebaseadmin";
 export async function POST(req) {
   try {
     const body = await req.json();
-    console.log(body);
     const { userId, currentMealGroup, currentMeal } = body;
     const validMeals = ["breakfast", "lunch1", "lunch2", "dinner", "midnightSnack"];
 
