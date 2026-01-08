@@ -23,7 +23,6 @@ export async function POST(req) {
       'numHackathons',
       'race',
       'shirtSize',
-      'disclaimer',
       'codeOfConduct',
       'privacyPolicy'
     ];
@@ -48,26 +47,25 @@ export async function POST(req) {
     const newUserObject = {
       firstName: data.firstName,
       lastName: data.lastName,
+      email: data.email,
       age: data.age,
       phone: data.phone,
-      email: data.email,
       school: data.school,
       major: data.major,
-      gradYear: data.gradYear,
       levelOfStudy: data.levelOfStudy,
+      gradYear: data.gradYear,
       country: data.country,
       gender: data.gender,
-      numHackathons: data.numHackathons,
-      race: data.race,
       shirtSize: data.shirtSize,
-      disclaimer: data.disclaimer,
+      race: data.race,
+      numHackathons: data.numHackathons,
+      socials: data.socials,
       codeOfConduct: data.codeOfConduct,
       privacyPolicy: data.privacyPolicy,
-      otherSchool: data.otherSchool || '',
       firstHackathon: data.numHackathon === 0 || false,
       dietaryRestrictions: data.dietaryRestrictions || [],
-      otherAccommodations: data.otherAccommodations || '',
-      notifications: data.notifications || false
+      newsletter: data.newsletter || false,
+      status: "pending"
     };
 
     // updateDoc updates the fields for the user profile
@@ -75,12 +73,6 @@ export async function POST(req) {
       await updateDoc(userRef, newUserObject);
     } else {
       return NextResponse.json({ error: "User does not exist" }, { status: 404 })
-    }
-
-    if (userSnap.exists()) {
-      if (data.status === "" ){
-        await updateDoc(userRef, { status: "pending" });
-      }
     }
 
     return new Response(JSON.stringify({
