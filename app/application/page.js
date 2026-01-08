@@ -39,7 +39,8 @@ import universitiesList from "./universitiesList";
 import majorsList from "./majorsList";
 import countriesList from "./countriesList";
 
-// TODO: redirect application status page to here
+// TODO: add application status
+// TODO: make alerts prettier
 
 const Application = () => {
   const [resume, setResume] = useState(null) //resume file
@@ -48,12 +49,14 @@ const Application = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    email: "",
     age: "",
     phone: "",
     school: "",
-    schoolOther: "",
     major: "",
     levelOfStudy: "",
+    gradYear: "",
+    shirtSize: "",
     country: "",
     gender: "",
     race: "",
@@ -70,11 +73,9 @@ const Application = () => {
     newsletter: false,
     eighteen: false
   })
-  const { firstName, lastName, age, phone, school, schoolOther, major, levelOfStudy, country,
+  const { firstName, lastName, email, age, phone, school, major, levelOfStudy, gradYear, shirtSize, country,
     gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter } = formData
   console.log(formData)
-
-  // TODO: get email from clerk
 
   // get userId
   const { userId } = useAuth();
@@ -97,51 +98,14 @@ const Application = () => {
     .then(result => {
       if (result.success && result && result.data) {
         const data = result.data;
-        // If school is not in the universities list, treat it as "Other"
-        if (data.school && !universitiesList.includes(data.school)) {
-          data.schoolOther = data.school;
-          data.school = "Other";
+
+        // Ensure new fields exist
+        for (const property in formData) {
+          // console.log("property: ", property, "undefined: ", data[property] == undefined, "formData property: ", formData[property])
+          if (data[property] == undefined) data[property] = formData[property]
+          // console.log("data[property] after assignment: ", data[property])
         }
-        // Ensure schoolOther exists
-        if (!data.schoolOther) {
-          data.schoolOther = "";
-        }
-        // Handle socials - convert array or object to the expected structure
-        if (Array.isArray(data.socials)) {
-          // If it's an array, convert to object structure
-          data.socials = {
-            linkedin: "",
-            github: "",
-            website: "",
-            devpost: "",
-            other: ""
-          };
-        } else if (typeof data.socials === 'object' && data.socials !== null) {
-          // If it's already an object, ensure all fields exist
-          data.socials = {
-            linkedin: data.socials.linkedin || "",
-            github: data.socials.github || "",
-            website: data.socials.website || "",
-            devpost: data.socials.devpost || "",
-            other: data.socials.other || ""
-          };
-        } else {
-          // If it's a string or doesn't exist, initialize as empty object
-          data.socials = {
-            linkedin: "",
-            github: "",
-            website: "",
-            devpost: "",
-            other: ""
-          };
-        }
-        // Convert numeric fields to strings for input fields
-        if (typeof data.age === 'number') {
-          data.age = String(data.age);
-        }
-        if (typeof data.numHackathons === 'number') {
-          data.numHackathons = String(data.numHackathons);
-        }
+        
         setFormData(data);
       }
     }) 
@@ -154,7 +118,7 @@ const Application = () => {
     if (type === "checkbox") {
       setFormData({ ...formData, [key]: checked });
     }
-    // handle non-checkboxes (including Material-UI Select which uses event.target.value)
+    // handle non-checkboxes
     else {
       setFormData({ ...formData, [key]: value });
       // Clear error when user starts typing
@@ -164,21 +128,10 @@ const Application = () => {
     }
   };
 
-  const handleSchoolChange = (event, newValue) => {
-    setFormData({ ...formData, school: newValue || "" });
-    // Clear error when user selects a value
-    if (errors.school) {
-      setErrors({ ...errors, school: "" });
-    }
-  };
-
-  const handleMajorChange = (event, newValue) => {
-    setFormData({ ...formData, major: newValue || "" });
-    // Clear error when user selects a value
-    if (errors.major) {
-      setErrors({ ...errors, major: "" });
-    }
-  };
+  const makeHandleChangeSelection = key => (event, newValue) => {
+    setFormData({ ...formData, [key]: newValue || "" });
+    if (errors[key]) setErrors({ ...errors, [key]: "" });
+  }
 
   const handleSocialsChange = (platform) => (event) => {
     setFormData({
@@ -208,20 +161,34 @@ const Application = () => {
       newErrors.age = "Age must be a number and at least 18";
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
     // Phone validation
     if (!phone || !validatePhone(phone)) {
       newErrors.phone = "Please enter a valid phone number";
     }
 
-    // School validation - must be from the list or "Other"
+    // School validation - must be from the list (including "Other")
     if (!school) {
       newErrors.school = "Please select a school";
     } else if (!universitiesList.includes(school)) {
       newErrors.school = "Please select a school from the list";
     }
-    // School validation - if "Other" is selected, schoolOther is required
-    if (school === "Other" && !schoolOther.trim()) {
-      newErrors.schoolOther = "Please enter the school name";
+
+    // GradYear validation
+    const currentYear = new Date().getFullYear();
+    const gradYearNum = parseInt(gradYear);
+    if (!gradYear || isNaN(gradYearNum) || gradYearNum < currentYear - 5 || gradYearNum > currentYear + 10) {
+      newErrors.gradYear = "Please enter a valid graduation year";
+    }
+
+    // ShirtSize validation
+    if (!shirtSize) {
+      newErrors.shirtSize = "Please select a shirt size";
     }
 
     // Major validation - must be from the list
@@ -278,18 +245,14 @@ const Application = () => {
       return;
     }
 
-    // Use schoolOther if "Other" is selected, otherwise use school
-    const finalSchool = school === "Other" ? schoolOther : school;
-    const finalFormData = { ...formData, school: finalSchool };
-
-    console.log("finalFormData: ", finalFormData);
+    console.log("finalFormData: ", formData);
 
     const saveApplicationResponse = await fetch("/api/saveApplication", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userId, ...finalFormData }),
+      body: JSON.stringify({ userId, ...formData }),
     })
 
     if (!saveApplicationResponse.ok) {
@@ -314,6 +277,7 @@ const Application = () => {
     "Multiracial / Two or more races",
     "Prefer not to say"
   ];
+  const shirtSizeOptions = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
   return (
     <Box
@@ -353,6 +317,19 @@ const Application = () => {
                 />
               </Box>
 
+              <TextField
+                fullWidth
+                label="Email"
+                type="email"
+                value={email}
+                onChange={makeHandleChange("email")}
+                placeholder="your.email@example.com"
+                error={!!errors.email}
+                helperText={errors.email}
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+
               <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 3 }}>
                 <TextField
                   fullWidth
@@ -380,44 +357,30 @@ const Application = () => {
                 />
               </Box>
 
-              <Box>
-                <Autocomplete
-                  freeSolo={false}
-                  options={universitiesList}
-                  value={school || null}
-                  onChange={handleSchoolChange}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="School"
-                      placeholder="Type to search for a school"
-                      error={!!errors.school}
-                      helperText={errors.school}
-                      required
-                      sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
-                    />
-                  )}
-                  isOptionEqualToValue={(option, value) => option === value}
-                />
-                {school === "Other" && (
+              <Autocomplete
+                freeSolo={false}
+                options={universitiesList}
+                value={school || null}
+                onChange={makeHandleChangeSelection("school")}
+                renderInput={(params) => (
                   <TextField
-                    fullWidth
-                    label="School Name (Other)"
-                    value={schoolOther}
-                    onChange={makeHandleChange("schoolOther")}
-                    error={!!errors.schoolOther}
-                    helperText={errors.schoolOther}
+                    {...params}
+                    label="School"
+                    placeholder="Type to search for a school"
+                    error={!!errors.school}
+                    helperText={errors.school}
                     required
-                    sx={{ mt: 2, "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                   />
                 )}
-              </Box>
+                isOptionEqualToValue={(option, value) => option === value}
+              />
 
               <Autocomplete
                 freeSolo={false}
                 options={majorsList}
                 value={major || null}
-                onChange={handleMajorChange}
+                onChange={makeHandleChangeSelection("major")}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -447,6 +410,19 @@ const Application = () => {
                 </Select>
               </FormControl>
 
+              <TextField
+                fullWidth
+                label="Graduation Year"
+                type="number"
+                value={gradYear}
+                onChange={makeHandleChange("gradYear")}
+                placeholder="2026"
+                error={!!errors.gradYear}
+                helperText={errors.gradYear}
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+
               <FormControl fullWidth required sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}>
                 <InputLabel>Country</InputLabel>
                 <Select
@@ -472,6 +448,21 @@ const Application = () => {
                   {genderOptions.map((genderOption) => (
                     <MenuItem key={genderOption} value={genderOption}>
                       {genderOption.charAt(0).toUpperCase() + genderOption.slice(1)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth required sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}>
+                <InputLabel>Shirt Size</InputLabel>
+                <Select
+                  value={shirtSize}
+                  onChange={makeHandleChange("shirtSize")}
+                  label="Shirt Size"
+                >
+                  {shirtSizeOptions.map((size) => (
+                    <MenuItem key={size} value={size}>
+                      {size}
                     </MenuItem>
                   ))}
                 </Select>
