@@ -39,8 +39,7 @@ import universitiesList from "./universitiesList";
 import majorsList from "./majorsList";
 import countriesList from "./countriesList";
 
-// TODO: add application status
-// TODO: make alerts prettier
+import swal from "sweetalert";
 
 const Application = () => {
   const [resume, setResume] = useState(null) //resume file
@@ -226,7 +225,7 @@ const Application = () => {
 
     // Validate form before submission
     if (!validateForm()) {
-      alert("Some fields were invalid!");
+      swal("Error", "Some fields are invalid!", "error");
       return;
     }
 
@@ -241,7 +240,7 @@ const Application = () => {
     });
 
     if (!uploadResumeResponse.ok) {
-      alert("Uploading resume failed!");
+      swal("Error", "Uploading resume failed!", "error");
       return;
     }
 
@@ -256,11 +255,11 @@ const Application = () => {
     })
 
     if (!saveApplicationResponse.ok) {
-      alert("Saving application failed!");
+      swal("Error", "Saving application failed!", "error");
       return;
     }
 
-    alert("Application saved successfully!");
+    swal("Success", "Application saved successfully!", "success");
     router.push("/profile");
   }
 
