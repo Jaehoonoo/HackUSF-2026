@@ -9,6 +9,10 @@ import {
   useAuth
 } from "@clerk/nextjs";
 
+import {
+  useRouter
+} from "next/navigation"
+
 import { 
   Autocomplete, 
   TextField, 
@@ -25,6 +29,7 @@ import {
   Checkbox,
   FormHelperText
 } from "@mui/material";
+
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import ProfileHeader from "../profile/components/ProfileHeader";
@@ -66,7 +71,7 @@ const Application = () => {
     eighteen: false
   })
   const { firstName, lastName, age, phone, school, schoolOther, major, levelOfStudy, country,
-    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter, eighteen } = formData
+    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter } = formData
   console.log(formData)
 
   // TODO: get email from clerk
@@ -74,6 +79,9 @@ const Application = () => {
   // get userId
   const { userId } = useAuth();
   console.log(userId);
+
+  // initialize router to redirect user after submission
+  const router = useRouter()
 
   // get existing application
   useEffect(() => {
@@ -251,7 +259,7 @@ const Application = () => {
 
     // Validate form before submission
     if (!validateForm()) {
-      alert("Please fix the errors in the form before submitting.");
+      alert("Some fields were invalid!");
       return;
     }
 
@@ -265,11 +273,16 @@ const Application = () => {
       body: resumeData,
     });
 
-    if (!uploadResumeResponse.ok) throw new Error("Uploading resume failed!")
+    if (!uploadResumeResponse.ok) {
+      alert("Uploading resume failed!");
+      return;
+    }
 
     // Use schoolOther if "Other" is selected, otherwise use school
     const finalSchool = school === "Other" ? schoolOther : school;
     const finalFormData = { ...formData, school: finalSchool };
+
+    console.log("finalFormData: ", finalFormData);
 
     const saveApplicationResponse = await fetch("/api/saveApplication", {
       method: 'POST',
@@ -279,7 +292,13 @@ const Application = () => {
       body: JSON.stringify({ userId, ...finalFormData }),
     })
 
-    if (!saveApplicationResponse.ok) throw new Error("Saving application failed!")
+    if (!saveApplicationResponse.ok) {
+      alert("Saving application failed!");
+      return;
+    }
+
+    alert("Application saved successfully!");
+    router.push("/profile");
   }
 
   const levelOfStudyOptions = ["freshman", "sophomore", "junior", "senior", "master", "others"];
