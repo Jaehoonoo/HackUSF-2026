@@ -42,6 +42,9 @@ import countriesList from "./countriesList";
 import swal from "sweetalert";
 
 // TODO: attach policy and code links
+// TODO: display resume
+// TODO: convert age to string
+// TODO: fix font of notification
 
 const Application = () => {
   const [resume, setResume] = useState(null) //resume file

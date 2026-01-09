@@ -65,6 +65,7 @@ export async function POST(req) {
       firstHackathon: data.numHackathon === 0 || false,
       dietaryRestrictions: data.dietaryRestrictions || [],
       newsletter: data.newsletter || false,
+      eighteen: parseInt(data.age) >= 18,
       status: "pending"
     };
 
