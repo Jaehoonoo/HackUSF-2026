@@ -61,7 +61,7 @@ export default function AcceptedQrCode({
           variant="body1"
           sx={{
             mb: 1.5,
-            color: "text.secondary",
+            color: "#385BB2",
             fontWeight: 700,
             fontSize: { xs: "1rem", sm: "1.15rem" },
           }}
