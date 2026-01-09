@@ -41,6 +41,8 @@ import countriesList from "./countriesList";
 
 import swal from "sweetalert";
 
+// TODO: attach policy and code links
+
 const Application = () => {
   const [resume, setResume] = useState(null) //resume file
   const [resumeName, setResumeName] = useState(null) //resume file name
@@ -86,6 +88,13 @@ const Application = () => {
   // get existing application
   useEffect(() => {
     if (!userId) return;
+    fetch("/api/createProfile", {
+      method: "POST",
+      body: {
+        userId
+      }
+    })
+    .then(res => console.log("Profile created"))
     fetch(`/api/getApplication?userId=${encodeURIComponent(userId)}`, {
       method: 'GET',
       headers: {
