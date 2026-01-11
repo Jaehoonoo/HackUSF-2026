@@ -43,8 +43,6 @@ import swal from "sweetalert";
 
 // TODO: attach policy and code links
 // TODO: display resume
-// TODO: convert age to string
-// TODO: fix font of notification
 
 const Application = () => {
   const [resume, setResume] = useState(null) //resume file
@@ -79,7 +77,7 @@ const Application = () => {
   })
   const { firstName, lastName, email, age, phone, school, major, levelOfStudy, gradYear, shirtSize, country,
     gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter } = formData
-  console.log(formData)
+  // console.log(formData)
 
   // get userId
   const { userId } = useAuth();
@@ -90,14 +88,14 @@ const Application = () => {
 
   // get existing application
   useEffect(() => {
-    if (!userId) return;
+    if (!(typeof(userId) == "string")) return;
     fetch("/api/createProfile", {
       method: "POST",
-      body: {
+      body: JSON.stringify({
         userId
-      }
+      })
     })
-    .then(res => console.log("Profile created"))
+    .then(res => console.log("Profile created/exists"))
     fetch(`/api/getApplication?userId=${encodeURIComponent(userId)}`, {
       method: 'GET',
       headers: {

@@ -52,3 +52,83 @@
   border: 2px solid var(--ink);
   border-radius: 12px;
 }
+
+/* SweetAlert Styling */
+.swal-overlay {
+  background-color: rgba(75, 46, 26, 0.45);
+}
+
+.swal-modal {
+  background-color: white;
+  border: 5px solid #4B2E1A;
+  border-radius: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.swal-title {
+  color: #4B2E1A;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-weight: 700;
+  font-size: 1.875rem;
+}
+
+.swal-text {
+  color: #4B2E1A;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+.swal-button {
+  background-color: white;
+  color: #4B2E1A;
+  border: 2px solid #4B2E1A;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-weight: 600;
+  padding: 10px 24px;
+  transition: all 0.2s ease;
+}
+
+.swal-button:hover {
+  background-color: #4B2E1A;
+  color: white;
+}
+
+.swal-button:focus {
+  box-shadow: 0 0 0 3px rgba(75, 46, 26, 0.2);
+}
+
+.swal-button--confirm {
+  background-color: #4B2E1A;
+  color: white;
+}
+
+.swal-button--confirm:hover {
+  background-color: #3A2415;
+}
+
+.swal-icon--success__ring {
+  border: 4px solid rgba(75, 46, 26, 0.2);
+}
+
+.swal-icon--success__line {
+  background-color: #4B2E1A;
+}
+
+.swal-icon--error {
+  border-color: #C62828;
+}
+
+.swal-icon--error__line {
+  background-color: #C62828;
+}
+
+.swal-icon--warning {
+  border-color: #F57C00;
+}
+
+.swal-icon--warning__body,
+.swal-icon--warning__dot {
+  background-color: #F57C00;
+}
