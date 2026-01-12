@@ -2,12 +2,15 @@
 
 import { 
   useState,
-  useEffect
+  useEffect,
+  useRef
 } from "react";
 
 import {
   useAuth
 } from "@clerk/nextjs";
+
+import { renderAsync } from "docx-preview";
 
 import {
   useRouter
@@ -42,11 +45,13 @@ import countriesList from "./countriesList";
 import swal from "sweetalert";
 
 // TODO: attach policy and code links
-// TODO: display resume
 
 const Application = () => {
+  const docxPreviewRef = useRef(null)
   const [resume, setResume] = useState(null) //resume file
   const [resumeName, setResumeName] = useState(null) //resume file name
+  const [resumePreviewUrl, setResumePreviewUrl] = useState(null)
+  const [docxPreviewHtml, setDocxPreviewHtml] = useState(null)
   const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
     firstName: "",
@@ -142,6 +147,32 @@ const Application = () => {
     if (errors[key]) setErrors({ ...errors, [key]: "" });
   }
 
+  useEffect(() => {
+    if (resume && resume.type === "application/pdf") {
+      const url = URL.createObjectURL(resume);
+      setResumePreviewUrl(url);
+      setDocxPreviewHtml(null);
+      return () => URL.revokeObjectURL(url);
+    }
+
+    if (resume && resume.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+      const renderDocx = async () => {
+        const arrayBuffer = await resume.arrayBuffer();
+        if (docxPreviewRef.current) {
+          await renderAsync(arrayBuffer, docxPreviewRef.current);
+        }
+      };
+      renderDocx();
+      setResumePreviewUrl(null);
+      setDocxPreviewHtml(true);
+      return;
+    }
+
+    setResumePreviewUrl(null);
+    setDocxPreviewHtml(null);
+    return undefined;
+  }, [resume]);
+
   const handleSocialsChange = (platform) => (event) => {
     setFormData({
       ...formData,
@@ -226,8 +257,9 @@ const Application = () => {
   };
 
   const handleFileChange = event => {
-    setResume(event.target.files[0]);
-    setResumeName(event.target.files[0].name)
+    const nextFile = event?.target?.files?.[0];
+    setResume(nextFile || null);
+    setResumeName(nextFile ? nextFile.name : null)
   }
 
   const handleSubmit = async (e) => {
@@ -687,6 +719,23 @@ const Application = () => {
                   )}
                 </Box>
               </Box>
+
+              {resumePreviewUrl && (
+                <Box sx={{ borderRadius: 2, overflow: "hidden", border: "1px solid #e0e0e0" }}>
+                  <Box
+                    component="embed"
+                    src={`${resumePreviewUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+                    type="application/pdf"
+                    sx={{ width: "100%", height: { xs: 360, sm: 500 } }}
+                  />
+                </Box>
+              )}
+
+              {docxPreviewHtml && (
+                <Box sx={{ borderRadius: 2, overflow: "hidden", border: "1px solid #e0e0e0", p: 2, bgcolor: "#fafafa", maxHeight: { xs: 360, sm: 500 }, overflowY: "auto" }}>
+                  <Box ref={docxPreviewRef} sx={{ "& > *": { fontFamily: "Calibri, sans-serif" } }} />
+                </Box>
+              )}
 
               <Button
                 type="submit"
