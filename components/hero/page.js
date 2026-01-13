@@ -13,7 +13,7 @@ export default function Hero() {
 
   const handleClick = () => {
     if (isSignedIn) {
-      router.push("/profile/apply");
+      router.push("/application");
     } else {
       router.push("/sign-in");
     }
