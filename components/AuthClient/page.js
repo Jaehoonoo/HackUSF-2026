@@ -1,18 +1,24 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
 export default function CreateProfileOnSignIn() {
   const { isSignedIn, user } = useUser();
-  const hasCreatedRef = useRef(false);
 
   useEffect(() => {
-    if (!isSignedIn || !user?.id || hasCreatedRef.current) {
+    if (!isSignedIn || !user?.id) {
       return;
     }
 
-    hasCreatedRef.current = true;
+    // Check if we've already created a profile for this user (persisted across refreshes)
+    const createdKey = `profile_created_${user.id}`;
+    if (localStorage.getItem(createdKey)) {
+      return;
+    }
+
+    // Mark as created before making the API call
+    localStorage.setItem(createdKey, "true");
 
     const createProfile = async () => {
       try {
@@ -26,11 +32,13 @@ export default function CreateProfileOnSignIn() {
         });
       } catch (error) {
         console.error("Failed to create profile:", error);
+        // Remove the flag if the API call fails so it retries next time
+        localStorage.removeItem(createdKey);
       }
     };
 
     createProfile();
-  }, [isSignedIn, user]);
+  }, [isSignedIn, user?.id]);
 
   return null;
 }

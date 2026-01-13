@@ -27,7 +27,13 @@ export default function ProfileHeader() {
           justifyContent: "space-between",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1.5, sm: 2 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: { xs: 1.5, sm: 2 },
+          }}
+        >
           <Link href="/" style={{ textDecoration: "none" }}>
             <Box
               sx={{
@@ -44,7 +50,7 @@ export default function ProfileHeader() {
             >
               <Box
                 component="img"
-                src="/gdg_logo.svg"
+                src="/images/gdglogo.webp"
                 alt="GDG logo"
                 sx={{
                   width: { xs: 34, sm: 40, md: 44 },
@@ -69,7 +75,7 @@ export default function ProfileHeader() {
             bgcolor: "#C6473E",
             color: "#fff",
             border: "4px solid var(--ink)",
-            borderRadius: 0,
+            borderRadius: 4,
             boxShadow: "4px 4px 0px var(--ink)",
             px: { xs: 2, sm: 3 },
             transition: "transform 120ms ease, box-shadow 120ms ease",
