@@ -54,6 +54,8 @@ export default function ApplicationProgress() {
   const [status, setStatus] = useState("empty");
   const [rsvp, setRsvp] = useState(false);
   const [isRsvpLoading, setIsRsvpLoading] = useState(false);
+  const [mealGroupLoading, setMealGroupLoading] = useState(false);
+  const [mealGroup, setMealGroup] = useState("");
   const [rsvpError, setRsvpError] = useState("");
   const cachedProfileRef = useRef({ userId: null, status: "empty", rsvp: false });
   const isFinalized = (nextStatus, nextRsvp) =>
@@ -103,6 +105,56 @@ export default function ApplicationProgress() {
     fetchStatus();
   }, [isLoaded, userId]);
 
+  const setMealGroupforUser = async () => {
+    if (!userId) return null;
+    setMealGroupLoading(true);
+    try {
+      const response = await fetch("/api/setMealGroup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.error || payload.message || "Failed to set meal group.");
+      }
+      setMealGroup(payload.mealGroup || "");
+      return payload.mealGroup || "";
+    } catch (error) {
+      setRsvpError(error.message || "Failed to set meal group.");
+      return null;
+    } finally {
+      setMealGroupLoading(false);
+    }
+  };
+
+  const fetchMealGroup = async () => {
+    if (!userId) return;
+    setMealGroupLoading(true);
+    try {
+      const response = await fetch(
+        `/api/getMealGroup?userId=${encodeURIComponent(userId)}`,
+      );
+      const payload = await response.json();
+      if (!response.ok || !payload.success) {
+        throw new Error(
+          payload.error || payload.message || "Unable to load meal group.",
+        );
+      }
+      setMealGroup(payload.data?.mealGroup || "");
+    } catch (error) {
+      setRsvpError(error.message || "Unable to load meal group.");
+    } finally {
+      setMealGroupLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (status !== "accepted" || !rsvp) return;
+    if (mealGroup || mealGroupLoading) return;
+    fetchMealGroup();
+  }, [status, rsvp, mealGroup, mealGroupLoading]);
+
   const handleRsvpConfirm = async () => {
     if (!userId) return;
     setIsRsvpLoading(true);
@@ -128,6 +180,7 @@ export default function ApplicationProgress() {
           rsvp: true,
         };
       }
+      await setMealGroupforUser();
     } catch (error) {
       setRsvpError(error.message || "Unable to confirm RSVP");
     } finally {
@@ -233,7 +286,12 @@ export default function ApplicationProgress() {
         </Box>
       ) : null}
 
-      <AcceptedQrCode isVisible={status === "accepted" && rsvp} userId={userId} />
+      <AcceptedQrCode
+        isVisible={status === "accepted" && rsvp}
+        userId={userId}
+        mealGroup={mealGroup}
+        isMealGroupLoading={mealGroupLoading}
+      />
     </Paper>
   );
 }
