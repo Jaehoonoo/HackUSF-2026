@@ -12,7 +12,7 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { SignedOut } from "@clerk/nextjs";
+import { SignedOut, SignedIn } from "@clerk/nextjs";
 
 const sections = ["About", "Tracks", "Sponsors/Partners", "FAQs"];
 
@@ -46,34 +46,65 @@ function Header() {
     router.push("/sign-in");
   };
 
+  const handleProfileClick = () => {
+    handleCloseNavMenu();
+    router.push("/profile");
+  };
+
+  const applyButtonSx = {
+    pl: 3,
+    pr: 3,
+    textTransform: "none",
+    color: "white",
+    fontFamily: "var(--font-cinzel-bold)",
+    fontWeight: 700,
+    fontSize: {
+      xs: "0.9rem",
+      sm: "1.05rem",
+      md: "1.2rem",
+      lg: "1.3rem",
+    },
+    borderRadius: "18px",
+    boxShadow: "5px 5px 0px black",
+    border: "3px solid black",
+    backgroundColor: "#a63a36",
+    transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+    "&:hover": {
+      transform: "translate(3px, 3px)",
+      boxShadow: "0px 0px 0px black",
+      border: "3px solid black",
+    },
+  };
+
   return (
     <AppBar
-      position="static"
-      sx={{ backgroundColor: "transparent", boxShadow: "none" }}
+      position="fixed"
+      sx={{
+        backgroundColor: "transparent",
+        boxShadow: "none",
+        overflow: "visible",
+      }}
     >
-      <Box sx={{ width: "100%", px: 2 }}>
+      <Box sx={{ width: "100%", px: 2, position: "relative" }}>
         <Toolbar disableGutters>
           <Box
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
-              mr: 2,
+              position: "absolute",
+              top: 10,
               display: { xs: "none", md: "flex" },
-              textDecoration: "none",
-              "&:hover": {
-                textDecoration: "none",
-              },
-              "&:focus": {
-                outline: "none",
-              },
+              zIndex: 1,
             }}
           >
             <Image
-              src="/gdsclogo.webp"
-              alt="GDSC Logo"
-              width={120}
-              height={40}
-              style={{ objectFit: "contain" }}
+              src="/images/greek-sun.png"
+              alt="Greek Sun Placeholder"
+              width={140}
+              height={90}
+              style={{
+                objectFit: "contain",
+                maxWidth: "clamp(80px, 12vw, 140px)",
+                height: "auto",
+              }}
             />
           </Box>
 
@@ -81,14 +112,18 @@ function Header() {
             <IconButton
               size="large"
               aria-label="account of current user"
+              aria-expanded={Boolean(anchorElNav)}
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               disableRipple
               sx={{
                 color: "black",
+                transition:
+                  "transform 150ms ease, color 150ms ease, opacity 150ms ease",
                 "&:hover": {
-                  backgroundColor: "transparent",
+                  transform: "scale(1.07)",
+                  backgroundColor: "rgba(0,0,0,0.04)",
                   color: "black",
                 },
                 "&:focus": {
@@ -96,12 +131,17 @@ function Header() {
                   backgroundColor: "transparent",
                 },
                 "&:active": {
+                  transform: "scale(0.95)",
                   backgroundColor: "transparent",
                   color: "black",
                 },
+                '&[aria-expanded="true"]': {
+                  transform: "scale(0.95)",
+                  opacity: 0.95,
+                },
               }}
             >
-              <MenuIcon />
+              <MenuIcon sx={{ fontSize: 30 }} />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -135,6 +175,9 @@ function Header() {
                     "&:active": {
                       backgroundColor: "transparent",
                     },
+                    padding: "0.6rem",
+                    pl: 3,
+                    pr: 3,
                   }}
                 >
                   <Typography
@@ -149,70 +192,66 @@ function Header() {
                   </Typography>
                 </MenuItem>
               ))}
-              <SignedOut>
-                <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
+              <Box
+                sx={{
+                  p: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 1,
+                  mr: 0.8,
+                }}
+              >
+                <SignedIn>
                   <Button
                     disableRipple
-                    variant="outlined"
+                    onClick={() => {
+                      handleCloseNavMenu();
+                      router.push("/profile");
+                    }}
+                    sx={{
+                      ...applyButtonSx,
+                      width: "100%",
+                    }}
+                  >
+                    Profile
+                  </Button>
+                </SignedIn>
+                <SignedOut>
+                  <Button
+                    disableRipple
                     onClick={handleLoginClick}
                     sx={{
-                      color: "black",
-                      borderColor: "black",
-                      borderWidth: "2px",
-                      borderRadius: "8px",
-                      fontFamily: "var(--font-cinzel-bold)",
-                      fontWeight: 700,
-                      textTransform: "none",
+                      ...applyButtonSx,
                       width: "100%",
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                        color: "black",
-                        borderColor: "black",
-                        borderWidth: "2px",
-                      },
-                      "&:focus": {
-                        outline: "none",
-                        backgroundColor: "transparent",
-                        color: "black",
-                        borderColor: "black",
-                        borderWidth: "2px",
-                      },
-                      "&:active": {
-                        backgroundColor: "transparent",
-                        color: "black",
-                        borderColor: "black",
-                        borderWidth: "2px",
-                      },
                     }}
                   >
                     Login
                   </Button>
-                </Box>
-              </SignedOut>
+                </SignedOut>
+              </Box>
             </Menu>
           </Box>
           <Box
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              textDecoration: "none",
-              "&:hover": {
-                textDecoration: "none",
-              },
-              "&:focus": {
-                outline: "none",
-              },
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+              top: 10,
+              display: { xs: "block", md: "none" },
+              zIndex: 1,
+              pointerEvents: "none",
             }}
           >
             <Image
-              src="/gdsclogo.webp"
-              alt="GDSC Logo"
-              width={100}
+              src="/images/greek-sun.png"
+              alt="Greek Sun Placeholder"
+              width={70}
               height={35}
-              style={{ objectFit: "contain" }}
+              style={{
+                objectFit: "contain",
+                maxWidth: "clamp(50px, 15vw, 70px)",
+                height: "auto",
+              }}
             />
           </Box>
           <Box
@@ -235,6 +274,7 @@ function Header() {
                   display: "block",
                   fontFamily: "var(--font-cinzel-bold)",
                   fontWeight: 700,
+                  fontSize: { md: "0.95rem", lg: "1.1rem", xl: "1.25rem" },
                   "&:hover": {
                     backgroundColor: "transparent",
                     color: "black",
@@ -253,39 +293,27 @@ function Header() {
                 {section}
               </Button>
             ))}
+            <SignedIn>
+              <Button
+                disableRipple
+                onClick={handleProfileClick}
+                sx={{
+                  ...applyButtonSx,
+                  my: 2,
+                  ml: 1,
+                }}
+              >
+                Profile
+              </Button>
+            </SignedIn>
             <SignedOut>
               <Button
                 disableRipple
-                variant="outlined"
                 onClick={handleLoginClick}
                 sx={{
+                  ...applyButtonSx,
                   my: 2,
-                  color: "black",
-                  borderColor: "black",
-                  borderWidth: "2px",
-                  borderRadius: "8px",
-                  fontFamily: "var(--font-cinzel-bold)",
-                  fontWeight: 700,
-                  textTransform: "none",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderColor: "black",
-                    borderWidth: "2px",
-                  },
-                  "&:focus": {
-                    outline: "none",
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderColor: "black",
-                    borderWidth: "2px",
-                  },
-                  "&:active": {
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderColor: "black",
-                    borderWidth: "2px",
-                  },
+                  ml: 1,
                 }}
               >
                 Login

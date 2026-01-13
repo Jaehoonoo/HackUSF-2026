@@ -23,11 +23,11 @@ const cinzelBold = Cinzel({
 export const metadata = {
   title: "HackUSF 2026",
   description:
-    "Join USF GDSC Hackathon 2026! Innovate and compete in HackUSF at the University of South Florida. Build projects, win prizes, and network.",
+    "Join USF GDG Hackathon 2026! Innovate and compete in HackUSF at the University of South Florida. Build projects, win prizes, and network.",
   icons: {
-    icon: '/gdsclogo.webp',
-    shortcut: '/gdsclogo.webp',
-    apple: '/gdsclogo.webp',
+    icon: "/gdsclogo.webp",
+    shortcut: "/gdsclogo.webp",
+    apple: "/gdsclogo.webp",
   },
 };
 
