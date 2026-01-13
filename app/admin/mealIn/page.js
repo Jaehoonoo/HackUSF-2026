@@ -114,11 +114,11 @@ export default function MealPage() {
               value={currentMeal}
               onChange={handleMealChange}
               variant="outlined">
+              <MenuItem value="breakfast">Breakfast</MenuItem>
               <MenuItem value="lunch1">Lunch 1</MenuItem>
+              <MenuItem value="lunch2">Lunch 2</MenuItem>
               <MenuItem value="dinner">Dinner</MenuItem>
               <MenuItem value="midnightSnack">MidnightSnack</MenuItem>
-              <MenuItem value="breakfast">Breakfast</MenuItem>
-              <MenuItem value="lunch2">Lunch 2</MenuItem>
             </Select>
           </FormControl>
 
@@ -132,9 +132,12 @@ export default function MealPage() {
               onChange={handleGroupChange}
               variant="outlined">
               <MenuItem value="Gods">Gods</MenuItem>
-              <MenuItem value="Group 1">Group 1</MenuItem>
-              <MenuItem value="Group 2">Group 2</MenuItem>
-              <MenuItem value="Group 3">Group 3</MenuItem>
+              <MenuItem value="Primordials">Primordials</MenuItem>
+              <MenuItem value="Olympians">Olympians</MenuItem>
+              <MenuItem value="Titans">Titans</MenuItem>
+              <MenuItem value="Daemones">Daemones</MenuItem>
+              <MenuItem value="Demigods">Demigods</MenuItem>
+
             </Select>
           </FormControl>
         </Box>
@@ -142,7 +145,7 @@ export default function MealPage() {
         {/* Status Messages */}
         {(!currentMeal || !currentMealGroup) && (
           <Alert severity="info" sx={{ width: "100%" }}>
-            Please select both meal type and location group before scanning
+            Please select both meal type and group before scanning
           </Alert>
         )}
 
