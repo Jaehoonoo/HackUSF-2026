@@ -1,11 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import IconButton from "@mui/material/IconButton";
+import { Box, Typography, Link, IconButton } from "@mui/material";
 
 const DiscordIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -30,14 +26,13 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        padding: { xs: "2rem 1rem", md: "4rem 2rem" },
-        minHeight: "300px",
+        p: { xs: 2, md: 4 },
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
       }}
     >
-      <Container maxWidth="xl">
+      <Box sx={{ width: "100%" }}>
         <Box
           sx={{
             display: "flex",
@@ -45,7 +40,6 @@ function Footer() {
             justifyContent: "space-between",
             alignItems: { xs: "center", md: "flex-start" },
             gap: { xs: "1.5rem", md: "2rem" },
-            mb: "2rem",
           }}
         >
           <Box
@@ -215,7 +209,7 @@ function Footer() {
             © {2026} HackUSF. All rights reserved.
           </Typography>
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+import { Box, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -40,7 +38,7 @@ function Tracks() {
         backgroundColor: "transparent",
       }}
     >
-      <Container maxWidth="xl">
+      <Box sx={{ width: "100%", p: 6 }}>
         <Typography
           variant="h2"
           component="h2"
@@ -163,7 +161,7 @@ function Tracks() {
             </IconButton>
           </Box>
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 }
