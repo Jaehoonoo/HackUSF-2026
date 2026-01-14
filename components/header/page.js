@@ -78,7 +78,7 @@ function Header() {
 
   return (
     <AppBar
-      position="fixed"
+      position="static"
       sx={{
         backgroundColor: "transparent",
         boxShadow: "none",

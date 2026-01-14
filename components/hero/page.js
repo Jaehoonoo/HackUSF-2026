@@ -39,6 +39,7 @@ export default function Hero() {
           justifyContent: "center",
           alignItems: "center",
           pb: { xs: 12, md: 50 },
+          p: 2,
         }}
       >
         <Typography
@@ -47,7 +48,7 @@ export default function Hero() {
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
             fontSize: {
-              xs: "2.25rem",
+              xs: "3.25rem",
               md: "2.6rem",
               lg: "3.2rem",
               xl: "4rem",
@@ -62,7 +63,7 @@ export default function Hero() {
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
             fontSize: {
-              xs: "0.9rem",
+              xs: "1.2rem",
               sm: "1.3rem",
               md: "1.1rem",
               lg: "1.2rem",
