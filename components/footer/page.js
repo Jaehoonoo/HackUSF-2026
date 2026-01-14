@@ -30,8 +30,7 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        backgroundColor: "#F5F5F5",
-        padding: { xs: "3rem 1rem", md: "4rem 2rem" },
+        padding: { xs: "2rem 1rem", md: "4rem 2rem" },
         minHeight: "300px",
         display: "flex",
         flexDirection: "column",
@@ -45,8 +44,8 @@ function Footer() {
             flexDirection: { xs: "column", md: "row" },
             justifyContent: "space-between",
             alignItems: { xs: "center", md: "flex-start" },
-            gap: { xs: "3rem", md: "2rem" },
-            mb: "3rem",
+            gap: { xs: "1.5rem", md: "2rem" },
+            mb: "2rem",
           }}
         >
           <Box
@@ -63,9 +62,9 @@ function Footer() {
               sx={{
                 fontFamily: "var(--font-cinzel-bold)",
                 fontWeight: 700,
-                fontSize: { xs: "2rem", md: "2.5rem" },
+                fontSize: { xs: "1.5rem", md: "2.5rem" },
                 color: "black",
-                mb: "1.5rem",
+                pb: "1rem",
                 textAlign: "center",
               }}
             >
@@ -163,7 +162,7 @@ function Footer() {
                 },
               }}
             >
-              Hacker's Guide
+              Hacker&apos;s Guide
             </Link>
 
             <Link

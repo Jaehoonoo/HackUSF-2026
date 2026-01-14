@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const tracks = [
-  'BEST OVERALL',
-  'BEST AI',
-  'BEST DESIGN',
-  'BEST FIRST-TIME',
-  'FUNNIEST',
+  "BEST OVERALL",
+  "BEST AI",
+  "BEST DESIGN",
+  "BEST FIRST-TIME",
+  "FUNNIEST HACK",
 ];
 
 function Tracks() {
@@ -36,8 +36,8 @@ function Tracks() {
       component="section"
       id="tracks"
       sx={{
-        padding: { xs: '4rem 1rem', md: '6rem 2rem' },
-        backgroundColor: 'transparent',
+        padding: { xs: "4rem 1rem", md: "6rem 2rem" },
+        backgroundColor: "transparent",
       }}
     >
       <Container maxWidth="xl">
@@ -45,12 +45,12 @@ function Tracks() {
           variant="h2"
           component="h2"
           sx={{
-            fontFamily: 'var(--font-cinzel-bold)',
+            fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: { xs: '1.75rem', md: '2.5rem' },
-            color: 'black',
-            mb: '3rem',
-            textAlign: { xs: 'center', md: 'left' },
+            fontSize: { xs: "1.75rem", md: "2.5rem" },
+            color: "black",
+            mb: "3rem",
+            textAlign: { xs: "center", md: "left" },
           }}
         >
           TRACKS
@@ -58,35 +58,32 @@ function Tracks() {
 
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          
           <Box
             sx={{
-              backgroundColor: '#C8E6C9',
-              borderRadius: '8px',
-              padding: { xs: '2rem 1.5rem', md: '3rem 2rem' },
-              minWidth: { xs: '250px', md: '400px' },
-              maxWidth: { xs: '300px', md: '500px' },
-              minHeight: { xs: '150px', md: '200px' },
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
+              backgroundColor: "#35a0c7",
+              borderRadius: "8px",
+              padding: { xs: "4rem 2.5rem", sm: "4rem 3rem", md: "5rem 4rem" },
+              width: { xs: "85vw", sm: "500px", md: "600px" },
+              minHeight: { xs: "250px", sm: "300px", md: "350px" },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
             }}
           >
-            
             <Box
               sx={{
-                position: 'absolute',
-                top: '1rem',
-                display: 'flex',
-                gap: '0.5rem',
-                justifyContent: 'center',
+                position: "absolute",
+                top: "1.5rem",
+                display: "flex",
+                gap: "0.75rem",
+                justifyContent: "center",
               }}
             >
               {tracks.map((_, index) => (
@@ -94,67 +91,71 @@ function Tracks() {
                   key={index}
                   onClick={() => handleDotClick(index)}
                   sx={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: index === currentTrack ? '#FFD54F' : '#E0E0E0',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.3s',
-                    '&:hover': {
-                      backgroundColor: index === currentTrack ? '#FFD54F' : '#BDBDBD',
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    backgroundColor:
+                      index === currentTrack ? "#2670ad" : "#E0E0E0",
+                    cursor: "pointer",
+                    transition: "background-color 0.3s",
+                    "&:hover": {
+                      backgroundColor:
+                        index === currentTrack ? "#2670ad" : "#BDBDBD",
                     },
                   }}
                 />
               ))}
             </Box>
 
-            
             <IconButton
               onClick={handlePrevious}
               disableRipple
               sx={{
-                position: 'absolute',
-                left: '0.5rem',
-                color: 'black',
-                '&:hover': {
-                  backgroundColor: 'transparent',
+                position: "absolute",
+                left: "0.5rem",
+                color: "black",
+                "&:hover": {
+                  backgroundColor: "transparent",
                   opacity: 0.7,
                 },
-                '&:focus': {
-                  outline: 'none',
+                "&:focus": {
+                  outline: "none",
                 },
               }}
             >
               <ArrowBackIosIcon />
             </IconButton>
 
-            
             <Typography
               sx={{
-                fontFamily: 'var(--font-cinzel-bold)',
+                fontFamily: "var(--font-cinzel-bold)",
                 fontWeight: 700,
-                fontSize: { xs: '1.25rem', md: '1.75rem' },
-                color: 'black',
-                textAlign: 'center',
+                fontSize: {
+                  xs: "1.75rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "3rem",
+                },
+                color: "black",
+                textAlign: "center",
               }}
             >
               {tracks[currentTrack]}
             </Typography>
 
-            
             <IconButton
               onClick={handleNext}
               disableRipple
               sx={{
-                position: 'absolute',
-                right: '0.5rem',
-                color: 'black',
-                '&:hover': {
-                  backgroundColor: 'transparent',
+                position: "absolute",
+                right: "0.5rem",
+                color: "black",
+                "&:hover": {
+                  backgroundColor: "transparent",
                   opacity: 0.7,
                 },
-                '&:focus': {
-                  outline: 'none',
+                "&:focus": {
+                  outline: "none",
                 },
               }}
             >
