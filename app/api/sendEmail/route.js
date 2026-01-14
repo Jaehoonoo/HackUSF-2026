@@ -68,7 +68,7 @@ const emailTemplates = {
                 
                 <p><strong>2. Join Our Community on Discord</strong><br>
                 Dive into the heart of HackUSF! Join our Discord to meet other talented hackers, interact with our mentors, and stay updated with real-time announcements.</p>
-                <center><a href="https://discord.gg/QrGfXJehBy" class="button button-discord" style="color: #ffffff !important;">Join Discord</a></center>
+                <center><a href="https://discord.gg/FP3NQpBqQu" class="button button-discord" style="color: #ffffff !important;">Join Discord</a></center>
                 
                 <p><strong>3. Share Your Excitement</strong><br>
                 Let the world know you're heading to HackUSF 2026! Share your acceptance on your favorite social media platforms.</p>
@@ -159,7 +159,7 @@ const emailTemplates = {
                 <p style="margin: 10px 0 0 0; text-align: left;">We had an incredible number of applications this year. We'll notify you immediately if a spot becomes available.</p>
             </div>
             <p>In the meantime, feel free to join our Discord community to stay connected!</p>
-                <center><a href="https://discord.gg/QrGfXJehBy" class="button button-discord" style="color: #ffffff !important;">Join Discord</a></center>
+                <center><a href="https://discord.gg/FP3NQpBqQu" class="button button-discord" style="color: #ffffff !important;">Join Discord</a></center>
         </div>
         <div class="footer">
             <p>Best,<br><strong>GDG Team</strong></p>
