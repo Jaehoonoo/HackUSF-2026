@@ -36,7 +36,8 @@ export async function POST(req) {
         codeOfConduct: false,
         privacyPolicy: false,
         newsletter: false,
-        eighteen: false
+        eighteen: false,
+        resumeName: ""
       })
     }
     // After crating the profile sends a success response to frontend

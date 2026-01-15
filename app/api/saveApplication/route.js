@@ -24,7 +24,8 @@ export async function POST(req) {
       'race',
       'shirtSize',
       'codeOfConduct',
-      'privacyPolicy'
+      'privacyPolicy',
+      'resumeName'
     ];
 
     let missingFields = []
@@ -66,7 +67,8 @@ export async function POST(req) {
       dietaryRestrictions: data.dietaryRestrictions || [],
       newsletter: data.newsletter || false,
       eighteen: parseInt(data.age) >= 18,
-      status: "pending"
+      status: "pending",
+      resumeName: data.resumeName
     };
 
     // updateDoc updates the fields for the user profile

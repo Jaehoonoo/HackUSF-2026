@@ -78,15 +78,16 @@ const Application = () => {
     codeOfConduct: false,
     privacyPolicy: false,
     newsletter: false,
-    eighteen: false
+    eighteen: false,
+    resumeName: ""
   })
   const { firstName, lastName, email, age, phone, school, major, levelOfStudy, gradYear, shirtSize, country,
-    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter } = formData
+    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter, eighteen } = formData
   // console.log(formData)
 
   // get userId
   const { userId } = useAuth();
-  console.log(userId);
+  console.log("userId: ", userId);
 
   // initialize router to redirect user after submission
   const router = useRouter()
@@ -259,7 +260,12 @@ const Application = () => {
   const handleFileChange = event => {
     const nextFile = event?.target?.files?.[0];
     setResume(nextFile || null);
-    setResumeName(nextFile ? nextFile.name : null)
+    const newResumeName = nextFile ? nextFile.name : null;
+    setResumeName(newResumeName);
+    // Update formData.resumeName so it gets saved to Firebase
+    if (newResumeName) {
+      setFormData(prev => ({ ...prev, resumeName: newResumeName }));
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -639,6 +645,32 @@ const Application = () => {
                 <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
                   Resume
                 </Typography>
+                {formData.resumeName && !resume && (
+                  <Box
+                    sx={{
+                      mb: 2,
+                      p: 2,
+                      bgcolor: "rgba(74, 123, 167, 0.1)",
+                      borderRadius: 2,
+                      border: "1px solid #4A7BA7",
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: "#4A7BA7",
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 1,
+                      }}
+                    >
+                      <UploadFileIcon sx={{ fontSize: 24 }} />
+                      Current Resume: {formData.resumeName}
+                    </Typography>
+                  </Box>
+                )}
                 <Box
                   sx={{
                     border: "2px dashed",
