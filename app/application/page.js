@@ -30,7 +30,8 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
-  FormHelperText
+  FormHelperText,
+  FormGroup
 } from "@mui/material";
 
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -44,15 +45,16 @@ import countriesList from "./countriesList";
 
 import swal from "sweetalert";
 
-// TODO: attach policy and code links
-
 const Application = () => {
+  const { isSignedIn, isLoaded } = useAuth()
+
   const docxPreviewRef = useRef(null)
   const [resume, setResume] = useState(null) //resume file
   const [resumeName, setResumeName] = useState(null) //resume file name
   const [resumePreviewUrl, setResumePreviewUrl] = useState(null)
   const [docxPreviewHtml, setDocxPreviewHtml] = useState(null)
   const [errors, setErrors] = useState({})
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -60,6 +62,7 @@ const Application = () => {
     age: "",
     phone: "",
     school: "",
+    otherSchool: "",
     major: "",
     levelOfStudy: "",
     gradYear: "",
@@ -67,6 +70,8 @@ const Application = () => {
     country: "",
     gender: "",
     race: "",
+    dietaryRestrictions: [],
+    otherAccommodations: "",
     numHackathons: "",
     socials: {
       linkedin: "",
@@ -82,7 +87,8 @@ const Application = () => {
     resumeName: ""
   })
   const { firstName, lastName, email, age, phone, school, major, levelOfStudy, gradYear, shirtSize, country,
-    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter, eighteen } = formData
+    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter, eighteen, dietaryRestrictions
+    , otherAccommodations, otherSchool } = formData
   // console.log(formData)
 
   // get userId
@@ -91,6 +97,14 @@ const Application = () => {
 
   // initialize router to redirect user after submission
   const router = useRouter()
+
+  useEffect(()=>{
+    if (isLoaded) {
+      if (!isSignedIn) {
+        router.push("/sign-in")
+      }
+    }
+  }, [isSignedIn, isLoaded])
 
   // get existing application
   useEffect(() => {
@@ -113,6 +127,8 @@ const Application = () => {
     .then(result => {
       if (result.success && result && result.data) {
         const data = result.data;
+
+        console.log("returned data: ", data)
 
         // Ensure new fields exist
         for (const property in formData) {
@@ -139,6 +155,23 @@ const Application = () => {
       // Clear error when user starts typing
       if (errors[key]) {
         setErrors({ ...errors, [key]: "" });
+      }
+    }
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    // If the field is a checkbox, handle it appropriately
+    if (type === "checkbox") {
+      // Check if the field is expected to be an array (e.g., dietaryRestrictions)
+      if (Array.isArray(formData[name])) {
+        setFormData({
+          ...formData,
+          [name]: checked
+            ? [...formData[name], value] // Add value if checked
+            : formData[name].filter(item => item !== value), // Remove value if unchecked
+        });
       }
     }
   };
@@ -282,14 +315,16 @@ const Application = () => {
     resumeData.append("userName", `${formData.firstName} ${formData.lastName}`)
     resumeData.append("resume", resume)
 
-    const uploadResumeResponse = await fetch('/api/uploadResume', {
-      method: 'POST',
-      body: resumeData,
-    });
+    if (resumeName == "") {
+      const uploadResumeResponse = await fetch('/api/uploadResume', {
+        method: 'POST',
+        body: resumeData,
+      });
 
-    if (!uploadResumeResponse.ok) {
-      swal("Error", "Uploading resume failed!", "error");
-      return;
+      if (!uploadResumeResponse.ok) {
+        swal("Error", "Uploading resume failed!", "error");
+        return;
+      }
     }
 
     console.log("finalFormData: ", formData);
@@ -423,6 +458,18 @@ const Application = () => {
                 isOptionEqualToValue={(option, value) => option === value}
               />
 
+              {formData.school === "Other" && (
+                <TextField
+                  label="Other University"
+                  variant="outlined"
+                  name="otherSchool"
+                  value={formData.otherSchool}
+                  onChange={makeHandleChange("otherSchool")}
+                  sx={{ width: "100%", margin: "normal" }}
+                  required
+                />
+              )}
+
               <Autocomplete
                 freeSolo={false}
                 options={majorsList}
@@ -530,6 +577,35 @@ const Application = () => {
                 </Select>
               </FormControl>
 
+
+              <FormGroup sx={{ width: "100%" }}>
+                <Typography variant="h6">Dietary Restrictions</Typography>
+                {["Vegan", "Vegetarian", "Halal", "Nuts", "Fish", "Gluten", "Dairy", "Eggs", "No Beef", "No Pork"].map((restriction) => (
+                  <FormControlLabel
+                    key={restriction}
+                    control={
+                      <Checkbox
+                        checked={formData.dietaryRestrictions.includes(restriction)}
+                        value={restriction}
+                        name="dietaryRestrictions"
+                        onChange={handleCheckboxChange}
+                      />
+                    }
+                    label={restriction}
+                  />
+                ))}
+
+                <TextField
+                  label="Other Accommodations?"
+                  variant="outlined"
+                  name="otherAccommodations"
+                  value={formData.otherAccommodations}
+                  onChange={makeHandleChange("otherAccommodations")}
+                  margin="normal"
+                  sx={{ width: "100%" }}
+                />
+              </FormGroup>
+
               <TextField
                 fullWidth
                 label="Number of Hackathons"
@@ -606,7 +682,14 @@ const Application = () => {
                         onChange={makeHandleChange("codeOfConduct")}
                       />
                     }
-                    label="I agree to the MLH Code of Conduct (required)"
+                    label= {
+                      <>
+                        I have read and agree to the{' '}
+                        <a href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+                          MLH Code of Conduct
+                        </a>
+                      </>
+                    }
                   />
                   {errors.codeOfConduct && (
                     <FormHelperText>{errors.codeOfConduct}</FormHelperText>
@@ -621,7 +704,17 @@ const Application = () => {
                         onChange={makeHandleChange("privacyPolicy")}
                       />
                     }
-                    label="I agree to the MLH Privacy Policy (required)"
+                    label={
+                      <>
+                        I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in line with the MLH Privacy Policy. I further agree to the terms of both the{' '}
+                        <a href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+                          MLH Privacy Policy
+                        </a> and the{' '}
+                        <a href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+                          MLH Contest Terms and Conditions.
+                        </a>
+                      </>
+                    }
                   />
                   {errors.privacyPolicy && (
                     <FormHelperText>{errors.privacyPolicy}</FormHelperText>

@@ -6,6 +6,8 @@ export async function POST(req) {
   try {
     const data = await req.json();
 
+    console.log(data)
+
     // Validate required fields
     const requiredFields = [
       'userId',
@@ -20,6 +22,8 @@ export async function POST(req) {
       'levelOfStudy',
       'country',
       'gender',
+      'otherSchool',
+      'otherAccommodations',
       'numHackathons',
       'race',
       'shirtSize',
@@ -41,7 +45,6 @@ export async function POST(req) {
       }), { status: 400 });
     }
 
-
     const userRef = doc(db, 'users', data.userId)
     const userSnap = await getDoc(userRef)
 
@@ -52,6 +55,7 @@ export async function POST(req) {
       age: data.age,
       phone: data.phone,
       school: data.school,
+      otherSchool: data.otherSchool,
       major: data.major,
       levelOfStudy: data.levelOfStudy,
       gradYear: data.gradYear,
@@ -63,13 +67,16 @@ export async function POST(req) {
       socials: data.socials,
       codeOfConduct: data.codeOfConduct,
       privacyPolicy: data.privacyPolicy,
-      firstHackathon: data.numHackathon === 0 || false,
       dietaryRestrictions: data.dietaryRestrictions || [],
+      otherAccommodations: data.otherAccommodations,
       newsletter: data.newsletter || false,
       eighteen: parseInt(data.age) >= 18,
       status: "pending",
       resumeName: data.resumeName
     };
+
+    console.log("otherSchool: ", newUserObject.otherSchool)
+    console.log("otheraccom: ", newUserObject.otherAccommodations)
 
     // updateDoc updates the fields for the user profile
     if (userSnap.exists()) {

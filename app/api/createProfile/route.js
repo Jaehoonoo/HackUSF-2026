@@ -21,20 +21,26 @@ export async function POST(req) {
       // If user doesnt exist we create a new document with default fields
       // setDoc writes the document to Firestore
       await setDoc(userDocRef, {
+        firstName: "",
         lastName: "",
+        email: "",
         age: "",
         phone: "",
         school: "",
+        otherSchool: "",
         major: "",
         levelOfStudy: "",
+        gradYear: "",
         country: "",
         gender: "",
+        shirtSize: "",
         race: "",
         numHackathons: "",
-        resume: "",
         socials: {},
         codeOfConduct: false,
         privacyPolicy: false,
+        dietaryRestrictions: [],
+        otherAccommodations: "",
         newsletter: false,
         eighteen: false,
         resumeName: ""
