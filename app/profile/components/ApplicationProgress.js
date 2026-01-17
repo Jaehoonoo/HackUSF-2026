@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { Paper, Typography, Box, Button } from "@mui/material";
 import { doc, getDoc } from "firebase/firestore";
 import ProgressTimeline from "./ProgressTimeline";
@@ -60,6 +61,8 @@ export default function ApplicationProgress() {
   const cachedProfileRef = useRef({ userId: null, status: "empty", rsvp: false });
   const isFinalized = (nextStatus, nextRsvp) =>
     nextStatus === "accepted" && nextRsvp;
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -239,6 +242,7 @@ export default function ApplicationProgress() {
                 bgcolor: "#3E6B94",
               },
             }}
+            onClick={() => router.push("application")}
           >
             Apply Now
           </Button>
