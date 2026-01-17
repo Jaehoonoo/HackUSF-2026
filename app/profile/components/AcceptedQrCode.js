@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import QRCode from "qrcode";
 
-export default function AcceptedQrCode({ isVisible, userId }) {
+export default function AcceptedQrCode({
+  isVisible,
+  userId,
+  mealGroup,
+  isMealGroupLoading,
+}) {
   const [qrCode, setQrCode] = useState("");
 
   useEffect(() => {
@@ -39,6 +44,31 @@ export default function AcceptedQrCode({ isVisible, userId }) {
       <Typography sx={{ fontWeight: 700, mb: 1 }}>
         Your check-in QR
       </Typography>
+      {isMealGroupLoading ? (
+        <Typography
+          variant="body1"
+          sx={{
+            mb: 1.5,
+            color: "text.secondary",
+            fontWeight: 700,
+            fontSize: { xs: "1rem", sm: "1.15rem" },
+          }}
+        >
+          Assigning your meal group...
+        </Typography>
+      ) : mealGroup ? (
+        <Typography
+          variant="body1"
+          sx={{
+            mb: 1.5,
+            color: "#385BB2",
+            fontWeight: 700,
+            fontSize: { xs: "1rem", sm: "1.15rem" },
+          }}
+        >
+          Group: {mealGroup}
+        </Typography>
+      ) : null}
       <Typography variant="body2" sx={{ mb: 2, color: "text.secondary" }}>
         This qrcode will be use for hackathon and food check-in.
       </Typography>
