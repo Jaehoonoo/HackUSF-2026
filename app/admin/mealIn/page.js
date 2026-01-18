@@ -52,9 +52,6 @@ export default function MealPage() {
     setIsProcessing(true);
     setMealInResult(null);
 
-    console.log(`Processing check-in for user: ${userId}`);
-    console.log(`Meal: ${currentMeal}, Group: ${currentMealGroup}`);
-
     const result = await markAsMealed(userId, currentMeal, currentMealGroup);
     setMealInResult(result);
 
@@ -114,11 +111,11 @@ export default function MealPage() {
               value={currentMeal}
               onChange={handleMealChange}
               variant="outlined">
-              <MenuItem value="breakfast">Breakfast</MenuItem>
               <MenuItem value="lunch1">Lunch 1</MenuItem>
-              <MenuItem value="lunch2">Lunch 2</MenuItem>
               <MenuItem value="dinner">Dinner</MenuItem>
               <MenuItem value="midnightSnack">MidnightSnack</MenuItem>
+              <MenuItem value="breakfast">Breakfast</MenuItem>
+              <MenuItem value="lunch2">Lunch 2</MenuItem>
             </Select>
           </FormControl>
 
@@ -131,7 +128,6 @@ export default function MealPage() {
               value={currentMealGroup}
               onChange={handleGroupChange}
               variant="outlined">
-              <MenuItem value="Gods">Gods</MenuItem>
               <MenuItem value="Primordials">Primordials</MenuItem>
               <MenuItem value="Olympians">Olympians</MenuItem>
               <MenuItem value="Titans">Titans</MenuItem>
