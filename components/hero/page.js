@@ -148,7 +148,7 @@ export default function Hero() {
       </Box>
       <Box sx={{ pb: 40, display: { xs: "none", md: "block" }, width: "35%" }}>
         <Image
-          src="/images/temple_placeholder.png"
+          src="/images/temple.png"
           alt="Temple Placeholder"
           width={600}
           height={600}
