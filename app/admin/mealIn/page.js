@@ -52,9 +52,6 @@ export default function MealPage() {
     setIsProcessing(true);
     setMealInResult(null);
 
-    console.log(`Processing check-in for user: ${userId}`);
-    console.log(`Meal: ${currentMeal}, Group: ${currentMealGroup}`);
-
     const result = await markAsMealed(userId, currentMeal, currentMealGroup);
     setMealInResult(result);
 
@@ -131,10 +128,12 @@ export default function MealPage() {
               value={currentMealGroup}
               onChange={handleGroupChange}
               variant="outlined">
-              <MenuItem value="Gods">Gods</MenuItem>
-              <MenuItem value="Group 1">Group 1</MenuItem>
-              <MenuItem value="Group 2">Group 2</MenuItem>
-              <MenuItem value="Group 3">Group 3</MenuItem>
+              <MenuItem value="Primordials">Primordials</MenuItem>
+              <MenuItem value="Olympians">Olympians</MenuItem>
+              <MenuItem value="Titans">Titans</MenuItem>
+              <MenuItem value="Daemones">Daemones</MenuItem>
+              <MenuItem value="Demigods">Demigods</MenuItem>
+
             </Select>
           </FormControl>
         </Box>
@@ -142,7 +141,7 @@ export default function MealPage() {
         {/* Status Messages */}
         {(!currentMeal || !currentMealGroup) && (
           <Alert severity="info" sx={{ width: "100%" }}>
-            Please select both meal type and location group before scanning
+            Please select both meal type and group before scanning
           </Alert>
         )}
 

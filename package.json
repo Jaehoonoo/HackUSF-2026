@@ -17,6 +17,7 @@
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "archiver": "^7.0.1",
+    "docx-preview": "^0.3.7",
     "firebase": "^12.7.0",
     "firebase-admin": "^13.6.0",
     "html5-qrcode": "^2.3.8",
@@ -24,7 +25,8 @@
     "nodemailer": "^7.0.12",
     "qrcode": "^1.5.4",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "sweetalert": "^2.1.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",

@@ -20,33 +20,30 @@ export async function POST(req) {
       // If user doesnt exist we create a new document with default fields
       // setDoc writes the document to Firestore
       await setDoc(userDocRef, {
-        age: "",
-        checkedIn: false,
-        codeOfConduct: true,
-        country: "",
-        dietaryRestrictions: [],
-        disclaimer: false,
-        email: "",
-        ethnicity: "",
-        fileName: "",
-        numHackathons: 0,
         firstName: "",
-        gender: "",
-        gradYear: "",
         lastName: "",
-        levelOfStudy: "",
-        major: "",
-        notifications: false,
-        otherAccomodations: "",
-        otherSchool: "",
+        email: "",
+        age: "",
         phone: "",
-        privacyPolicy: true,
-        resumeURL: "",
-        rsvp: false,
         school: "",
+        otherSchool: "",
+        major: "",
+        levelOfStudy: "",
+        gradYear: "",
+        country: "",
+        gender: "",
         shirtSize: "",
-        status: "",
-      });
+        race: "",
+        numHackathons: "",
+        socials: {},
+        codeOfConduct: false,
+        privacyPolicy: false,
+        dietaryRestrictions: [],
+        otherAccommodations: "",
+        newsletter: false,
+        eighteen: false,
+        resumeName: ""
+      })
     }
     // After crating the profile sends a success response to frontend
     return new Response(

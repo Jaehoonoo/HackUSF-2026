@@ -6,6 +6,8 @@ export async function POST(req) {
   try {
     const data = await req.json();
 
+    console.log(data)
+
     // Validate required fields
     const requiredFields = [
       'userId',
@@ -20,18 +22,19 @@ export async function POST(req) {
       'levelOfStudy',
       'country',
       'gender',
+      'otherSchool',
+      'otherAccommodations',
       'numHackathons',
-      // 'resume',
-      'ethnicity',
+      'race',
       'shirtSize',
-      'disclaimer',
       'codeOfConduct',
-      'privacyPolicy'
+      'privacyPolicy',
+      'resumeName'
     ];
 
     let missingFields = []
     for (const field of requiredFields) {
-      if (!data[field]) missingFields.push(field);
+      if (data[field] == null) missingFields.push(field);
     }
 
     if (missingFields.length) {
@@ -42,46 +45,44 @@ export async function POST(req) {
       }), { status: 400 });
     }
 
-
     const userRef = doc(db, 'users', data.userId)
     const userSnap = await getDoc(userRef)
 
     const newUserObject = {
       firstName: data.firstName,
       lastName: data.lastName,
+      email: data.email,
       age: data.age,
       phone: data.phone,
-      email: data.email,
       school: data.school,
+      otherSchool: data.otherSchool,
       major: data.major,
-      gradYear: data.gradYear,
       levelOfStudy: data.levelOfStudy,
+      gradYear: data.gradYear,
       country: data.country,
       gender: data.gender,
-      numHackathons: data.numHackathons,
-      ethnicity: data.ethnicity,
       shirtSize: data.shirtSize,
-      disclaimer: data.disclaimer,
+      race: data.race,
+      numHackathons: data.numHackathons,
+      socials: data.socials,
       codeOfConduct: data.codeOfConduct,
       privacyPolicy: data.privacyPolicy,
-      otherSchool: data.otherSchool || '',
-      firstHackathon: data.numHackathon === 0 || false,
       dietaryRestrictions: data.dietaryRestrictions || [],
-      otherAccommodations: data.otherAccommodations || '',
-      notifications: data.notifications || false
+      otherAccommodations: data.otherAccommodations,
+      newsletter: data.newsletter || false,
+      eighteen: parseInt(data.age) >= 18,
+      status: "pending",
+      resumeName: data.resumeName
     };
+
+    console.log("otherSchool: ", newUserObject.otherSchool)
+    console.log("otheraccom: ", newUserObject.otherAccommodations)
 
     // updateDoc updates the fields for the user profile
     if (userSnap.exists()) {
       await updateDoc(userRef, newUserObject);
     } else {
       return NextResponse.json({ error: "User does not exist" }, { status: 404 })
-    }
-
-    if (userSnap.exists()) {
-      if (data.status === "" ){
-        await updateDoc(userRef, { status: "pending" });
-      }
     }
 
     return new Response(JSON.stringify({
