@@ -8,6 +8,7 @@ import About from "@/components/about/page";
 import Tracks from "@/components/tracks/page";
 import Sponsors from "@/components/sponsors/page";
 import Footer from "@/components/footer/page";
+import FAQ from "@/components/faq/page";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <About />
       <Tracks />
       <Sponsors />
+      <FAQ />
       <Footer />
     </Box>
   );
