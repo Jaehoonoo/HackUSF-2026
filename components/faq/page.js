@@ -134,7 +134,7 @@ export default function FAQ() {
     const [expanded, setExpanded] = useState(null);
     const [activeCategory, setActiveCategory] = useState("General");
 
-// Change handling for the accordions...closes old ones when new are clicked or when the same accordion is clicked again.
+    // Change handling for the accordions...closes old ones when new are clicked or when the same accordion is clicked again.
     function handleChange(index) {
         setExpanded(function (prev) {
             if (prev == index) {
@@ -157,8 +157,7 @@ export default function FAQ() {
         return (
             <Box
                 sx={{
-                    maxWidth: 700,
-                    width: "100%",
+                    width: "50%",
                     mx: "auto",
                     mt: { xs: 8, md: 12 },
                     px: { xs: 2, md: 0 },
@@ -174,6 +173,8 @@ export default function FAQ() {
                             borderRadius: 2,
                             mb: { xs: 1.5, md: 3 }, // spacing between items
                             width: "100%",
+                            p: "1.0rem",
+                            pr: "1.6rem",
                             // base shadow and transform for smoother lift effect
                             boxShadow: "0 8px 20px rgba(0,0,0,0.10)",
                             transform: "translateZ(0)",
@@ -181,7 +182,7 @@ export default function FAQ() {
                             // hover lift only for pointer devices to avoid mobile quirks
                             '@media (hover: hover) and (pointer: fine)': {
                                 '&:hover': {
-                                    transform: 'translateY(-8px)',
+                                    transform: 'translateY(-4px)',
                                     boxShadow: '0 24px 48px rgba(0,0,0,0.18)',
                                 }
                             }
@@ -192,7 +193,7 @@ export default function FAQ() {
                                 sx={{
                                     fontFamily: "Cinzel",
                                     fontWeight: 700,
-                                    fontSize: { xs: "18px", md: "24px" },
+                                    fontSize: { xs: "1.2rem", md: "1.5rem", lg: "1.9rem" },
                                     lineHeight: "100%",
                                     letterSpacing: 0,
                                 }}
@@ -205,10 +206,10 @@ export default function FAQ() {
                                 sx={{
                                     fontFamily: "Cinzel",
                                     fontWeight: 400,
-                                    fontSize: { xs: "16px", md: "18px" },
+                                    fontSize: { xs: "1.0rem", md: "1.3rem", lg: "1.7rem" },
                                     lineHeight: 1.6,
                                     letterSpacing: "0px",
-                                    color: "black",
+                                    color: "#3d3d3dff",
                                 }}
                             >
                                 {item.answer}
@@ -230,7 +231,7 @@ export default function FAQ() {
                 pt: 1,
             }}
         >
-            <Box sx={{ maxWidth: 1200, mx: "auto", px: { xs: 3, md: 6 }, py: { xs: 4, md: 8 } }}>
+            <Box sx={{ mx: "auto", px: { xs: 3, md: 6 }, py: { xs: 4, md: 8 } }}>
                 {/* Centered title */}
                 <Box sx={{ textAlign: "center", mb: { xs: 2, md: 4 } }}>
                     <Typography
@@ -254,7 +255,8 @@ export default function FAQ() {
                         justifyContent: "center",
                         flexWrap: "wrap",
                         gap: { xs: 1.5, md: 3 },
-                        mt: { xs: 2, md: 5 },
+                        pt: { xs: 2, md: 5 },
+                        width: "100%",
                     }}
                 >
                     {questionBoxes.map((box) => (
@@ -262,9 +264,8 @@ export default function FAQ() {
                             key={box.id}
                             onClick={() => handleCategoryClick(box.key)}
                             sx={{
-                                bgcolor: activeCategory === box.key ? "#F7E8BC" : "#FBF1DA",
-                                px: { xs: 2, md: 3 },
-                                py: { xs: 0.7, md: 1 },
+                                bgcolor: activeCategory === box.key ? "#FFD37C" : "#FBF1DA",
+                                p: "1.1rem",
                                 borderRadius: "8px",
                                 display: "flex",
                                 alignItems: "center",
@@ -272,15 +273,18 @@ export default function FAQ() {
                                 cursor: "pointer",
                                 // use CSS box-shadow strings for consistent visuals
                                 boxShadow: activeCategory === box.key ? "0 10px 30px rgba(0,0,0,0.18)" : "0 6px 18px rgba(0,0,0,0.08)",
-                                minWidth: { xs: "auto", md: 140 },
-                                // smooth, non-layout-changing hover/active effects
-                                transition: "transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease",
+                                minWidth: { xs: "auto", md: "auto" },
+                                // keep a consistent border to avoid layout shift; show solid black when active
+                                border: activeCategory === box.key ? "5px solid #C4944A" : "3px solid transparent",
+                                boxSizing: "border-box",
+                                // smooth, non-layout-changing hover effects
+                                transition: "transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease, border 180ms ease",
                                 transform: "translateZ(0)",
                                 // apply hover only on devices that support hover to remain mobile-safe
                                 "@media (hover: hover) and (pointer: fine)": {
                                     '&:hover': {
                                         transform: 'scale(1.03)',
-                                        backgroundColor: activeCategory === box.key ? "#F7E8BC" : "#F7EEC5",
+                                        backgroundColor: activeCategory === box.key ? "#FFD37C" : "#F7EEC5",
                                         boxShadow: "0 14px 36px rgba(0,0,0,0.18)",
                                     },
                                 },
@@ -290,7 +294,7 @@ export default function FAQ() {
                                 sx={{
                                     fontFamily: "Cinzel",
                                     fontWeight: 700,
-                                    fontSize: { xs: "14px", md: "20px" },
+                                    fontSize: { xs: "1.3rem", md: "1.6rem", lg: "2.0rem" },
                                     textAlign: "center",
                                 }}
                             >
