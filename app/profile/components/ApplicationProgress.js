@@ -15,13 +15,14 @@ const STATUS_CONTENT = {
     message: "Start your HackUSF application when you are ready!",
     borderColor: "#FFB84D",
     textColor: "#C9851A",
-    showApply: true,
+    // showApply: true,
   },
   submitted: {
     banner: "Submitted",
     message: "Thanks for applying! We will email you ASAP.",
     borderColor: "#7BDE95",
     textColor: "#3A8B52",
+    showApply: true,
   },
   in_review: {
     banner: "In review",
@@ -245,6 +246,7 @@ export default function ApplicationProgress() {
             onClick={() => router.push("application")}
           >
             Apply Now
+            // {status === "submitted" ? "Edit Application" : "Apply Now"}
           </Button>
         ) : null}
       </Box>
