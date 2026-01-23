@@ -1,28 +1,20 @@
 "use client";
 
-import { 
-  useState,
-  useEffect,
-  useRef
-} from "react";
+import { useState, useEffect, useRef } from "react";
 
-import {
-  useAuth
-} from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 
 import { renderAsync } from "docx-preview";
 
-import {
-  useRouter
-} from "next/navigation"
+import { useRouter } from "next/navigation";
 
-import { 
-  Autocomplete, 
-  TextField, 
-  Box, 
-  Container, 
-  Paper, 
-  Typography, 
+import {
+  Autocomplete,
+  TextField,
+  Box,
+  Container,
+  Paper,
+  Typography,
   Button,
   FormControl,
   InputLabel,
@@ -31,7 +23,7 @@ import {
   FormControlLabel,
   Checkbox,
   FormHelperText,
-  FormGroup
+  FormGroup,
 } from "@mui/material";
 
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -46,14 +38,14 @@ import countriesList from "./countriesList";
 import swal from "sweetalert";
 
 const Application = () => {
-  const { isSignedIn, isLoaded } = useAuth()
+  const { isSignedIn, isLoaded } = useAuth();
 
-  const docxPreviewRef = useRef(null)
-  const [resume, setResume] = useState(null) //resume file
-  const [resumeName, setResumeName] = useState(null) //resume file name
-  const [resumePreviewUrl, setResumePreviewUrl] = useState(null)
-  const [docxPreviewHtml, setDocxPreviewHtml] = useState(null)
-  const [errors, setErrors] = useState({})
+  const docxPreviewRef = useRef(null);
+  const [resume, setResume] = useState(null); //resume file
+  const [resumeName, setResumeName] = useState(null); //resume file name
+  const [resumePreviewUrl, setResumePreviewUrl] = useState(null);
+  const [docxPreviewHtml, setDocxPreviewHtml] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -78,72 +70,88 @@ const Application = () => {
       github: "",
       website: "",
       devpost: "",
-      other: ""
+      other: "",
     },
     codeOfConduct: false,
     privacyPolicy: false,
     newsletter: false,
     eighteen: false,
-    resumeName: ""
-  })
-  const { firstName, lastName, email, age, phone, school, major, levelOfStudy, gradYear, shirtSize, country,
-    gender, race, numHackathons, socials, codeOfConduct, privacyPolicy, newsletter, eighteen, dietaryRestrictions
-    , otherAccommodations, otherSchool } = formData
-  // console.log(formData)
+    resumeName: "",
+  });
+  const {
+    firstName,
+    lastName,
+    email,
+    age,
+    phone,
+    school,
+    major,
+    levelOfStudy,
+    gradYear,
+    shirtSize,
+    country,
+    gender,
+    race,
+    numHackathons,
+    socials,
+    codeOfConduct,
+    privacyPolicy,
+    newsletter,
+    eighteen,
+    dietaryRestrictions,
+    otherAccommodations,
+    otherSchool,
+  } = formData;
 
   // get userId
   const { userId } = useAuth();
-  console.log("userId: ", userId);
 
   // initialize router to redirect user after submission
-  const router = useRouter()
+  const router = useRouter();
 
-  useEffect(()=>{
+  useEffect(() => {
     if (isLoaded) {
       if (!isSignedIn) {
-        router.push("/sign-in")
+        router.push("/sign-in");
       }
     }
-  }, [isSignedIn, isLoaded])
+  }, [isSignedIn, isLoaded]);
 
   // get existing application
   useEffect(() => {
-    if (!(typeof(userId) == "string")) return;
+    if (!(typeof userId == "string")) return;
     fetch("/api/createProfile", {
       method: "POST",
       body: JSON.stringify({
-        userId
-      })
-    })
-    .then(res => console.log("Profile created/exists"))
+        userId,
+      }),
+    }).then((res) => console.log("Profile created/exists"));
     fetch(`/api/getApplication?userId=${encodeURIComponent(userId)}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
-    .then(res => res.json())
-    // if result is successful && result is truthy then set result
-    .then(result => {
-      if (result.success && result && result.data) {
-        const data = result.data;
+      .then((res) => res.json())
+      // if result is successful && result is truthy then set result
+      .then((result) => {
+        if (result.success && result && result.data) {
+          const data = result.data;
 
-        console.log("returned data: ", data)
+          // Ensure new fields exist
+          for (const property in formData) {
+            // console.log("property: ", property, "undefined: ", data[property] == undefined, "formData property: ", formData[property])
+            if (data[property] == undefined)
+              data[property] = formData[property];
+            // console.log("data[property] after assignment: ", data[property])
+          }
 
-        // Ensure new fields exist
-        for (const property in formData) {
-          // console.log("property: ", property, "undefined: ", data[property] == undefined, "formData property: ", formData[property])
-          if (data[property] == undefined) data[property] = formData[property]
-          // console.log("data[property] after assignment: ", data[property])
+          setFormData(data);
         }
-        
-        setFormData(data);
-      }
-    }) 
+      });
   }, [userId]);
 
-
-  const makeHandleChange = key => event => {
+  const makeHandleChange = (key) => (event) => {
     const { type, checked, value } = event.target;
     // handle checkboxes
     if (type === "checkbox") {
@@ -170,16 +178,16 @@ const Application = () => {
           ...formData,
           [name]: checked
             ? [...formData[name], value] // Add value if checked
-            : formData[name].filter(item => item !== value), // Remove value if unchecked
+            : formData[name].filter((item) => item !== value), // Remove value if unchecked
         });
       }
     }
   };
 
-  const makeHandleChangeSelection = key => (event, newValue) => {
+  const makeHandleChangeSelection = (key) => (event, newValue) => {
     setFormData({ ...formData, [key]: newValue || "" });
     if (errors[key]) setErrors({ ...errors, [key]: "" });
-  }
+  };
 
   useEffect(() => {
     if (resume && resume.type === "application/pdf") {
@@ -189,7 +197,11 @@ const Application = () => {
       return () => URL.revokeObjectURL(url);
     }
 
-    if (resume && resume.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+    if (
+      resume &&
+      resume.type ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
       const renderDocx = async () => {
         const arrayBuffer = await resume.arrayBuffer();
         if (docxPreviewRef.current) {
@@ -212,17 +224,18 @@ const Application = () => {
       ...formData,
       socials: {
         ...socials,
-        [platform]: event.target.value
-      }
+        [platform]: event.target.value,
+      },
     });
   };
 
   const validatePhone = (phoneNumber) => {
     // Remove all non-digit characters for validation
-    const cleaned = phoneNumber.replace(/\D/g, '');
+    const cleaned = phoneNumber.replace(/\D/g, "");
     // Check if it's a valid phone format (10 digits for US, or international format)
     // Allow formats like: (123) 456-7890, 123-456-7890, 1234567890, +1 1234567890, etc.
-    const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
+    const phoneRegex =
+      /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
     return phoneRegex.test(phoneNumber) && cleaned.length >= 10;
   };
 
@@ -256,7 +269,12 @@ const Application = () => {
     // GradYear validation
     const currentYear = new Date().getFullYear();
     const gradYearNum = parseInt(gradYear);
-    if (!gradYear || isNaN(gradYearNum) || gradYearNum < currentYear - 5 || gradYearNum > currentYear + 10) {
+    if (
+      !gradYear ||
+      isNaN(gradYearNum) ||
+      gradYearNum < currentYear - 5 ||
+      gradYearNum > currentYear + 10
+    ) {
       newErrors.gradYear = "Please enter a valid graduation year";
     }
 
@@ -290,16 +308,16 @@ const Application = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFileChange = event => {
+  const handleFileChange = (event) => {
     const nextFile = event?.target?.files?.[0];
     setResume(nextFile || null);
     const newResumeName = nextFile ? nextFile.name : null;
     setResumeName(newResumeName);
     // Update formData.resumeName so it gets saved to Firebase
     if (newResumeName) {
-      setFormData(prev => ({ ...prev, resumeName: newResumeName }));
+      setFormData((prev) => ({ ...prev, resumeName: newResumeName }));
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -310,14 +328,14 @@ const Application = () => {
       return;
     }
 
-    const resumeData = new FormData()
-    resumeData.append("userId", userId)
-    resumeData.append("userName", `${formData.firstName} ${formData.lastName}`)
-    resumeData.append("resume", resume)
+    const resumeData = new FormData();
+    resumeData.append("userId", userId);
+    resumeData.append("userName", `${formData.firstName} ${formData.lastName}`);
+    resumeData.append("resume", resume);
 
     if (resumeName == "") {
-      const uploadResumeResponse = await fetch('/api/uploadResume', {
-        method: 'POST',
+      const uploadResumeResponse = await fetch("/api/uploadResume", {
+        method: "POST",
         body: resumeData,
       });
 
@@ -327,15 +345,13 @@ const Application = () => {
       }
     }
 
-    console.log("finalFormData: ", formData);
-
     const saveApplicationResponse = await fetch("/api/saveApplication", {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ userId, ...formData }),
-    })
+    });
 
     if (!saveApplicationResponse.ok) {
       swal("Error", "Saving application failed!", "error");
@@ -344,9 +360,16 @@ const Application = () => {
 
     swal("Success", "Application saved successfully!", "success");
     router.push("/profile");
-  }
+  };
 
-  const levelOfStudyOptions = ["freshman", "sophomore", "junior", "senior", "master", "others"];
+  const levelOfStudyOptions = [
+    "freshman",
+    "sophomore",
+    "junior",
+    "senior",
+    "masters",
+    "other",
+  ];
   const genderOptions = ["male", "female", "other", "prefer not to say"];
   const raceOptions = [
     "American Indian or Alaska Native",
@@ -357,7 +380,7 @@ const Application = () => {
     "White",
     "Middle Eastern or North African",
     "Multiracial / Two or more races",
-    "Prefer not to say"
+    "Prefer not to say",
   ];
   const shirtSizeOptions = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
@@ -370,7 +393,10 @@ const Application = () => {
       <GradientDivider />
 
       <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 4 }, mb: 0 }}>
-        <Paper className="hackusf-card" sx={{ borderRadius: 16, p: { xs: 3, sm: 4 }, mb: 4 }}>
+        <Paper
+          className="hackusf-card"
+          sx={{ borderRadius: 16, p: { xs: 3, sm: 4 }, mb: 4 }}
+        >
           <Typography
             align="center"
             sx={{ mb: 3, fontSize: "1.5rem", fontWeight: 700 }}
@@ -380,7 +406,13 @@ const Application = () => {
 
           <form onSubmit={handleSubmit}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-              <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 3 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  gap: 3,
+                }}
+              >
                 <TextField
                   fullWidth
                   label="First Name"
@@ -412,7 +444,13 @@ const Application = () => {
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
               />
 
-              <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 3 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  gap: 3,
+                }}
+              >
                 <TextField
                   fullWidth
                   label="Age"
@@ -489,7 +527,11 @@ const Application = () => {
                 isOptionEqualToValue={(option, value) => option === value}
               />
 
-              <FormControl fullWidth required sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}>
+              <FormControl
+                fullWidth
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
                 <InputLabel>Level of Study</InputLabel>
                 <Select
                   value={levelOfStudy}
@@ -517,7 +559,11 @@ const Application = () => {
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
               />
 
-              <FormControl fullWidth required sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}>
+              <FormControl
+                fullWidth
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
                 <InputLabel>Country</InputLabel>
                 <Select
                   value={country}
@@ -532,7 +578,11 @@ const Application = () => {
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth required sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}>
+              <FormControl
+                fullWidth
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
                 <InputLabel>Gender</InputLabel>
                 <Select
                   value={gender}
@@ -541,13 +591,18 @@ const Application = () => {
                 >
                   {genderOptions.map((genderOption) => (
                     <MenuItem key={genderOption} value={genderOption}>
-                      {genderOption.charAt(0).toUpperCase() + genderOption.slice(1)}
+                      {genderOption.charAt(0).toUpperCase() +
+                        genderOption.slice(1)}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth required sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}>
+              <FormControl
+                fullWidth
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
                 <InputLabel>Shirt Size</InputLabel>
                 <Select
                   value={shirtSize}
@@ -562,7 +617,10 @@ const Application = () => {
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}>
+              <FormControl
+                fullWidth
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
                 <InputLabel>Race</InputLabel>
                 <Select
                   value={race}
@@ -577,15 +635,27 @@ const Application = () => {
                 </Select>
               </FormControl>
 
-
               <FormGroup sx={{ width: "100%" }}>
                 <Typography variant="h6">Dietary Restrictions</Typography>
-                {["Vegan", "Vegetarian", "Halal", "Nuts", "Fish", "Gluten", "Dairy", "Eggs", "No Beef", "No Pork"].map((restriction) => (
+                {[
+                  "Vegan",
+                  "Vegetarian",
+                  "Halal",
+                  "Nuts",
+                  "Fish",
+                  "Gluten",
+                  "Dairy",
+                  "Eggs",
+                  "No Beef",
+                  "No Pork",
+                ].map((restriction) => (
                   <FormControlLabel
                     key={restriction}
                     control={
                       <Checkbox
-                        checked={formData.dietaryRestrictions.includes(restriction)}
+                        checked={formData.dietaryRestrictions.includes(
+                          restriction
+                        )}
                         value={restriction}
                         name="dietaryRestrictions"
                         onChange={handleCheckboxChange}
@@ -622,11 +692,13 @@ const Application = () => {
                 <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
                   Social Links (optional)
                 </Typography>
-                <Box sx={{ 
-                  display: "grid", 
-                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-                  gap: 2 
-                }}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                    gap: 2,
+                  }}
+                >
                   <TextField
                     fullWidth
                     label="LinkedIn"
@@ -665,9 +737,9 @@ const Application = () => {
                     value={socials.other || ""}
                     onChange={handleSocialsChange("other")}
                     placeholder="Any other social links"
-                    sx={{ 
+                    sx={{
                       gridColumn: { xs: "1", sm: "1 / -1" },
-                      "& .MuiOutlinedInput-root": { borderRadius: 2 } 
+                      "& .MuiOutlinedInput-root": { borderRadius: 2 },
                     }}
                   />
                 </Box>
@@ -682,10 +754,15 @@ const Application = () => {
                         onChange={makeHandleChange("codeOfConduct")}
                       />
                     }
-                    label= {
+                    label={
                       <>
-                        I have read and agree to the{' '}
-                        <a href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+                        I have read and agree to the{" "}
+                        <a
+                          href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "inherit" }}
+                        >
                           MLH Code of Conduct
                         </a>
                       </>
@@ -706,11 +783,26 @@ const Application = () => {
                     }
                     label={
                       <>
-                        I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in line with the MLH Privacy Policy. I further agree to the terms of both the{' '}
-                        <a href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+                        I authorize you to share my application/registration
+                        information with Major League Hacking for event
+                        administration, ranking, and MLH administration in line
+                        with the MLH Privacy Policy. I further agree to the
+                        terms of both the{" "}
+                        <a
+                          href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "inherit" }}
+                        >
                           MLH Privacy Policy
-                        </a> and the{' '}
-                        <a href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+                        </a>{" "}
+                        and the{" "}
+                        <a
+                          href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "inherit" }}
+                        >
                           MLH Contest Terms and Conditions.
                         </a>
                       </>
@@ -736,7 +828,7 @@ const Application = () => {
 
               <Box>
                 <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
-                  Resume
+                  Resume*
                 </Typography>
                 {formData.resumeName && !resume && (
                   <Box
@@ -771,7 +863,9 @@ const Application = () => {
                     borderRadius: 2,
                     p: 3,
                     textAlign: "center",
-                    bgcolor: resume ? "rgba(74, 123, 167, 0.05)" : "transparent",
+                    bgcolor: resume
+                      ? "rgba(74, 123, 167, 0.05)"
+                      : "transparent",
                     transition: "all 0.2s ease",
                     "&:hover": {
                       borderColor: "#4A7BA7",
@@ -835,10 +929,7 @@ const Application = () => {
                     </Box>
                   )}
                   {!resume && (
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "#666", mt: 2 }}
-                    >
+                    <Typography variant="body2" sx={{ color: "#666", mt: 2 }}>
                       PDF or DOCX files only
                     </Typography>
                   )}
@@ -846,7 +937,13 @@ const Application = () => {
               </Box>
 
               {resumePreviewUrl && (
-                <Box sx={{ borderRadius: 2, overflow: "hidden", border: "1px solid #e0e0e0" }}>
+                <Box
+                  sx={{
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    border: "1px solid #e0e0e0",
+                  }}
+                >
                   <Box
                     component="embed"
                     src={`${resumePreviewUrl}#toolbar=0&navpanes=0&scrollbar=0`}
@@ -857,8 +954,21 @@ const Application = () => {
               )}
 
               {docxPreviewHtml && (
-                <Box sx={{ borderRadius: 2, overflow: "hidden", border: "1px solid #e0e0e0", p: 2, bgcolor: "#fafafa", maxHeight: { xs: 360, sm: 500 }, overflowY: "auto" }}>
-                  <Box ref={docxPreviewRef} sx={{ "& > *": { fontFamily: "Calibri, sans-serif" } }} />
+                <Box
+                  sx={{
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    border: "1px solid #e0e0e0",
+                    p: 2,
+                    bgcolor: "#fafafa",
+                    maxHeight: { xs: 360, sm: 500 },
+                    overflowY: "auto",
+                  }}
+                >
+                  <Box
+                    ref={docxPreviewRef}
+                    sx={{ "& > *": { fontFamily: "Calibri, sans-serif" } }}
+                  />
                 </Box>
               )}
 
@@ -886,6 +996,6 @@ const Application = () => {
         </Paper>
       </Container>
     </Box>
-  )
-}
-export default Application
+  );
+};
+export default Application;

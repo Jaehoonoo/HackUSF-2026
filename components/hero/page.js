@@ -146,18 +146,9 @@ export default function Hero() {
           Apply Now
         </Button>
       </Box>
-      <Box sx={{ pb: 40, display: { xs: "none", md: "block" }, width: "35%" }}>
-        <Image
-          src="/images/temple.png"
-          alt="Temple Placeholder"
-          width={600}
-          height={600}
-          quality={100}
-          objectFit="contain"
-          layout="responsive"
-          loading="lazy"
-        />
-      </Box>
+      <Box
+        sx={{ pb: 40, display: { xs: "none", md: "block" }, width: "35%" }}
+      ></Box>
     </Box>
   );
 }

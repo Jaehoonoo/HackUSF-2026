@@ -96,7 +96,7 @@ function Header() {
             }}
           >
             <Image
-              src="/images/greek-sun.png"
+              src="/images/gdg-sun.png"
               alt="Greek Sun Placeholder"
               width={140}
               height={90}
@@ -243,7 +243,7 @@ function Header() {
             }}
           >
             <Image
-              src="/images/greek-sun.png"
+              src="/images/gdg-sun.png"
               alt="Greek Sun Placeholder"
               width={70}
               height={35}

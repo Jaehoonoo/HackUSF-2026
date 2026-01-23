@@ -130,8 +130,10 @@ function Footer() {
               gap: "0.75rem",
             }}
           >
-            <Link
+            {/* <Link
               href="/sponsor-us"
+              target="_blank"
+              rel="noopener noreferrer"
               sx={{
                 fontFamily: "var(--font-cinzel-bold)",
                 color: "black",
@@ -143,9 +145,11 @@ function Footer() {
               }}
             >
               Sponsor Us
-            </Link>
-            <Link
+            </Link> */}
+            {/* <Link
               href=""
+              target="_blank"
+              rel="noopener noreferrer"
               sx={{
                 fontFamily: "var(--font-cinzel-bold)",
                 color: "black",
@@ -157,10 +161,12 @@ function Footer() {
               }}
             >
               Hacker&apos;s Guide
-            </Link>
+            </Link> */}
 
             <Link
               href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
+              target="_blank"
+              rel="noopener noreferrer"
               sx={{
                 fontFamily: "var(--font-cinzel-bold)",
                 color: "black",
