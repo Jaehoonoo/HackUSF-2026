@@ -22,12 +22,14 @@ const STATUS_CONTENT = {
     message: "Thanks for applying! We will email you ASAP.",
     borderColor: "#7BDE95",
     textColor: "#3A8B52",
+    showEdit: true,
   },
   in_review: {
     banner: "In review",
     message: "We are carefully reviewing your application!",
     borderColor: "#7BDE95",
     textColor: "#3A8B52",
+    showEdit: true,
   },
   accepted: {
     banner: "Accepted",
@@ -38,7 +40,7 @@ const STATUS_CONTENT = {
   declined: {
     banner: "Declined",
     message:
-      "Thank you for applying. We hope you’ll consider joining us next year.",
+      "Thank you for applying. We hope you'll consider joining us next year.",
     borderColor: "#C6473E",
     textColor: "#C6473E",
   },
@@ -58,7 +60,11 @@ export default function ApplicationProgress() {
   const [mealGroupLoading, setMealGroupLoading] = useState(false);
   const [mealGroup, setMealGroup] = useState("");
   const [rsvpError, setRsvpError] = useState("");
-  const cachedProfileRef = useRef({ userId: null, status: "empty", rsvp: false });
+  const cachedProfileRef = useRef({
+    userId: null,
+    status: "empty",
+    rsvp: false,
+  });
   const isFinalized = (nextStatus, nextRsvp) =>
     nextStatus === "accepted" && nextRsvp;
 
@@ -119,7 +125,9 @@ export default function ApplicationProgress() {
       });
       const payload = await response.json();
       if (!response.ok || !payload.success) {
-        throw new Error(payload.error || payload.message || "Failed to set meal group.");
+        throw new Error(
+          payload.error || payload.message || "Failed to set meal group."
+        );
       }
       setMealGroup(payload.mealGroup || "");
       return payload.mealGroup || "";
@@ -136,12 +144,12 @@ export default function ApplicationProgress() {
     setMealGroupLoading(true);
     try {
       const response = await fetch(
-        `/api/getMealGroup?userId=${encodeURIComponent(userId)}`,
+        `/api/getMealGroup?userId=${encodeURIComponent(userId)}`
       );
       const payload = await response.json();
       if (!response.ok || !payload.success) {
         throw new Error(
-          payload.error || payload.message || "Unable to load meal group.",
+          payload.error || payload.message || "Unable to load meal group."
         );
       }
       setMealGroup(payload.data?.mealGroup || "");
@@ -193,7 +201,7 @@ export default function ApplicationProgress() {
 
   const content = useMemo(
     () => STATUS_CONTENT[normalizeStatus(status)],
-    [status],
+    [status]
   );
 
   return (
@@ -245,6 +253,24 @@ export default function ApplicationProgress() {
             onClick={() => router.push("application")}
           >
             Apply Now
+          </Button>
+        ) : null}
+
+        {content.showEdit ? (
+          <Button
+            variant="contained"
+            sx={{
+              bgcolor: "#4A7BA7",
+              border: "2px solid var(--ink)",
+              borderRadius: 12,
+              transition: "background-color 120ms ease",
+              "&:hover": {
+                bgcolor: "#3E6B94",
+              },
+            }}
+            onClick={() => router.push("application")}
+          >
+            Edit Application
           </Button>
         ) : null}
       </Box>

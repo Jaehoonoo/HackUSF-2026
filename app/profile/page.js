@@ -10,7 +10,7 @@ export default function Page() {
       sx={{ minHeight: "100dvh", pb: { xs: 3, sm: 6 } }}
     >
       <ProfileHeader />
-      <GradientDivider />
+      {/* <GradientDivider /> */}
 
       <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 4 }, mb: 0 }}>
         <ApplicationProgress />

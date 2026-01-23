@@ -6,47 +6,56 @@ export async function POST(req) {
   try {
     const data = await req.json();
 
-    console.log(data)
+    console.log(data);
 
     // Validate required fields
     const requiredFields = [
-      'userId',
-      'firstName',
-      'lastName',
-      'age',
-      'phone',
-      'email',
-      'school',
-      'major',
-      'gradYear',
-      'levelOfStudy',
-      'country',
-      'gender',
-      'otherSchool',
-      'otherAccommodations',
-      'numHackathons',
-      'race',
-      'shirtSize',
-      'codeOfConduct',
-      'privacyPolicy',
-      'resumeName'
+      "userId",
+      "firstName",
+      "lastName",
+      "age",
+      "phone",
+      "email",
+      "school",
+      "major",
+      "gradYear",
+      "levelOfStudy",
+      "country",
+      "gender",
+      "otherSchool",
+      "otherAccommodations",
+      "numHackathons",
+      "race",
+      "shirtSize",
+      "codeOfConduct",
+      "privacyPolicy",
+      "resumeName",
     ];
 
-    let missingFields = []
+    let missingFields = [];
     for (const field of requiredFields) {
       if (data[field] == null) missingFields.push(field);
     }
 
     if (missingFields.length) {
       console.error("Missing required fields:", missingFields);
-      return new Response(JSON.stringify({
-        error: `Missing required fields: ${missingFields}`,
-        missingFields: missingFields
-      }), { status: 400 });
+      return new Response(
+        JSON.stringify({
+          error: `Missing required fields: ${missingFields}`,
+          missingFields: missingFields,
+        }),
+        { status: 400 }
+      );
     }
 
-    const userRef = doc(db, 'users', data.userId)
-    const userSnap = await getDoc(userRef)
+    const userRef = doc(db, "users", data.userId);
+    const userSnap = await getDoc(userRef);
+
+    // Only set status to "submitted" if it was previously empty or doesn't exist
+    let status = "submitted";
+    if (userSnap.exists() && userSnap.data().status) {
+      status = userSnap.data().status;
+    }
 
     const newUserObject = {
       firstName: data.firstName,
@@ -71,30 +80,38 @@ export async function POST(req) {
       otherAccommodations: data.otherAccommodations,
       newsletter: data.newsletter || false,
       eighteen: parseInt(data.age) >= 18,
-      status: "pending",
-      resumeName: data.resumeName
+      status: status,
+      resumeName: data.resumeName,
     };
 
-    console.log("otherSchool: ", newUserObject.otherSchool)
-    console.log("otheraccom: ", newUserObject.otherAccommodations)
+    console.log("otherSchool: ", newUserObject.otherSchool);
+    console.log("otheraccom: ", newUserObject.otherAccommodations);
 
     // updateDoc updates the fields for the user profile
     if (userSnap.exists()) {
       await updateDoc(userRef, newUserObject);
     } else {
-      return NextResponse.json({ error: "User does not exist" }, { status: 404 })
+      return NextResponse.json(
+        { error: "User does not exist" },
+        { status: 404 }
+      );
     }
 
-    return new Response(JSON.stringify({
-      message: 'User application created/updated successfully',
-      data: { userId: data.userId }
-    }), { status: 200 });
-
+    return new Response(
+      JSON.stringify({
+        message: "User application created/updated successfully",
+        data: { userId: data.userId },
+      }),
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Error creating/updating user application:', error);
-    return new Response(JSON.stringify({
-      error: 'Error updating user status',
-      details: error.message
-    }), { status: 500 })
+    console.error("Error creating/updating user application:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Error updating user status",
+        details: error.message,
+      }),
+      { status: 500 }
+    );
   }
 }

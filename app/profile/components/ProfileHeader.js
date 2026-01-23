@@ -3,6 +3,7 @@
 import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
 import { useClerk } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ProfileHeader() {
   const { signOut } = useClerk();
@@ -22,8 +23,8 @@ export default function ProfileHeader() {
     >
       <Toolbar
         sx={{
-          minHeight: { xs: 80, sm: 104, md: 112 },
-          py: { xs: 1, sm: 2 },
+          minHeight: { xs: 60, sm: 70, md: 80 },
+          py: { xs: 0.5, sm: 1 },
           justifyContent: "space-between",
         }}
       >
@@ -35,27 +36,16 @@ export default function ProfileHeader() {
           }}
         >
           <Link href="/" style={{ textDecoration: "none" }}>
-            <Box
-              sx={{
-                width: { xs: 52, sm: 60, md: 64 },
-                height: { xs: 52, sm: 60, md: 64 },
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                p: 1,
-                backgroundColor: "#fff",
-                border: "4px solid var(--ink)",
-                boxShadow: "none",
-              }}
-            >
-              <Box
-                component="img"
-                src="/images/gdglogo.webp"
-                alt="GDG logo"
-                sx={{
-                  width: { xs: 34, sm: 40, md: 44 },
-                  height: { xs: 34, sm: 40, md: 44 },
+            <Box>
+              <Image
+                src="/images/gdg-sun.png"
+                alt="Greek Sun Placeholder"
+                width={70}
+                height={35}
+                style={{
                   objectFit: "contain",
+                  maxWidth: "clamp(50px, 15vw, 70px)",
+                  height: "auto",
                 }}
               />
             </Box>
