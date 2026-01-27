@@ -108,7 +108,13 @@ function Header() {
             />
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none" },
+              justifyContent: "flex-end",
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -231,13 +237,35 @@ function Header() {
               </Box>
             </Menu>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               position: "absolute",
               left: "50%",
               transform: "translateX(-50%)",
               top: 10,
               display: { xs: "block", md: "none" },
+              zIndex: 1,
+              pointerEvents: "none",
+            }}
+          >
+            <Image
+              src="/images/gdg-sun.png"
+              alt="Greek Sun Placeholder"
+              width={70}
+              height={35}
+              style={{
+                objectFit: "contain",
+                maxWidth: "clamp(50px, 15vw, 70px)",
+                height: "auto",
+              }}
+            />
+          </Box> */}
+          <Box
+            sx={{
+              position: "absolute",
+              left: 0,
+              top: 5,
+              display: { xs: "flex", md: "none" },
               zIndex: 1,
               pointerEvents: "none",
             }}

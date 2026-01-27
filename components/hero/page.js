@@ -3,7 +3,6 @@
 import { Box, Button, Typography } from "@mui/material";
 
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 import { useUser } from "@clerk/nextjs";
 
@@ -22,24 +21,28 @@ export default function Hero() {
   return (
     <Box
       sx={{
-        p: { xs: 0, md: 4 },
+        p: "clamp(0px, 2vw, 2rem)",
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        justifyContent: { xs: "center", md: "space-around" },
+        justifyContent: { xs: "space-between", md: "space-around" },
         alignItems: "center",
-        minHeight: "100vh",
+        minHeight: "clamp(600px, 100vh, 1200px)",
         margin: 0,
-        textAlign: "center",
+        width: "100%",
       }}
     >
       <Box
         sx={{
+          width: { xs: "100%", md: "50%" },
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "center",
-          pb: { xs: 12, md: 50 },
+          alignItems: { xs: "flex-start", md: "center" },
+          pb: { xs: 12, md: 62, lg: 50 },
           p: 2,
+          pl: { xs: 3, sm: 6, md: 0 },
+          pt: { xs: 3, md: 0 },
+          color: "#fad37a",
         }}
       >
         <Typography
@@ -47,12 +50,8 @@ export default function Hero() {
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: {
-              xs: "3.25rem",
-              md: "2.6rem",
-              lg: "3.2rem",
-              xl: "4rem",
-            },
+            fontSize: "clamp(1.8rem, 6vw, 5.5rem)",
+            textShadow: "2px 2px 4px rgba(27, 24, 24, 0.7)",
           }}
         >
           HackUSF 2026
@@ -62,52 +61,48 @@ export default function Hero() {
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: {
-              xs: "1.2rem",
-              sm: "1.3rem",
-              md: "1.1rem",
-              lg: "1.2rem",
-              xl: "1.3rem",
-            },
+            fontSize: "clamp(1rem, 3vw, 2.2rem)",
+            pb: { xs: 2, md: 0 },
+            textShadow: "2px 2px 4px rgba(27, 24, 24, 0.7)",
+          }}
+          textAlign="center"
+        >
+          March 28 - 29, 2026
+          {/* <Box component="span" sx={{ display: { xs: "none", md: "inline" } }}>
+            {" "}
+            @ Engineering Building II
+          </Box> */}
+        </Typography>
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            gap: 2,
+            pt: 1,
+            pb: 4,
           }}
         >
-          March 28 - 29, 2026 @ Engineering Building II
-        </Typography>
-        <Box sx={{ display: "flex", gap: 2, pt: 1, pb: 4 }}>
           <Box
             sx={{
-              fontSize: {
-                xs: "0.75rem",
-                sm: "0.9rem",
-                md: "1rem",
-                lg: "1.1rem",
-                xl: "1.2rem",
-              },
+              fontSize: "clamp(0.7rem, 1.2vw, 1.2rem)",
               fontWeight: 700,
               fontFamily: "var(--font-cinzel-bold)",
               borderRadius: "20px",
               border: "2px solid black",
               padding: "0.75rem",
-              backgroundColor: "#e08785",
+              backgroundColor: "#a63a36",
             }}
           >
             Tampa, FL
           </Box>
           <Box
             sx={{
-              fontSize: {
-                xs: "0.75rem",
-                sm: "0.9rem",
-                md: "1rem",
-                lg: "1.1rem",
-                xl: "1.2rem",
-              },
+              fontSize: "clamp(0.7rem, 1.2vw, 1.2rem)",
               fontWeight: 700,
               fontFamily: "var(--font-cinzel-bold)",
               borderRadius: "20px",
               border: "2px solid black",
               padding: "0.75rem",
-              backgroundColor: "#e08785",
+              backgroundColor: "#a63a36",
             }}
           >
             24-Hour
@@ -116,18 +111,12 @@ export default function Hero() {
         <Button
           variant="outlined"
           sx={{
-            width: "max(200px, 20vw)",
+            width: "clamp(150px, 20vw, 300px)",
             textTransform: "none",
-            color: "white",
+            color: "#fad37a",
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: {
-              xs: "0.9rem",
-              sm: "1.05rem",
-              md: "1.2rem",
-              lg: "1.3rem",
-              xl: "1.5rem",
-            },
+            fontSize: "clamp(0.9rem, 2vw, 1.5rem)",
             borderRadius: "18px",
             boxShadow: "5px 5px 0px black",
             border: "3px solid black",
