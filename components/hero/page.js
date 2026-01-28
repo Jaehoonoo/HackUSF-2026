@@ -12,7 +12,7 @@ export default function Hero() {
 
   const handleClick = () => {
     if (isSignedIn) {
-      router.push("/application");
+      router.push("/profile");
     } else {
       router.push("/sign-in");
     }
@@ -26,7 +26,7 @@ export default function Hero() {
         flexDirection: { xs: "column", md: "row" },
         justifyContent: { xs: "space-between", md: "space-around" },
         alignItems: "center",
-        minHeight: "clamp(600px, 100vh, 1200px)",
+        height: { xs: "100vh", md: "clamp(600px, 100vh, 1200px)" },
         margin: 0,
         width: "100%",
       }}
@@ -38,10 +38,20 @@ export default function Hero() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: { xs: "flex-start", md: "center" },
-          pb: { xs: 12, md: 62, lg: 50 },
+          pb: {
+            xs: "clamp(3rem, 12vh, 12rem)",
+            sm: "clamp(3rem, 30vh, 16rem)",
+            md: "clamp(4rem, 50vh, 30rem)",
+            lg: "clamp(1rem, 50vh, 40rem)",
+          },
           p: 2,
-          pl: { xs: 3, sm: 6, md: 0 },
-          pt: { xs: 3, md: 0 },
+          pl: { xs: 2, sm: 2.5, md: 0 },
+          pt: {
+            xs: "clamp(0.5rem, 4vh, 1rem)",
+            sm: "clamp(0.5rem, 50vh, 1.4rem)",
+            md: "clamp(1rem, 60vh, 2rem)",
+            lg: "clamp(1rem, 50vh, 8rem)",
+          },
           color: "#fad37a",
         }}
       >
@@ -50,7 +60,7 @@ export default function Hero() {
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: "clamp(1.8rem, 6vw, 5.5rem)",
+            fontSize: "clamp(2.2rem, 6vw, 5.5rem)",
             textShadow: "2px 2px 4px rgba(27, 24, 24, 0.7)",
           }}
         >
@@ -61,7 +71,7 @@ export default function Hero() {
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: "clamp(1rem, 3vw, 2.2rem)",
+            fontSize: "clamp(1.2rem, 3vw, 2.4rem)",
             pb: { xs: 2, md: 0 },
             textShadow: "2px 2px 4px rgba(27, 24, 24, 0.7)",
           }}
@@ -78,10 +88,10 @@ export default function Hero() {
             display: { xs: "none", md: "flex" },
             gap: 2,
             pt: 1,
-            pb: 4,
+            pb: 2,
           }}
         >
-          <Box
+          {/* <Box
             sx={{
               fontSize: "clamp(0.7rem, 1.2vw, 1.2rem)",
               fontWeight: 700,
@@ -106,7 +116,7 @@ export default function Hero() {
             }}
           >
             24-Hour
-          </Box>
+          </Box> */}
         </Box>
         <Button
           variant="outlined"

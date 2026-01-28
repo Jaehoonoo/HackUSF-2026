@@ -9,16 +9,24 @@ function About() {
       component="section"
       id="about"
       sx={{
-        padding: { xs: "4rem 1rem", md: "6rem 2rem" },
+        padding: {
+          xs: "clamp(2rem, 5vh, 4rem) clamp(0.5rem, 2vw, 2rem)",
+          md: "clamp(4rem, 8vh, 8rem) clamp(1rem, 3vw, 3rem)",
+        },
         backgroundColor: "transparent",
       }}
     >
-      <Box sx={{ width: "100%", p: 6 }}>
+      <Box
+        sx={{
+          width: "100%",
+          p: { xs: "clamp(1rem, 3vh, 3rem)", md: "clamp(2rem, 5vh, 6rem)" },
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
-            gap: { xs: "3rem", md: "0" },
+            gap: { xs: "clamp(1.5rem, 4vh, 3rem)", md: "clamp(0, 5vw, 3rem)" },
             alignItems: { xs: "center", md: "flex-start" },
             justifyContent: { xs: "center", md: "space-between" },
           }}
@@ -36,8 +44,11 @@ function About() {
               sx={{
                 fontFamily: "var(--font-cinzel-bold)",
                 fontWeight: 700,
-                fontSize: { xs: "1.75rem", md: "2.5rem" },
-                color: "black",
+                fontSize: {
+                  xs: "clamp(1.5rem, 5vw, 4rem)",
+                  md: "clamp(2rem, 6vw, 4rem)",
+                },
+                color: "white",
                 mb: "2rem",
               }}
             >
@@ -45,18 +56,21 @@ function About() {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "var(--font-cinzel-bold)",
-                fontWeight: 700,
-                fontSize: { xs: "0.9rem", md: "1rem" },
-                color: "black",
+                fontFamily: "var(--font-libre-baskerville)",
+                fontWeight: 400,
+                fontSize: {
+                  xs: "clamp(0.8rem, 2.5vw, 1.2rem)",
+                  md: "clamp(1rem, 3vw, 1.8rem)",
+                },
+                color: "white",
                 lineHeight: 1.6,
-                maxWidth: "600px",
+                maxWidth: "500px",
                 mx: { xs: "auto", md: "0" },
               }}
             >
-              THE GOOGLE DEVELOPER GROUP AT USF IS HOSTING ITS 24-HOUR
-              HACKATHON, BRINGING STUDENTS FROM ALL UNIVERSITIES TOGETHER TO
-              INNOVATE, BUILD, AND COMPETE.
+              The Google Developer Group at USF is hosting its 24-hour
+              hackathon, bringing students from all universities together to
+              innovate, build, and compete.
             </Typography>
           </Box>
 
@@ -65,6 +79,10 @@ function About() {
               flex: { xs: "1", md: "0 0 auto" },
               textAlign: { xs: "center", md: "right" },
               maxWidth: { xs: "100%", md: "45%" },
+              mt: {
+                xs: "clamp(1rem, 5vh, 4rem)",
+                md: "clamp(2rem, 15vh, 30rem)",
+              },
             }}
           >
             <Typography
@@ -73,12 +91,15 @@ function About() {
               sx={{
                 fontFamily: "var(--font-cinzel-bold)",
                 fontWeight: 700,
-                fontSize: { xs: "1.75rem", md: "2.5rem" },
-                color: "black",
+                fontSize: {
+                  xs: "clamp(1.5rem, 5vw, 2.5rem)",
+                  md: "clamp(1.75rem, 4vw, 2.5rem)",
+                },
+                color: "white",
                 mb: "2rem",
               }}
             >
-              STATS
+              HackUSF 2025
             </Typography>
             <Box
               sx={{
@@ -97,23 +118,29 @@ function About() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "var(--font-cinzel-bold)",
+                    fontFamily: "var(--font-libre-baskerville)",
                     fontWeight: 700,
-                    fontSize: { xs: "1.1rem", md: "1.3rem" },
-                    color: "black",
+                    fontSize: {
+                      xs: "clamp(0.9rem, 2.5vw, 1.3rem)",
+                      md: "clamp(1rem, 3vw, 2rem)",
+                    },
+                    color: "white",
                   }}
                 >
-                  24 HOURS
+                  24 Hours
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "var(--font-cinzel-bold)",
+                    fontFamily: "var(--font-libre-baskerville)",
                     fontWeight: 700,
-                    fontSize: { xs: "1.1rem", md: "1.3rem" },
-                    color: "black",
+                    fontSize: {
+                      xs: "clamp(0.9rem, 2.5vw, 1.3rem)",
+                      md: "clamp(1rem, 3vw, 2rem)",
+                    },
+                    color: "white",
                   }}
                 >
-                  220+ PARTICIPANTS
+                  220+ Participants
                 </Typography>
               </Box>
               <Box
@@ -124,13 +151,16 @@ function About() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "var(--font-cinzel-bold)",
+                    fontFamily: "var(--font-libre-baskerville)",
                     fontWeight: 700,
-                    fontSize: { xs: "1.1rem", md: "1.3rem" },
-                    color: "black",
+                    fontSize: {
+                      xs: "clamp(0.9rem, 2.5vw, 1.3rem)",
+                      md: "clamp(1rem, 3vw, 2rem)",
+                    },
+                    color: "white",
                   }}
                 >
-                  $8,000 IN PRIZES
+                  $3,000 In Prizes
                 </Typography>
               </Box>
             </Box>

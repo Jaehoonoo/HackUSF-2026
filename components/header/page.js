@@ -64,7 +64,7 @@ function Header() {
       md: "1.2rem",
       lg: "1.3rem",
     },
-    borderRadius: "18px",
+    borderRadius: "20px",
     boxShadow: "5px 5px 0px black",
     border: "3px solid black",
     backgroundColor: "#a63a36",
@@ -102,7 +102,7 @@ function Header() {
               height={90}
               style={{
                 objectFit: "contain",
-                maxWidth: "clamp(80px, 12vw, 140px)",
+                maxWidth: "clamp(80px, 12vw, 120px)",
                 height: "auto",
               }}
             />
@@ -125,6 +125,7 @@ function Header() {
               disableRipple
               sx={{
                 color: "black",
+                padding: "12px",
                 transition:
                   "transform 150ms ease, color 150ms ease, opacity 150ms ease",
                 "&:hover": {
@@ -147,7 +148,7 @@ function Header() {
                 },
               }}
             >
-              <MenuIcon sx={{ fontSize: 30 }} />
+              <MenuIcon sx={{ fontSize: "clamp(40px, 6vw, 45px)" }} />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -217,6 +218,7 @@ function Header() {
                     sx={{
                       ...applyButtonSx,
                       width: "100%",
+                      color: "#fad37a",
                     }}
                   >
                     Profile
@@ -229,6 +231,7 @@ function Header() {
                     sx={{
                       ...applyButtonSx,
                       width: "100%",
+                      color: "#fad37a",
                     }}
                   >
                     Login
@@ -273,11 +276,11 @@ function Header() {
             <Image
               src="/images/gdg-sun.png"
               alt="Greek Sun Placeholder"
-              width={70}
-              height={35}
+              width={140}
+              height={70}
               style={{
                 objectFit: "contain",
-                maxWidth: "clamp(50px, 15vw, 70px)",
+                maxWidth: "clamp(40px, 15vw, 60px)",
                 height: "auto",
               }}
             />
@@ -329,6 +332,7 @@ function Header() {
                   ...applyButtonSx,
                   my: 2,
                   ml: 1,
+                  color: "#fad37a",
                 }}
               >
                 Profile
@@ -342,6 +346,7 @@ function Header() {
                   ...applyButtonSx,
                   my: 2,
                   ml: 1,
+                  color: "#fad37a",
                 }}
               >
                 Login
