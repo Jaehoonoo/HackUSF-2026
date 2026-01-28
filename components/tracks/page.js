@@ -36,6 +36,8 @@ function Tracks() {
       sx={{
         padding: { xs: "4rem 1rem", md: "6rem 2rem" },
         backgroundColor: "transparent",
+        position: "relative",
+        zIndex: 5,
       }}
     >
       <Box sx={{ width: "100%", p: 6 }}>

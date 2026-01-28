@@ -21,7 +21,7 @@ export default function Home() {
             position: "absolute",
             top: 0,
             left: 0,
-            zIndex: -2,
+            zIndex: -1,
           }}
         >
           <Box
@@ -45,7 +45,7 @@ export default function Home() {
                 left: 0,
                 width: "100%",
                 height: "auto",
-                zIndex: -1,
+                zIndex: 0,
               }}
             />
           </Box>
@@ -74,9 +74,41 @@ export default function Home() {
             height: "clamp(10rem, 70vh, 25rem)",
           }}
         >
-          <Box sx={{ width: "100%", position: "absolute" }}>
+          <Box sx={{ width: "100%", position: "absolute", zIndex: 3 }}>
             <About />
           </Box>
+          <Image
+            src="/images/Vector.svg"
+            alt="Vector Background"
+            width={1920}
+            height={1080}
+            style={{
+              position: "absolute",
+              top: 0,
+              transform: "translateY(80vh)",
+              left: 0,
+              width: "100%",
+              height: "auto",
+              zIndex: -1,
+              pointerEvents: "none",
+            }}
+          />
+          <Image
+            src="/images/forest.svg"
+            alt="Forest Overlay"
+            width={1920}
+            height={3479}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "auto",
+              transform: "translateY(53vh)",
+              zIndex: 1,
+              pointerEvents: "none",
+            }}
+          />
           <Image
             src="/images/island (2).svg"
             alt="islands"
@@ -86,6 +118,7 @@ export default function Home() {
               width: "100%",
               height: "auto",
               display: "block",
+              zIndex: 0,
             }}
           />
         </Box>
@@ -93,10 +126,42 @@ export default function Home() {
 
       {/* About section on desktop */}
       <Box sx={{ display: { xs: "none", lg: "block" } }}>
-        <Box sx={{ width: "100%", position: "absolute" }}>
+        <Box sx={{ width: "100%", position: "absolute", zIndex: 3 }}>
           <About />
         </Box>
         <Box>
+          <Image
+            src="/images/Vector.svg"
+            alt="Vector Background"
+            width={1920}
+            height={1080}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              transform: "translateY(350vh)",
+              height: "auto",
+              zIndex: -1,
+              pointerEvents: "none",
+            }}
+          />
+          <Image
+            src="/images/forest.svg"
+            alt="Forest Overlay"
+            width={1920}
+            height={3479}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "auto",
+              transform: "translateY(298vh)",
+              zIndex: 1,
+              pointerEvents: "none",
+            }}
+          />
           <Image
             src="/images/island (2).svg"
             alt="islands"
@@ -106,7 +171,7 @@ export default function Home() {
               width: "100%",
               height: "auto",
               display: "block",
-              zIndex: -1,
+              zIndex: 0,
             }}
           />
         </Box>
