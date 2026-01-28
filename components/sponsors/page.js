@@ -10,102 +10,42 @@ import Image from "next/image";
 // Fewer sponsors from a "large" catagory can fit on a row than from a "small" catagory
 const platinumSponsors = [
   {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
+    src: "/images/sponsors/googleLogo.png",
+    alt: "Google",
     link: "https://about.google/",
   },
 ];
 
 const goldSponsors = [
   {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
+    src: "/images/sponsors/oracleLogo.png",
+    alt: "Oracle",
+    link: "https://www.oracle.com/",
   },
   {
-    src: "/images/gdglogo.webp",
-    alt: "Moffitt - HackUSF",
-    link: "https://moffitt.org",
+    src: "/images/sponsors/tampaBayWave.png",
+    alt: "TampaBay Wave",
+    link: "https://www.tampabaywave.org/",
   },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
+
 ];
 
 const silverSponsors = [
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
+
+
 ];
 
 const bronzeSponsors = [
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
+
 ];
 
 const partners = [
   {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
+    src: "/images/sponsors/USFCollegeofengineeringlogo.webp",
+    alt: "USF College of Engineering",
+    link: "https://www.usf.edu/engineering/",
   },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
-  {
-    src: "/images/gdglogo.webp",
-    alt: "Google - HackUSF",
-    link: "https://about.google/",
-  },
+
 ];
 
 // CompanyBubble: Combines Bubble and DecorBubble for flexboard
@@ -239,21 +179,17 @@ const SponsorSection = ({ sponsors, isMobile }) => {
   return (
     <Box
       sx={{
-        display: "grid",
-        gridTemplateColumns: {
-          xs: "repeat(6, 1fr)", // 6 columns on mobile: 2 large sponsors per row (span 3), 3 small sponsors per row (span 2)
-          sm: "repeat(6, 1fr)",
-          md: "repeat(12, 1fr)", // 12 columns on desktop: 3 large sponsors per row (span 4), 4 small sponsors per row (span 3)
-        },
+        display: "flex",
+        flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
         gap: { xs: 1, sm: 2, md: 4 }, // Reduced gap on mobile
         px: { xs: 1, sm: 1.5, md: 2 }, // Reduced padding on mobile
         py: { xs: 1, sm: 1.5, md: 2 }, // Reduced padding on mobile
-        maxWidth: "1200px",
         mx: "auto",
       }}
     >
+      
       {sponsors.map((sponsor, index) => (
         <Box
           key={index}
@@ -292,13 +228,13 @@ function Sponsors() {
   const goldSize = 360;
   const silverSize = 300;
   const bronzeSize = 260;
-  const partnerSize = 240;
+  const partnerSize = 260;
 
   const platinumDecorSize = 158;
   const goldDecorSize = 135;
   const silverDecorSize = 113;
   const bronzeDecorSize = 98;
-  const partnerDecorSize = 90;
+  const partnerDecorSize = 98;
 
   // Combine large sponsors (platinum + gold) with tier metadata
   // Both Plat/Gold can be on the same row
@@ -458,8 +394,18 @@ function Sponsors() {
           >
             Sponsors
           </Typography>
-          <SponsorSection sponsors={largeSponsors} isMobile={isMobile} />
-          <SponsorSection sponsors={smallSponsors} isMobile={isMobile} />
+          <Box sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 4,
+            width: "100%",
+            }}>
+            <SponsorSection sponsors={largeSponsors} isMobile={isMobile} />
+            <SponsorSection sponsors={smallSponsors} isMobile={isMobile} />
+          </Box>
+
         </Box>
 
         {/* Partners Flexboard */}
