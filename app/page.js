@@ -114,14 +114,14 @@ export default function Home() {
       </Box>
 
     {/*Archway background*/}
-     <Box sx= {{position: "relative", overflow: "hidden"}}>
+     <Box sx= {{position: "relative", overflow: "hidden", width : "100%", aspectRatio : "2023 / 4587.76"}}>
         <Box
             sx = {{
               position: "absolute",
               top: 0,
               left: 0,
               width: "100%",
-              height: {xs: "400vh", md: "300vh"},
+              height:"100%",
               zIndex: -1,
               pointerEvents: "none",
 
@@ -131,7 +131,7 @@ export default function Home() {
             src="/images/archway-water.svg"
             alt="Decorative archway background"
             fill 
-            style={{objectFit:"cover"}} 
+            style={{objectFit: "cover"}}        
           />
         </Box>
         <Box sx ={{ position: "relative", zIndex: 1}}>
