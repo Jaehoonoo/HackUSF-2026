@@ -12,7 +12,13 @@ import FAQ from "@/components/faq/page";
 export default function Home() {
   return (
     <Box sx={{ overflowX: "hidden" }}>
-      <Box sx={{ position: "relative", width: "100%", minHeight: "100vh" }}>
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          minHeight: "100vh",
+        }}
+      >
         <Box
           sx={{
             background: "linear-gradient(to bottom, #af4700, #f59212)",
@@ -53,39 +59,35 @@ export default function Home() {
 
         <Header />
         <Hero />
+      </Box>
 
-        {/* Islands overlay positioned within 100vh on mobile */}
-        <Box
-          sx={{
-            position: "absolute",
-            width: "100%",
-            top: {
-              xs: "50%",
-              sm: "60%",
-              md: "75%",
-              lg: "75%",
-            },
-            left: 0,
-            zIndex: 1,
-            display: { xs: "block", lg: "none" },
-            height: "clamp(10rem, 100vh, 25rem)",
-          }}
-        >
-          <Box sx={{ width: "100%", position: "absolute" }}>
-            <About />
-          </Box>
-          <Image
-            src="/images/island (2).svg"
-            alt="islands"
-            width={1920}
-            height={1080}
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-            }}
-          />
+      {/* Islands overlay on mobile */}
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          marginTop: {
+            xs: "clamp(-560px, calc(-560px + (100vw - 300px) * 0.67), -340px)",
+            sm: "clamp(-400px, calc(-400px + (100vw - 600px) * 0.67), -200px)",
+            md: "clamp(-300px, calc(-300px + (100vw - 900px) * 0.67), -100px)",
+          },
+          display: { xs: "block", lg: "none" },
+        }}
+      >
+        <Box sx={{ width: "100%", position: "absolute", top: 0 }}>
+          <About />
         </Box>
+        <Image
+          src="/images/island (2).svg"
+          alt="islands"
+          width={1920}
+          height={1080}
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "block",
+          }}
+        />
       </Box>
 
       {/* About section on desktop */}
@@ -109,7 +111,23 @@ export default function Home() {
         </Box>
       </Box>
 
-      <Tracks />
+      {/* Tracks section */}
+      <Box>
+        <Box sx={{ width: "100%", position: "absolute" }}>
+          <Tracks />
+        </Box>
+        <Image
+          src="/images/forest (2).svg"
+          alt="forest"
+          width={1920}
+          height={1080}
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "block",
+          }}
+        />
+      </Box>
 
       {/*Archway background*/}
       <Box
