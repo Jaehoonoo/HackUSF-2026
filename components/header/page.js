@@ -301,23 +301,19 @@ function Header() {
                 disableRipple
                 sx={{
                   my: 2,
-                  color: "black",
+                  color: "#fad470",
+                  textShadow: "1px 1px 2px rgba(27, 24, 24, 0.7)",
                   display: "block",
                   fontFamily: "var(--font-cinzel-bold)",
                   fontWeight: 700,
                   fontSize: { md: "0.95rem", lg: "1.1rem", xl: "1.25rem" },
                   "&:hover": {
                     backgroundColor: "transparent",
-                    color: "black",
-                  },
-                  "&:focus": {
-                    outline: "none",
-                    backgroundColor: "transparent",
-                    color: "black",
+                    color: "#f8b727",
                   },
                   "&:active": {
                     backgroundColor: "transparent",
-                    color: "black",
+                    color: "#fad470",
                   },
                 }}
               >

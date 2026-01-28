@@ -11,7 +11,7 @@ import FAQ from "@/components/faq/page";
 
 export default function Home() {
   return (
-    <Box>
+    <Box sx={{ overflowX: "hidden" }}>
       <Box sx={{ position: "relative", width: "100%", minHeight: "100vh" }}>
         <Box
           sx={{
@@ -27,14 +27,14 @@ export default function Home() {
           <Box
             sx={{
               position: "absolute",
-              top: { xs: "16%", md: "10%" },
+              top: { xs: "20%", md: "10%" },
               left: 0,
               width: "100%",
               height: "100%",
             }}
           >
             <Image
-              src="/images/stairs (1).svg"
+              src="/images/stairs (3).svg"
               alt="Temple Stairs Background"
               width={1920}
               height={1080}
@@ -49,16 +49,6 @@ export default function Home() {
               }}
             />
           </Box>
-          <Box
-            sx={{
-              position: "absolute",
-              top: { xs: "20%", md: "10%" },
-              left: 0,
-              width: "100%",
-              height: "100%",
-              pointerEvents: "none",
-            }}
-          />
         </Box>
 
         <Header />
@@ -68,11 +58,18 @@ export default function Home() {
         {/* Islands overlay positioned within 100vh on mobile */}
         <Box
           sx={{
-            position: "relative",
+            position: "absolute",
             width: "100%",
+            top: {
+              xs: "50%",
+              sm: "55%",
+              md: "75%",
+              lg: "75%",
+            },
+            left: 0,
             zIndex: 1,
             display: { xs: "block", lg: "none" },
-            height: "clamp(10rem, 70vh, 25rem)",
+            height: "clamp(10rem, 100vh, 25rem)",
           }}
         >
           <Box sx={{ width: "100%", position: "absolute" }}>

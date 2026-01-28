@@ -39,8 +39,6 @@ export default function Hero() {
           justifyContent: "center",
           alignItems: { xs: "flex-start", md: "center" },
           pb: {
-            xs: "clamp(3rem, 12vh, 12rem)",
-            sm: "clamp(3rem, 30vh, 16rem)",
             md: "clamp(4rem, 50vh, 30rem)",
             lg: "clamp(1rem, 50vh, 40rem)",
           },
@@ -49,9 +47,8 @@ export default function Hero() {
           pt: {
             xs: "clamp(0.5rem, 4vh, 1rem)",
             sm: "clamp(0.5rem, 50vh, 1.4rem)",
-            md: "clamp(1rem, 60vh, 2rem)",
-            lg: "clamp(1rem, 50vh, 8rem)",
           },
+          mt: { xs: 1, sm: 3, md: 0 },
           color: "#fad37a",
         }}
       >
@@ -60,7 +57,7 @@ export default function Hero() {
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: "clamp(2.2rem, 6vw, 5.5rem)",
+            fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
             textShadow: "2px 2px 4px rgba(27, 24, 24, 0.7)",
           }}
         >
@@ -126,7 +123,7 @@ export default function Hero() {
             color: "#fad37a",
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: "clamp(0.9rem, 2vw, 1.5rem)",
+            fontSize: "clamp(1rem, 2vw, 1.5rem)",
             borderRadius: "18px",
             boxShadow: "5px 5px 0px black",
             border: "3px solid black",
