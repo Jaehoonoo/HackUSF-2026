@@ -39,8 +39,8 @@ export default function Hero() {
           justifyContent: "center",
           alignItems: { xs: "flex-start", md: "center" },
           pb: {
-            md: "clamp(4rem, 50vh, 30rem)",
-            lg: "clamp(1rem, 50vh, 40rem)",
+            md: "clamp(35rem, 50vh, 40rem)",
+            lg: "clamp(25rem, 10vh, 35rem)",
           },
           p: 2,
           pl: { xs: 2, sm: 2.5, md: 0 },
@@ -57,7 +57,12 @@ export default function Hero() {
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
+            fontSize: {
+              xs: "clamp(2.5rem, 10vw, 3rem)",
+              sm: "clamp(3rem, 8vw, 4rem)",
+              md: "clamp(3rem, 5vw, 4.5rem)",
+              lg: "clamp(4.5rem, 4vw, 6rem)",
+            },
             textShadow: "2px 2px 4px rgba(27, 24, 24, 0.7)",
           }}
         >

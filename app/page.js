@@ -53,7 +53,6 @@ export default function Home() {
 
         <Header />
         <Hero />
-        <Tracks/>
 
         {/* Islands overlay positioned within 100vh on mobile */}
         <Box
@@ -110,31 +109,39 @@ export default function Home() {
         </Box>
       </Box>
 
-    {/*Archway background*/}
-     <Box sx= {{position: "relative", overflow: "hidden", width : "100%", aspectRatio : "2023 / 4587.76"}}>
-        <Box
-            sx = {{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height:"100%",
-              zIndex: -1,
-              pointerEvents: "none",
+      <Tracks />
 
-            }}
-        > 
-          <Image 
+      {/*Archway background*/}
+      <Box
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          width: "100%",
+          aspectRatio: "2023 / 4587.76",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: -1,
+            pointerEvents: "none",
+          }}
+        >
+          <Image
             src="/images/archway-water.svg"
             alt="Decorative archway background"
-            fill 
-            style={{objectFit: "cover"}}        
+            fill
+            style={{ objectFit: "cover" }}
           />
         </Box>
-        <Box sx ={{ position: "relative", zIndex: 1}}>
-          <Sponsors/>
-          <FAQ/>
-          <Footer/>
+        <Box sx={{ position: "relative", zIndex: 1 }}>
+          <Sponsors />
+          <FAQ />
+          <Footer />
         </Box>
       </Box>
     </Box>

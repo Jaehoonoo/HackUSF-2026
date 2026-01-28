@@ -22,8 +22,8 @@ function About() {
       fontFamily: "var(--font-libre-baskerville)",
       fontWeight: 400,
       fontSize: {
-        xs: "clamp(0.7rem, 2vw, 1.5rem)",
-        sm: "clamp(0.8rem, 2.3vw, 1.5rem)",
+        xs: "clamp(0.7rem, 2.5vw, 1.5rem)",
+        sm: "clamp(0.9rem, 2.5vw, 1.6rem)",
         md: "clamp(1rem, 2vw, 1.8rem)",
         lg: "1.8rem",
         xl: "2.2rem",
