@@ -61,7 +61,7 @@ export default function Home() {
             width: "100%",
             top: {
               xs: "50%",
-              sm: "55%",
+              sm: "60%",
               md: "75%",
               lg: "75%",
             },

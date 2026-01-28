@@ -73,7 +73,12 @@ export default function Hero() {
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
-            fontSize: "clamp(1.2rem, 3vw, 2.4rem)",
+            fontSize: {
+              xs: "clamp(1rem, 3.5vw, 1.5rem)",
+              sm: "clamp(1.2rem, 3vw, 1.6rem)",
+              md: "clamp(1.6rem, 2.5vw, 2rem)",
+              lg: "clamp(2rem, 2vw, 2.2rem)",
+            },
             pb: { xs: 2, md: 0 },
             textShadow: "2px 2px 4px rgba(27, 24, 24, 0.7)",
           }}
