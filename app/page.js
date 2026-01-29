@@ -225,6 +225,71 @@ export default function Home() {
             <Box
               sx={{
                 position: "absolute",
+                top: {
+                  xs: "63%",
+                  sm: "63%",
+                  md: "61.5%",
+                  lg: "62%",
+                  xl: "61%",
+                },
+                left: { xs: "45%", sm: "46.5%", md: "48%", lg: "51%" },
+                transform: "translateX(-50%)",
+                transformOrigin: "center top",
+                width: "100%",
+                zIndex: 3,
+                pointerEvents: "none",
+              }}
+            >
+              <Image
+                src="/images/sword-stone 1.svg"
+                alt="forest"
+                width={1920}
+                height={1080}
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%231d6071'/%3E%3C/svg%3E"
+                style={{
+                  position: "relative",
+                  width: "43%",
+                  height: "auto",
+                  display: "block",
+                  zIndex: 1,
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                top: { xs: "70%", sm: "68%", md: "67%", lg: "66%" },
+                left: { xs: "15%", sm: "16%", md: "17%", lg: "12%" },
+                transform: "translateX(50%)",
+                transformOrigin: "center top",
+                width: "100%",
+                zIndex: 3,
+                pointerEvents: "none",
+              }}
+            >
+              <Image
+                src="/images/sword-stone 1.svg"
+                alt="forest"
+                width={1920}
+                height={1080}
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%231d6071'/%3E%3C/svg%3E"
+                style={{
+                  position: "relative",
+                  width: "30%",
+                  height: "auto",
+                  display: "block",
+                  zIndex: 1,
+                  transform: "scaleX(-1)",
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
                 top: "60%",
                 left: "50%",
                 transform: "translateX(-50%)",
