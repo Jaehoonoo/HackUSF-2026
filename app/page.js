@@ -305,41 +305,42 @@ export default function Home() {
         </Box>
       </Box>
 
-      {/* Blue background section with archway */}
+      {/* Blue background section with archway - height is content only, no extra page length */}
       <Box
         sx={{
           background:
             "linear-gradient(to bottom, #2b9fc6 0%, #1670ac 50%, #0c3e9aff 100%)",
           width: "100%",
           position: "relative",
-          minHeight: "100vh",
+          overflow: "hidden",
         }}
       >
-        {/* Archway background image */}
-        {/* <Box
+        {/* Archway background: fills section only, top of arch visible, ends at footer */}
+        <Box
           sx={{
             position: "absolute",
-            bottom: 0,
+            top: 0,
             left: 0,
-            width: "100%",
+            right: 0,
+            bottom: 0,
             zIndex: 0,
           }}
         >
           <Image
-            src="/images/archway-water.svg"
-            alt="Decorative archway background"
-            width={2023}
-            height={4588}
+            src="/images/archway-water.png"
+            alt=""
+            fill
+            sizes="100vw"
             loading="lazy"
             placeholder="blur"
-            blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2023 4588'%3E%3Crect width='2023' height='4588' fill='%2335a0c7'/%3E%3C/svg%3E"
+            blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 4577'%3E%3Crect width='1920' height='4577' fill='%231670ac'/%3E%3C/svg%3E"
             style={{
-              width: "100%",
-              height: "auto",
+              objectFit: "cover",
+              objectPosition: "center top",
               display: "block",
             }}
           />
-        </Box> */}
+        </Box>
 
         {/* Content overlayed on top */}
         <Box sx={{ position: "relative", zIndex: 1 }}>

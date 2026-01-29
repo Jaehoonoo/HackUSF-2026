@@ -301,26 +301,6 @@ function Sponsors() {
       <Box
         sx={{
           position: "absolute",
-          left: { xs: "-10%", md: "-5%" },
-          bottom: { xs: "2%", md: "5%" },
-          width: { xs: 350, sm: 450, md: 550 },
-          height: { xs: 200, sm: 260, md: 320 },
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      >
-        <Image
-          src="/images/sponsors/whale.png"
-          alt=""
-          fill
-          sizes="(max-width: 600px) 350px, (max-width: 900px) 450px, 550px"
-          style={{ objectFit: "contain" }}
-          loading="lazy"
-        />
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
           left: { xs: "0%", md: "12%" },
           top: { xs: "35%", md: "38%" },
           width: { xs: 240, md: 360 },
@@ -338,11 +318,33 @@ function Sponsors() {
           loading="lazy"
         />
       </Box>
+      {/* Hippocampi (seahorse) - right side, approx where fish were */}
       <Box
         sx={{
           position: "absolute",
-          right: { xs: "0%", md: "0%" },
-          bottom: { xs: "18%", md: "20%" },
+          right: { xs: "-20%", md: "-9%" },
+          top: { xs: "70%", md: "70%" },
+          width: { xs: 350, md: 600 },
+          height: { xs: 250, md: 500 },
+          pointerEvents: "none",
+          zIndex: 1,
+        }}
+      >
+        <Image
+          src="/images/sponsors/seahorse.png"
+          alt=""
+          fill
+          sizes="(max-width: 600px) 100px, 150px"
+          style={{ objectFit: "contain" }}
+          loading="lazy"
+        />
+      </Box>
+      {/* Right fish - bottom right of sponsors section */}
+      <Box
+        sx={{
+          position: "absolute",
+          right: { xs: "0%", md: "-.5%" },
+          bottom: { xs: "2%", md: "0%" },
           width: { xs: 200, md: 300 },
           height: { xs: 140, md: 200 },
           pointerEvents: "none",
