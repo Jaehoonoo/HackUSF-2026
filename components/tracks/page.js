@@ -120,9 +120,9 @@ function Tracks() {
             sx={{
               bgcolor: "#cdc5b5",
               border: {
-                xs: "3px solid #28453d",
-                sm: "4px solid #28453d",
-                md: "6px solid #28453d",
+                xs: "3px solid #261b25",
+                sm: "4px solid #261b25",
+                md: "6px solid #261b25",
               },
               borderRadius: "12px",
               width: { xs: "65%", sm: "60%", md: "55%", lg: "50%" },
@@ -160,12 +160,12 @@ function Tracks() {
                     height: { xs: "8px", sm: "10px", md: "12px" },
                     borderRadius: "50%",
                     backgroundColor:
-                      index === currentTrack ? "#28453d" : "#E0E0E0",
+                      index === currentTrack ? "#261b25" : "#E0E0E0",
                     cursor: "pointer",
                     transition: "background-color 0.3s",
                     "&:hover": {
                       backgroundColor:
-                        index === currentTrack ? "#28453d" : "#BDBDBD",
+                        index === currentTrack ? "#261b25" : "#BDBDBD",
                     },
                   }}
                 />
@@ -192,13 +192,13 @@ function Tracks() {
                 borderRadius: "12px 0 0 12px",
                 transition: "background-color 0.2s ease-in-out",
                 "&:hover": {
-                  backgroundColor: "rgba(40, 69, 61, 0.1)",
+                  backgroundColor: "rgba(38, 27, 37, 0.1)",
                 },
               }}
             >
               <ArrowBackIosIcon
                 sx={{
-                  color: "#28453d",
+                  color: "#261b25",
                   fontSize: {
                     xs: "1.5rem",
                     sm: "2rem",
@@ -239,7 +239,7 @@ function Tracks() {
                     md: "clamp(2.6rem, 5.5vw, 3rem)",
                     lg: "clamp(3rem, 6vw, 3.5rem)",
                   },
-                  color: "#28453d",
+                  color: "#261b25",
                   textAlign: "center",
                   px: { xs: "2rem", sm: "3rem", md: "4rem" },
                 }}
@@ -268,13 +268,13 @@ function Tracks() {
                 borderRadius: "0 12px 12px 0",
                 transition: "background-color 0.2s ease-in-out",
                 "&:hover": {
-                  backgroundColor: "rgba(40, 69, 61, 0.1)",
+                  backgroundColor: "rgba(38, 27, 37, 0.1)",
                 },
               }}
             >
               <ArrowForwardIosIcon
                 sx={{
-                  color: "#28453d",
+                  color: "#261b25",
                   fontSize: {
                     xs: "1.5rem",
                     sm: "2rem",
@@ -308,9 +308,9 @@ function Tracks() {
               p: { xs: 4, sm: 6, md: 8 },
               outline: "none",
               border: {
-                xs: "3px solid #28453d",
-                sm: "4px solid #28453d",
-                md: "6px solid #28453d",
+                xs: "3px solid #261b25",
+                sm: "4px solid #261b25",
+                md: "6px solid #261b25",
               },
             }}
           >
@@ -320,7 +320,7 @@ function Tracks() {
                 position: "absolute",
                 top: 8,
                 right: 8,
-                color: "#28453d",
+                color: "#261b25",
               }}
             >
               <CloseIcon />
@@ -331,7 +331,7 @@ function Tracks() {
                 fontFamily: "var(--font-cinzel-bold)",
                 fontWeight: 700,
                 fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
-                color: "#28453d",
+                color: "#261b25",
                 mb: 2,
                 pr: 4,
               }}
@@ -343,7 +343,7 @@ function Tracks() {
               sx={{
                 fontFamily: "var(--font-libre-baskerville)",
                 fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
-                color: "#28453d",
+                color: "#261b25",
                 lineHeight: 1.6,
               }}
             >
