@@ -7,11 +7,11 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const tracks = [
-  "BEST OVERALL",
-  "BEST AI",
-  "BEST DESIGN",
-  "BEST FIRST-TIME",
-  "FUNNIEST HACK",
+  "Best Overall",
+  "Most Innovative",
+  "Best AI",
+  "Best Design",
+  "Best First-Time",
 ];
 
 function Tracks() {
@@ -34,11 +34,10 @@ function Tracks() {
       component="section"
       id="tracks"
       sx={{
-        padding: { xs: "4rem 1rem", md: "6rem 2rem" },
         backgroundColor: "transparent",
       }}
     >
-      <Box sx={{ width: "100%", p: 6 }}>
+      <Box sx={{ width: "100%" }}>
         <Typography
           variant="h2"
           component="h2"
@@ -47,11 +46,9 @@ function Tracks() {
             fontWeight: 700,
             fontSize: { xs: "1.75rem", md: "2.5rem" },
             color: "black",
-            mb: "3rem",
-            textAlign: { xs: "center", md: "left" },
           }}
         >
-          TRACKS
+          Tracks
         </Typography>
 
         <Box
@@ -65,9 +62,8 @@ function Tracks() {
             sx={{
               backgroundColor: "#35a0c7",
               borderRadius: "8px",
-              padding: { xs: "4rem 2.5rem", sm: "4rem 3rem", md: "5rem 4rem" },
-              width: { xs: "85vw", sm: "500px", md: "600px" },
-              minHeight: { xs: "250px", sm: "300px", md: "350px" },
+              width: { xs: "80%", md: "50%" },
+              height: { xs: "30vh", md: "55vh" },
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -78,9 +74,9 @@ function Tracks() {
             <Box
               sx={{
                 position: "absolute",
-                top: "1.5rem",
+                top: "1.75em",
                 display: "flex",
-                gap: "0.75rem",
+                gap: "1.5rem",
                 justifyContent: "center",
               }}
             >
@@ -126,7 +122,7 @@ function Tracks() {
 
             <Typography
               sx={{
-                fontFamily: "var(--font-cinzel-bold)",
+                fontFamily: "var(--font-libre-baskerville)",
                 fontWeight: 700,
                 fontSize: {
                   xs: "1.75rem",

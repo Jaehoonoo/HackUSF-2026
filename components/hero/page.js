@@ -38,12 +38,12 @@ export default function Hero() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: { xs: "flex-start", md: "center" },
-          pb: {
-            md: "clamp(35rem, 50vh, 40rem)",
-            lg: "clamp(25rem, 10vh, 35rem)",
-          },
-          p: 2,
           pl: { xs: 2, sm: 2.5, md: 0 },
+          p: 2,
+          pb: {
+            md: "clamp(30vh, 55vh, 70vh)",
+            lg: "clamp(20rem, 25vh, 45rem)",
+          },
           pt: {
             xs: "clamp(0.5rem, 4vh, 1rem)",
             sm: "clamp(0.5rem, 50vh, 1.4rem)",

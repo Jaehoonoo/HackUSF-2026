@@ -132,3 +132,51 @@
 .swal-icon--warning__dot {
   background-color: #F57C00;
 }
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.floating-islands {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Cloud drift animation */
+@keyframes cloudDrift {
+  0% {
+    transform: translateX(-50%) translateY(-50%) translateX(-20px);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-50%) translateX(20px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50%) translateX(-20px);
+  }
+}
+
+.drifting-cloud {
+  animation: cloudDrift 10s ease-in-out infinite;
+}
+
+/* Cloud drift animation 2 - slower and larger movement */
+@keyframes cloudDrift2 {
+  0% {
+    transform: translateX(-40%) translateY(-50%) translateX(30px);
+  }
+  50% {
+    transform: translateX(-40%) translateY(-50%) translateX(-30px);
+  }
+  100% {
+    transform: translateX(-40%) translateY(-50%) translateX(30px);
+  }
+}
+
+.drifting-cloud-2 {
+  animation: cloudDrift2 15s ease-in-out infinite;
+}

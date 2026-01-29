@@ -152,6 +152,13 @@ function Header() {
             </IconButton>
             <Menu
               id="menu-appbar"
+              PaperProps={{
+                style: {
+                  backgroundColor: "#fcf0da",
+                  borderRadius: "12px",
+                  padding: 4,
+                },
+              }}
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",

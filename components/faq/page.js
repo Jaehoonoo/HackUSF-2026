@@ -215,7 +215,7 @@ export default function FAQ() {
             >
               <Typography
                 sx={{
-                  fontFamily: "Cinzel",
+                  fontFamily: "Libre Baskerville",
                   fontWeight: 400,
                   fontSize: { xs: "1.0rem", md: "1.3rem", lg: "1.7rem" },
                   lineHeight: 1.6,
@@ -234,6 +234,8 @@ export default function FAQ() {
 
   return (
     <Box
+      component="section"
+      id="faq"
       sx={{
         bgcolor: "transparent", // blue background
         minHeight: "100vh", // full screen height

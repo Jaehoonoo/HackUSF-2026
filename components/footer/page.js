@@ -201,7 +201,7 @@ function Footer() {
               textAlign: "center",
             }}
           >
-            Made with ❤️ By The GDG Team
+            Made with 💙 By The GDG Team
           </Typography>
           <Typography
             sx={{
