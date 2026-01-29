@@ -32,153 +32,95 @@ function Footer() {
         justifyContent: "space-between",
       }}
     >
-      <Box sx={{ width: "100%" }}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: { xs: "center", md: "flex-end" },
+          gap: { xs: "1.5rem", md: "2rem" },
+        }}
+      >
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            justifyContent: "space-between",
-            alignItems: { xs: "center", md: "flex-start" },
-            gap: { xs: "1.5rem", md: "2rem" },
+            flexDirection: "column",
+            alignItems: "center",
+            flex: { xs: "1", md: "0 0 auto" },
+            order: { xs: 1, md: 0 },
           }}
         >
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              fontFamily: "var(--font-cinzel-bold)",
+              fontWeight: 700,
+              fontSize: { xs: "1.5rem", md: "2.5rem" },
+              color: "#fcf0da",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+              pb: { xs: "0.6rem", md: "1rem" },
+              textAlign: "center",
+            }}
+          >
+            HackUSF 2026
+          </Typography>
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              flex: { xs: "1", md: "0 0 auto" },
+              gap: "1.5rem",
+              justifyContent: "center",
             }}
           >
-            <Typography
-              variant="h3"
-              component="h2"
-              sx={{
-                fontFamily: "var(--font-cinzel-bold)",
-                fontWeight: 700,
-                fontSize: { xs: "1.5rem", md: "2.5rem" },
-                color: "black",
-                pb: "1rem",
-                textAlign: "center",
-              }}
-            >
-              HackUSF 2026
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                gap: "1.5rem",
-                justifyContent: "center",
-              }}
-            >
-              <IconButton
-                component="a"
-                href="https://discord.gg/FP3NQpBqQu"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  color: "black",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    opacity: 0.7,
-                  },
-                }}
-                disableRipple
-              >
-                <DiscordIcon />
-              </IconButton>
-              <IconButton
-                component="a"
-                href="https://www.instagram.com/gdgatusf/"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  color: "black",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    opacity: 0.7,
-                  },
-                }}
-                disableRipple
-              >
-                <InstagramIcon />
-              </IconButton>
-              <IconButton
-                component="a"
-                href="https://www.linkedin.com/company/gdgatusf/"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  color: "black",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    opacity: 0.7,
-                  },
-                }}
-                disableRipple
-              >
-                <LinkedInIcon />
-              </IconButton>
-            </Box>
-          </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: { xs: "center", md: "flex-end" },
-              gap: "0.75rem",
-            }}
-          >
-            {/* <Link
-              href="/sponsor-us"
+            <IconButton
+              component="a"
+              href="https://discord.gg/FP3NQpBqQu"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                fontFamily: "var(--font-cinzel-bold)",
-                color: "black",
-                textDecoration: "underline",
-                fontSize: { xs: "0.9rem", md: "1rem" },
+                color: "#fcf0da",
                 "&:hover": {
+                  backgroundColor: "transparent",
                   opacity: 0.7,
                 },
               }}
+              disableRipple
             >
-              Sponsor Us
-            </Link> */}
-            {/* <Link
-              href=""
+              <DiscordIcon />
+            </IconButton>
+            <IconButton
+              component="a"
+              href="https://www.instagram.com/gdgatusf/"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                fontFamily: "var(--font-cinzel-bold)",
-                color: "black",
-                textDecoration: "underline",
-                fontSize: { xs: "0.9rem", md: "1rem" },
+                color: "#fcf0da",
                 "&:hover": {
+                  backgroundColor: "transparent",
                   opacity: 0.7,
                 },
               }}
+              disableRipple
             >
-              Hacker&apos;s Guide
-            </Link> */}
-
-            <Link
-              href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
+              <InstagramIcon />
+            </IconButton>
+            <IconButton
+              component="a"
+              href="https://www.linkedin.com/company/gdgatusf/"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                fontFamily: "var(--font-cinzel-bold)",
-                color: "black",
-                textDecoration: "underline",
-                fontSize: { xs: "0.9rem", md: "1rem" },
+                color: "#fcf0da",
                 "&:hover": {
+                  backgroundColor: "transparent",
                   opacity: 0.7,
                 },
               }}
+              disableRipple
             >
-              MLH Code of Conduct
-            </Link>
+              <LinkedInIcon />
+            </IconButton>
           </Box>
         </Box>
 
@@ -187,26 +129,28 @@ function Footer() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "0.5rem",
-            mt: "2rem",
-            pt: "2rem",
-            borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+            gap: "0.75rem",
+            flex: 1,
+            order: { xs: 3, md: 0 },
+            pt: { xs: "1.5rem", md: 0 },
           }}
         >
           <Typography
             sx={{
               fontFamily: "var(--font-cinzel-bold)",
-              color: "black",
+              color: "#fcf0da",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
               fontSize: { xs: "0.85rem", md: "1rem" },
               textAlign: "center",
             }}
           >
-            Made with ❤️ By The GDG Team
+            Made with 🤍 By The GDG Team
           </Typography>
           <Typography
             sx={{
               fontFamily: "var(--font-cinzel-bold)",
-              color: "black",
+              color: "#fcf0da",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
               fontSize: { xs: "0.75rem", md: "0.85rem" },
               textAlign: "center",
               opacity: 0.8,
@@ -214,6 +158,71 @@ function Footer() {
           >
             © {2026} HackUSF. All rights reserved.
           </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: { xs: "center", md: "flex-end" },
+            gap: "0.75rem",
+            flex: { xs: "1", md: "0 0 auto" },
+            order: { xs: 2, md: 0 },
+            mt: { xs: "-0.5rem", md: 0 },
+          }}
+        >
+          <Link
+            href="/HackUSF-Sponsorship.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: "var(--font-cinzel-bold)",
+              color: "#fcf0da",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+              textDecoration: "underline",
+              fontSize: { xs: "0.9rem", md: "1rem" },
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            Sponsor Us
+          </Link>
+          {/* <Link
+            href=""
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: "var(--font-cinzel-bold)",
+              color: "#fcf0da",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+              textDecoration: "underline",
+              fontSize: { xs: "0.9rem", md: "1rem" },
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            Hacker&apos;s Guide
+          </Link> */}
+
+          <Link
+            href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: "var(--font-cinzel-bold)",
+              color: "#fcf0da",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+              textDecoration: "underline",
+              fontSize: { xs: "0.9rem", md: "1rem" },
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            MLH Code of Conduct
+          </Link>
         </Box>
       </Box>
     </Box>
