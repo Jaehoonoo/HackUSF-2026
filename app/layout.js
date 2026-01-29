@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Cinzel } from "next/font/google";
+import { Geist, Geist_Mono, Cinzel, Libre_Baskerville } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import ThemeRegistry from "./ThemeRegistry";
@@ -20,6 +20,12 @@ const cinzelBold = Cinzel({
   weight: "700",
 });
 
+const libreBaskervilleSans = Libre_Baskerville({
+  variable: "--font-libre-baskerville",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata = {
   title: "HackUSF 2026",
   description:
@@ -36,7 +42,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${cinzelBold.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} ${cinzelBold.variable} ${libreBaskervilleSans.variable} antialiased`}
         >
           <CreateProfileOnSignIn />
           <ThemeRegistry>{children}</ThemeRegistry>

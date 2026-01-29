@@ -64,7 +64,7 @@ function Header() {
       md: "1.2rem",
       lg: "1.3rem",
     },
-    borderRadius: "18px",
+    borderRadius: "20px",
     boxShadow: "5px 5px 0px black",
     border: "3px solid black",
     backgroundColor: "#a63a36",
@@ -102,13 +102,19 @@ function Header() {
               height={90}
               style={{
                 objectFit: "contain",
-                maxWidth: "clamp(80px, 12vw, 140px)",
+                maxWidth: "clamp(80px, 12vw, 120px)",
                 height: "auto",
               }}
             />
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none" },
+              justifyContent: "flex-end",
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -119,6 +125,7 @@ function Header() {
               disableRipple
               sx={{
                 color: "black",
+                padding: "12px",
                 transition:
                   "transform 150ms ease, color 150ms ease, opacity 150ms ease",
                 "&:hover": {
@@ -141,10 +148,19 @@ function Header() {
                 },
               }}
             >
-              <MenuIcon sx={{ fontSize: 30 }} />
+              <MenuIcon
+                sx={{ fontSize: "clamp(40px, 6vw, 45px)", color: "#fad37a" }}
+              />
             </IconButton>
             <Menu
               id="menu-appbar"
+              PaperProps={{
+                style: {
+                  backgroundColor: "#fcf0da",
+                  borderRadius: "12px",
+                  padding: 4,
+                },
+              }}
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
@@ -211,6 +227,7 @@ function Header() {
                     sx={{
                       ...applyButtonSx,
                       width: "100%",
+                      color: "#fad37a",
                     }}
                   >
                     Profile
@@ -223,6 +240,7 @@ function Header() {
                     sx={{
                       ...applyButtonSx,
                       width: "100%",
+                      color: "#fad37a",
                     }}
                   >
                     Login
@@ -231,7 +249,7 @@ function Header() {
               </Box>
             </Menu>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               position: "absolute",
               left: "50%",
@@ -253,6 +271,28 @@ function Header() {
                 height: "auto",
               }}
             />
+          </Box> */}
+          <Box
+            sx={{
+              position: "absolute",
+              left: 0,
+              top: 5,
+              display: { xs: "flex", md: "none" },
+              zIndex: 1,
+              pointerEvents: "none",
+            }}
+          >
+            <Image
+              src="/images/gdg-sun.png"
+              alt="Greek Sun Placeholder"
+              width={140}
+              height={70}
+              style={{
+                objectFit: "contain",
+                maxWidth: "clamp(40px, 15vw, 60px)",
+                height: "auto",
+              }}
+            />
           </Box>
           <Box
             sx={{
@@ -270,23 +310,19 @@ function Header() {
                 disableRipple
                 sx={{
                   my: 2,
-                  color: "black",
+                  color: "#fad470",
+                  textShadow: "1px 1px 2px rgba(27, 24, 24, 0.7)",
                   display: "block",
                   fontFamily: "var(--font-cinzel-bold)",
                   fontWeight: 700,
                   fontSize: { md: "0.95rem", lg: "1.1rem", xl: "1.25rem" },
                   "&:hover": {
                     backgroundColor: "transparent",
-                    color: "black",
-                  },
-                  "&:focus": {
-                    outline: "none",
-                    backgroundColor: "transparent",
-                    color: "black",
+                    color: "#f8b727",
                   },
                   "&:active": {
                     backgroundColor: "transparent",
-                    color: "black",
+                    color: "#fad470",
                   },
                 }}
               >
@@ -301,6 +337,7 @@ function Header() {
                   ...applyButtonSx,
                   my: 2,
                   ml: 1,
+                  color: "#fad37a",
                 }}
               >
                 Profile
@@ -314,6 +351,7 @@ function Header() {
                   ...applyButtonSx,
                   my: 2,
                   ml: 1,
+                  color: "#fad37a",
                 }}
               >
                 Login
