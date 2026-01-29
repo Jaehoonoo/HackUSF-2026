@@ -62,7 +62,6 @@ function Tracks() {
   return (
     <Box
       component="section"
-      id="tracks"
       sx={{
         backgroundColor: "transparent",
       }}
@@ -84,6 +83,7 @@ function Tracks() {
         <Typography
           variant="h2"
           component="h2"
+          id="tracks"
           sx={{
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
