@@ -161,7 +161,7 @@
 }
 
 .drifting-cloud {
-  animation: cloudDrift 10s ease-in-out infinite;
+  animation: cloudDrift 14s ease-in-out infinite;
 }
 
 /* Cloud drift animation 2 - slower and larger movement */
@@ -178,5 +178,5 @@
 }
 
 .drifting-cloud-2 {
-  animation: cloudDrift2 15s ease-in-out infinite;
+  animation: cloudDrift2 12s ease-in-out infinite;
 }

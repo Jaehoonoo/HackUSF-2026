@@ -1,5 +1,8 @@
+"use client";
+
 import { Box } from "@mui/material";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 import Header from "@/components/header/page";
 import Hero from "@/components/hero/page";
@@ -10,8 +13,22 @@ import Footer from "@/components/footer/page";
 import FAQ from "@/components/faq/page";
 
 export default function Home() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
-    <Box sx={{ overflowX: "hidden", position: "relative", minHeight: "100vh" }}>
+    <Box
+      sx={{
+        overflowX: "hidden",
+        position: "relative",
+        minHeight: "100vh",
+        opacity: isLoaded ? 1 : 0,
+        transition: "opacity 0.3s ease-in-out",
+      }}
+    >
       {/* Gradient background behind everything */}
       <Box
         sx={{
@@ -60,6 +77,8 @@ export default function Home() {
                 width={1920}
                 height={1080}
                 priority
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23f59212'/%3E%3C/svg%3E"
                 style={{
                   position: "relative",
                   width: "100%",
@@ -83,13 +102,14 @@ export default function Home() {
                   alt="sunset-bg"
                   width={1920}
                   height={1080}
+                  priority
                   className="drifting-cloud"
                   style={{
                     position: "absolute",
                     top: "20%",
                     left: "50%",
                     transform: "translateX(-50%) translateY(-50%) scale(1.1)",
-                    width: "110%",
+                    width: "115%",
                     height: "auto",
                     zIndex: -10,
                   }}
@@ -99,6 +119,7 @@ export default function Home() {
                   alt="sunset-bg"
                   width={1920}
                   height={1080}
+                  priority
                   className="drifting-cloud-2"
                   style={{
                     position: "absolute",
@@ -142,6 +163,9 @@ export default function Home() {
           alt="islands"
           width={1920}
           height={1080}
+          priority
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23ffd37b'/%3E%3C/svg%3E"
           style={{
             width: "100%",
             height: "auto",
@@ -171,13 +195,17 @@ export default function Home() {
             zIndex: -3,
           }}
         />
-        <Box sx={{ position: "relative", width: "100%" }}>
+        <Box sx={{ position: "relative", width: "100%", height: "auto" }}>
           <Image
             src="/images/forest (3).svg"
             alt="forest"
             width={1920}
             height={1080}
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%231d6071'/%3E%3C/svg%3E"
             style={{
+              position: "relative",
               width: "100%",
               height: "auto",
               display: "block",
@@ -187,20 +215,27 @@ export default function Home() {
           <Box
             sx={{
               position: "absolute",
-              top: { xs: "60%", sm: "62%", md: "64%", lg: "66%" },
+              top: 0,
               left: 0,
               width: "100%",
-              zIndex: 2,
-              transform: {
-                xs: "scale(0.85)",
-                sm: "scale(0.9)",
-                md: "scale(0.95)",
-                lg: "scale(1)",
-              },
-              transformOrigin: "center top",
+              height: "100%",
+              pointerEvents: "none",
             }}
           >
-            <Tracks />
+            <Box
+              sx={{
+                position: "absolute",
+                top: "60%",
+                left: "50%",
+                transform: "translateX(-50%)",
+                transformOrigin: "center top",
+                width: "100%",
+                zIndex: 2,
+                pointerEvents: "auto",
+              }}
+            >
+              <Tracks />
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -229,6 +264,9 @@ export default function Home() {
             alt="Decorative archway background"
             width={2023}
             height={4588}
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2023 4588'%3E%3Crect width='2023' height='4588' fill='%2335a0c7'/%3E%3C/svg%3E"
             style={{
               width: "100%",
               height: "auto",
