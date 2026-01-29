@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react"; // for state
+import Image from "next/image"; // for optimized images
 import {
   Box,
   Typography,
@@ -70,11 +71,6 @@ const faqData = {
       answer:
         "It’s up to you! Some participants like to brainstorm ideas ahead of time, while others prefer inspiration from workshops, challenges, and conversations during the event. Both approaches work well. If you bring an idea, stay flexible, you might discover something even more exciting once you’re there.",
     },
-    {
-      question: "What if I don’t have a laptop or mine isn’t powerful enough?",
-      answer:
-        "No problem! Reach out to us and we’ll help you find a solution. You can also join a team with someone who has the hardware you need, many great projects come together by combining team members’ different resources and skills.",
-    },
   ],
   Logistics: [
     {
@@ -93,26 +89,33 @@ const faqData = {
         "Not at all! We encourage you to stay as much as possible so you don’t miss out on the experience, but you’re free to come and go as needed.",
     },
     {
-      question: "Are there showers available?",
-      answer:
-        "Yes! Showers are accessible at the UCF Recreation and Wellness Center. We’ll include all the details and free entry info in the Hacker’s Guide.",
-    },
-    {
       question: "Is there parking available at the venue?",
       answer:
-        "Absolutely! We’ll provide free parking passes for certain garages during the event. Specific garage locations and instructions for getting your pass will be included in the Hacker’s Guide.",
+        "Absolutely! We'll provide instructions for specific parking locations during the event in the Hacker's Guide.",
     },
   ],
   Sponsorship: [
     {
       question: "Can I volunteer at HackUSF?",
       answer:
-        "Absolutely! We’re always looking for enthusiastic volunteers to help make HackUSF a success. Volunteers assist with registration, logistics, mentoring and various event activities. It’s a great way to be part of the hackathon community and gain experience. Interested? Reach out to us to get involved.",
+        "Absolutely! We're always looking for enthusiastic volunteers to help make HackUSF a success. Volunteers assist with registration, logistics, mentoring and various event activities. It's a great way to be part of the hackathon community and gain experience. Interested? Reach out to us to get involved.",
     },
     {
       question: "How can I become a sponsor?",
-      answer:
-        "We’d love to have your organization support HackUSF. Sponsoring gives you the chance to connect with talented students, showcase your brand and support the tech community. To learn more about sponsorship opportunities, get in touch with us.",
+      answer: (
+        <>
+          We'd love to have your organization support HackUSF. Sponsoring gives
+          you the chance to connect with talented students, showcase your brand
+          and support the tech community. To learn more about sponsorship
+          opportunities, get in touch with us at{" "}
+          <a
+            href="mailto:gdscatusf@gmail.com"
+            style={{ color: "inherit", textDecoration: "underline" }}
+          >
+            gdscatusf@gmail.com
+          </a>
+        </>
+      ),
     },
     {
       question: "What are the benefits of sponsoring HackUSF?",
@@ -120,14 +123,9 @@ const faqData = {
         "Sponsors receive brand visibility, direct access to skilled students for recruiting, opportunities to host workshops or challenges and the chance to be part of one of Florida’s premier hackathons. Different sponsorship levels include benefits like booth space, branded swag and speaking opportunities.",
     },
     {
-      question: "Do volunteers get any perks?",
-      answer:
-        "Yes. Volunteers receive exclusive HackUSF swag, meals during their shifts and the satisfaction of helping create an amazing experience for everyone. It’s also a great opportunity to network and learn about event organization.",
-    },
-    {
       question: "When is the deadline to become a sponsor?",
       answer:
-        "We recommend reaching out early to secure your preferred sponsorship level and benefits. We do accept new sponsors closer to the event, so contact us soon to avoid missing the opportunity to be part of HackUSF.",
+        "We recommend reaching out early to secure your preferred sponsorship level and benefits. February 13th is the early deadline, February 27th is the regular deadline, and March 6th is the payment deadline for sponsorship commitments.",
     },
   ],
 };
@@ -177,7 +175,7 @@ export default function FAQ() {
             expanded={expanded === idx}
             onChange={() => handleChange(idx)}
             sx={{
-              bgcolor: "#FBF1DA",
+              bgcolor: "#FcF0DA",
               borderRadius: 2,
               mb: { xs: 1.5, md: 3 }, // spacing between items
               width: "100%",
@@ -241,6 +239,7 @@ export default function FAQ() {
         minHeight: "100vh", // full screen height
         position: "relative", // allows absolute positioning if needed later
         pt: 1,
+        pb: { xs: 4, md: 6 },
       }}
     >
       <Box sx={{ mx: "auto", px: { xs: 3, md: 6 }, py: { xs: 4, md: 8 } }}>
@@ -253,7 +252,8 @@ export default function FAQ() {
               fontSize: { xs: "32px", md: "64px" },
               lineHeight: "100%",
               letterSpacing: 0,
-              color: "black",
+              color: "#fcf0da",
+              textShadow: "1px 2px 2px rgba(0, 0, 0, 0.5)",
             }}
           >
             FAQ

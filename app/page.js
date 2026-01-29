@@ -197,7 +197,7 @@ export default function Home() {
         />
         <Box sx={{ position: "relative", width: "100%", height: "auto" }}>
           <Image
-            src="/images/forest (3).svg"
+            src="/images/forest (4).svg"
             alt="forest"
             width={1920}
             height={1080}
@@ -308,14 +308,15 @@ export default function Home() {
       {/* Blue background section with archway */}
       <Box
         sx={{
-          background: "#35a0c7",
+          background:
+            "linear-gradient(to bottom, #2b9fc6 0%, #1670ac 50%, #0c3e9aff 100%)",
           width: "100%",
           position: "relative",
-          minHeight: "100vh", // Ensures minimum space for archway
+          minHeight: "100vh",
         }}
       >
         {/* Archway background image */}
-        <Box
+        {/* <Box
           sx={{
             position: "absolute",
             bottom: 0,
@@ -338,7 +339,7 @@ export default function Home() {
               display: "block",
             }}
           />
-        </Box>
+        </Box> */}
 
         {/* Content overlayed on top */}
         <Box sx={{ position: "relative", zIndex: 1 }}>

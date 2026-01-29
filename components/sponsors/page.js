@@ -351,7 +351,7 @@ function Sponsors() {
       }}
     >
       {/* Decorative elements */}
-      {/* <Box
+      <Box
         sx={{
           position: "absolute",
           right: { xs: "-5%", md: "-2%" },
@@ -361,16 +361,7 @@ function Sponsors() {
           pointerEvents: "none",
           zIndex: 1,
         }}
-      >
-        <Image
-          src="/images/sponsors/seahorse.png"
-          alt=""
-          fill
-          sizes="(max-width: 600px) 300px, (max-width: 900px) 400px, 500px"
-          style={{ objectFit: "contain" }}
-          loading="lazy"
-        />
-      </Box>
+      ></Box>
       <Box
         sx={{
           position: "absolute",
@@ -430,7 +421,7 @@ function Sponsors() {
           style={{ objectFit: "contain" }}
           loading="lazy"
         />
-      </Box> */}
+      </Box>
 
       {/* Flexboards container */}
       <Box>
@@ -449,7 +440,8 @@ function Sponsors() {
               fontFamily: "var(--font-cinzel-bold)",
               fontWeight: 700,
               fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-              color: "#E5E4E2",
+              color: "#fcf0da",
+              textShadow: "1px 2px 2px rgba(0, 0, 0, 0.5)",
               textAlign: "center",
               mb: { xs: 2, md: 4 },
               textTransform: "uppercase",
@@ -477,7 +469,8 @@ function Sponsors() {
               fontFamily: "var(--font-cinzel-bold)",
               fontWeight: 700,
               fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-              color: "#E5E4E2",
+              color: "#fcf0da",
+              textShadow: "1px 2px 2px rgba(0, 0, 0, 0.5)",
               textAlign: "center",
               mb: { xs: 2, md: 4 },
               textTransform: "uppercase",

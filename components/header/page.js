@@ -148,7 +148,9 @@ function Header() {
                 },
               }}
             >
-              <MenuIcon sx={{ fontSize: "clamp(40px, 6vw, 45px)" }} />
+              <MenuIcon
+                sx={{ fontSize: "clamp(40px, 6vw, 45px)", color: "#fad37a" }}
+              />
             </IconButton>
             <Menu
               id="menu-appbar"
