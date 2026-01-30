@@ -126,7 +126,7 @@ export default function ApplicationProgress() {
       const payload = await response.json();
       if (!response.ok || !payload.success) {
         throw new Error(
-          payload.error || payload.message || "Failed to set meal group."
+          payload.error || payload.message || "Failed to set meal group.",
         );
       }
       setMealGroup(payload.mealGroup || "");
@@ -144,12 +144,12 @@ export default function ApplicationProgress() {
     setMealGroupLoading(true);
     try {
       const response = await fetch(
-        `/api/getMealGroup?userId=${encodeURIComponent(userId)}`
+        `/api/getMealGroup?userId=${encodeURIComponent(userId)}`,
       );
       const payload = await response.json();
       if (!response.ok || !payload.success) {
         throw new Error(
-          payload.error || payload.message || "Unable to load meal group."
+          payload.error || payload.message || "Unable to load meal group.",
         );
       }
       setMealGroup(payload.data?.mealGroup || "");
@@ -164,7 +164,8 @@ export default function ApplicationProgress() {
     if (status !== "accepted" || !rsvp) return;
     if (mealGroup || mealGroupLoading) return;
     fetchMealGroup();
-  }, [status, rsvp, mealGroup, mealGroupLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, rsvp]);
 
   const handleRsvpConfirm = async () => {
     if (!userId) return;
@@ -201,7 +202,7 @@ export default function ApplicationProgress() {
 
   const content = useMemo(
     () => STATUS_CONTENT[normalizeStatus(status)],
-    [status]
+    [status],
   );
 
   return (

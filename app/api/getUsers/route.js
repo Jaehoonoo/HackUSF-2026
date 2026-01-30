@@ -3,86 +3,80 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 
 export async function GET(req) {
-    try {
-        // Authenticate the user and get session claims
-        //const userId = new URL(req.url, `http://${req.headers.get('host')}`).searchParams.get(const usersRef);
-        
-        // if (!userId) {
-        //     return new Response(
-        //         JSON.stringify({ error: "Unauthorized" }), 
-        //         { status: 401 }
-        //     );
-        // }
+  try {
+    // Authenticate the user and get session claims
+    //const userId = new URL(req.url, `http://${req.headers.get('host')}`).searchParams.get(const usersRef);
 
-        // Check if user has admin role
-        // if (sessionClaims?.metadata?.role !== 'admin') {
-        //     return new Response(
-        //         JSON.stringify({ error: "Forbidden - Admin access required" }), 
-        //         { status: 403 }
-        //     );
-        // }
+    // if (!userId) {
+    //     return new Response(
+    //         JSON.stringify({ error: "Unauthorized" }),
+    //         { status: 401 }
+    //     );
+    // }
 
-        const usersRef = collection(db, "users");
-        
-        // Fetch users in parallel by status (including empty status)
-        const [
-            acceptedSnapshot,
-            rejectedSnapshot,
-            pendingSnapshot,
-            waitlistedSnapshot
-        ] = await Promise.all([
-            getDocs(query(usersRef, where("status", "==", "accepted"))),
-            getDocs(query(usersRef, where("status", "==", "rejected"))),
-            getDocs(query(usersRef, where("status", "==", "pending"))),
-            getDocs(query(usersRef, where("status", "==", "waitlisted"))),
-        ]);
+    // Check if user has admin role
+    // if (sessionClaims?.metadata?.role !== 'admin') {
+    //     return new Response(
+    //         JSON.stringify({ error: "Forbidden - Admin access required" }),
+    //         { status: 403 }
+    //     );
+    // }
 
-        // Map Firestore documents to plain objects with IDs
-        const acceptedUsers = acceptedSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const rejectedUsers = rejectedSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const pendingUsers = pendingSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const waitlistedUsers = waitlistedSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const usersRef = collection(db, "users");
 
-        // Build response data
-        const data = {
-            acceptedUsers,
-            rejectedUsers,
-            pendingUsers,
-            waitlistedUsers,
+    // Fetch ALL users from the collection
+    const allUsersSnapshot = await getDocs(usersRef);
 
-            acceptedUsersCount: acceptedUsers.length,
-            rejectedUsersCount: rejectedUsers.length,
-            pendingUsersCount: pendingUsers.length,
-            waitlistedUsersCount: waitlistedUsers.length,
+    // Map Firestore documents to plain objects with IDs
+    const allUsers = allUsersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-            totalUsers:
-                acceptedUsers.length +
-                rejectedUsers.length +
-                pendingUsers.length +
-                waitlistedUsers.length 
-        };
+    // Group users by status
+    const acceptedUsers = allUsers.filter((u) => u.status === "accepted");
+    const rejectedUsers = allUsers.filter((u) => u.status === "rejected");
+    const waitlistedUsers = allUsers.filter((u) => u.status === "waitlisted");
+    const submittedUsers = allUsers.filter(
+      (u) => u.status === "submitted" || u.status === "in_review" || !u.status,
+    );
 
-        return new Response(
-            JSON.stringify({ 
-                success: true, 
-                data
-            }), 
-            { 
-                status: 200,
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            }
-        );
+    // Build response data
+    const data = {
+      allUsers, // All users for admin table
+      acceptedUsers,
+      rejectedUsers,
+      waitlistedUsers,
+      submittedUsers, // Users waiting for review
 
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        return new Response(
-            JSON.stringify({ 
-                success: false, 
-                error: error.message 
-            }), 
-            { status: 500 }
-        );
-    }
+      acceptedUsersCount: acceptedUsers.length,
+      rejectedUsersCount: rejectedUsers.length,
+      waitlistedUsersCount: waitlistedUsers.length,
+      submittedUsersCount: submittedUsers.length,
+
+      totalUsers: allUsers.length,
+    };
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        data,
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: error.message,
+      }),
+      { status: 500 },
+    );
+  }
 }
