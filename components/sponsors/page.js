@@ -277,6 +277,14 @@ function Sponsors() {
     isBigSponsor: false,
   }));
 
+  const seaCreatures = [
+    { src: "/images/dolphin.png", pos: { left: { xs: "-8%", md: "-5%" }, bottom: { xs: "-5%", md: "-2%" } }, size: { w: { xs: 220, md: 520 }, h: { xs: 145, md: 340 } }, objectPos: "left bottom" },
+    { src: "/images/seahorse.webp", pos: { right: { xs: "-8%", md: "2%" }, top: { xs: "36%", md: "48%" } }, size: { w: { xs: 100, md: 280 }, h: { xs: 130, md: 360 } }, objectPos: "right center", hideOnMobile: true },
+    { src: "/images/stingray.png", pos: { left: { xs: "18%", md: "32%" }, bottom: { xs: "18%", md: "42%" } }, size: { w: { xs: 160, md: 400 }, h: { xs: 75, md: 190 } }, objectPos: "left bottom", hideOnMobile: true },
+    { src: "/images/whale2.png", pos: { right: { xs: "-5%", md: "4%" }, top: { xs: "-2%", md: "0%" } }, size: { w: { xs: 180, md: 450 }, h: { xs: 105, md: 260 } }, objectPos: "right top" },
+    { src: "/images/whale2.webp", pos: { right: { xs: "0%", md: "24%" }, bottom: { xs: "18%", md: "16%" } }, size: { w: { xs: 170, md: 420 }, h: { xs: 100, md: 240 } }, objectPos: "right bottom" },
+  ];
+
   return (
     <Box
       component="section"
@@ -284,23 +292,38 @@ function Sponsors() {
       sx={{
         position: "relative",
         py: { xs: 4, md: 6 },
+        overflow: "hidden",
       }}
     >
-      {/* Decorative elements */}
+      {/* Scattered sea creatures - background layer, low opacity */}
+      {seaCreatures.map((creature, idx) => (
+        <Box
+          key={idx}
+          sx={{
+            display: { xs: creature.hideOnMobile ? "none" : "block", md: "block" },
+            position: "absolute",
+            ...creature.pos,
+            width: creature.size.w,
+            height: creature.size.h,
+            pointerEvents: "none",
+            zIndex: 0,
+            opacity: 0.52,
+          }}
+        >
+          <Image
+            src={creature.src}
+            alt=""
+            fill
+            sizes="(max-width: 600px) 150px, 250px"
+            style={{ objectFit: "contain", objectPosition: creature.objectPos }}
+            loading="lazy"
+          />
+        </Box>
+      ))}
+      {/* Hippocampi (seahorse) - right side, hidden on mobile */}
       <Box
         sx={{
-          position: "absolute",
-          right: { xs: "-5%", md: "-2%" },
-          top: { xs: "8%", md: "10%" },
-          width: { xs: 300, sm: 400, md: 500 },
-          height: { xs: 500, sm: 650, md: 800 },
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      ></Box>
-      {/* Hippocampi (seahorse) - right side */}
-      <Box
-        sx={{
+          display: { xs: "none", md: "block" },
           position: "absolute",
           right: { xs: "-20%", md: "-9%" },
           top: { xs: "70%", md: "70%" },

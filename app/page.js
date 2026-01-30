@@ -328,14 +328,14 @@ export default function Home() {
           <Image src="/images/vecteezy_a-group-of-sea-fish_41272473.png" alt="" fill sizes="180px" style={{ objectFit: "contain" }} loading="lazy" />
         </Box>
         {/* Row 2 - upper mid */}
-        <Box sx={{ position: "absolute", left: { xs: "0%", md: "3%" }, top: { xs: "22%", md: "20%" }, width: { xs: 90, md: 150 }, height: { xs: 55, md: 90 }, zIndex: 0, pointerEvents: "none", opacity: 0.75 }}>
+        <Box sx={{ position: "absolute", left: { xs: "0%", md: "14%" }, top: { xs: "22%", md: "20%" }, width: { xs: 90, md: 150 }, height: { xs: 55, md: 90 }, zIndex: 0, pointerEvents: "none", opacity: 0.75 }}>
           <Image src="/images/R2L_fih.png" alt="" fill sizes="150px" style={{ objectFit: "contain" }} loading="lazy" />
         </Box>
         <Box sx={{ position: "absolute", left: { xs: "18%", md: "0%" }, top: { xs: "18%", md: "22%" }, width: { xs: 85, md: 500 }, height: { xs: 50, md: 300 }, zIndex: 0, pointerEvents: "none", opacity: 0.8 }}>
           <Image src="/images/bigSchoolfih.png" alt="" fill sizes="140px" style={{ objectFit: "contain" }} loading="lazy" />
         </Box>
         {/* Row 3 - mid */}
-        <Box sx={{ position: "absolute", left: { xs: "18%", md: "10%" }, top: { xs: "35%", md: "36%" }, width: { xs: 95, md: 400 }, height: { xs: 58, md: 300 }, zIndex: 0, pointerEvents: "none", opacity: 0.75 }}>
+        <Box sx={{ position: "absolute", left: { xs: "18%", md: "22%" }, top: { xs: "35%", md: "36%" }, width: { xs: 95, md: 400 }, height: { xs: 58, md: 300 }, zIndex: 0, pointerEvents: "none", opacity: 0.75 }}>
           <Image src="/images/R2L_fih.png" alt="" fill sizes="160px" style={{ objectFit: "contain" }} loading="lazy" />
         </Box>
         {/* Row 4 - lower mid */}
@@ -346,9 +346,6 @@ export default function Home() {
           <Image src="/images/pngtree-fish-group-cartoon-silhouette-png-image_6455488.png" alt="" fill sizes="135px" style={{ objectFit: "contain" }} loading="lazy" />
         </Box>
         {/* Row 5 - bottom */}
-        <Box sx={{ position: "absolute", left: { xs: "22%", md: "25%" }, bottom: { xs: "22%", md: "25%" }, width: { xs: 90, md: 155 }, height: { xs: 55, md: 92 }, zIndex: 0, pointerEvents: "none", opacity: 0.8 }}>
-          <Image src="/images/fish%20right%20to%20lef.jpg" alt="" fill sizes="155px" style={{ objectFit: "contain" }} loading="lazy" />
-        </Box>
         <Box sx={{ position: "absolute", right: { xs: "28%", md: "32%" }, bottom: { xs: "5%", md: "8%" }, width: { xs: 78, md: 400 }, height: { xs: 46, md: 300 }, zIndex: 0, pointerEvents: "none", opacity: 0.8 }}>
           <Image src="/images/vecteezy_a-group-of-sea-fish_41272473.png" alt="" fill sizes="128px" style={{ objectFit: "contain" }} loading="lazy" />
         </Box>
