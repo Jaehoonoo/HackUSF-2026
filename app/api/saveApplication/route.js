@@ -6,8 +6,6 @@ export async function POST(req) {
   try {
     const data = await req.json();
 
-    console.log(data);
-
     // Validate required fields
     const requiredFields = [
       "userId",
@@ -44,7 +42,7 @@ export async function POST(req) {
           error: `Missing required fields: ${missingFields}`,
           missingFields: missingFields,
         }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -84,16 +82,13 @@ export async function POST(req) {
       resumeName: data.resumeName,
     };
 
-    console.log("otherSchool: ", newUserObject.otherSchool);
-    console.log("otheraccom: ", newUserObject.otherAccommodations);
-
     // updateDoc updates the fields for the user profile
     if (userSnap.exists()) {
       await updateDoc(userRef, newUserObject);
     } else {
       return NextResponse.json(
         { error: "User does not exist" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -102,7 +97,7 @@ export async function POST(req) {
         message: "User application created/updated successfully",
         data: { userId: data.userId },
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error creating/updating user application:", error);
@@ -111,7 +106,7 @@ export async function POST(req) {
         error: "Error updating user status",
         details: error.message,
       }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

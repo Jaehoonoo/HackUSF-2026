@@ -1,7 +1,4 @@
-import { 
-  listFiles,
-  getFile
-} from "@/utils/r2";
+import { listFiles, getFile } from "@/utils/r2";
 import archiver from "archiver";
 import { NextResponse } from "next/server";
 
@@ -13,25 +10,25 @@ export async function GET() {
     const archive = archiver("zip", { zlib: { level: 5 } });
 
     // collect all chunks from the archive stream
-    archive.on('data', (chunk) => chunks.push(chunk));
-    
+    archive.on("data", (chunk) => chunks.push(chunk));
+
     // handle archive completion
     const archivePromise = new Promise((resolve, reject) => {
-      archive.on('end', () => resolve());
-      archive.on('error', (err) => reject(err));
+      archive.on("end", () => resolve());
+      archive.on("error", (err) => reject(err));
     });
 
-    const filesList = await listFiles();
+    const filesList = await listFiles("resumes/");
 
     // process files in parallel
     for (let i = 0; i < filesList.length; i += BATCH_SIZE) {
       const batch = filesList.slice(i, i + BATCH_SIZE);
-      
+
       const results = await Promise.all(
         batch.map(async (obj) => {
           console.log("Fetching file: ", obj.Key);
           return getFile(obj.Key);
-        })
+        }),
       );
 
       // append fetched files to archive
@@ -55,7 +52,6 @@ export async function GET() {
         "Content-Length": buffer.length.toString(),
       },
     });
-
   } catch (e) {
     console.log(e);
     return NextResponse.json({ error: e.message }, { status: 500 });

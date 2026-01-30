@@ -328,12 +328,22 @@ const Application = () => {
       return;
     }
 
-    const resumeData = new FormData();
-    resumeData.append("userId", userId);
-    resumeData.append("userName", `${formData.firstName} ${formData.lastName}`);
-    resumeData.append("resume", resume);
+    // Validate that resume exists (either uploaded previously or being uploaded now)
+    if (!resume && !formData.resumeName) {
+      swal("Error", "Resume is required! Please upload your resume.", "error");
+      return;
+    }
 
-    if (resumeName == "") {
+    // Only upload resume if a new file was selected
+    if (resume) {
+      const resumeData = new FormData();
+      resumeData.append("userId", userId);
+      resumeData.append(
+        "userName",
+        `${formData.firstName} ${formData.lastName}`,
+      );
+      resumeData.append("resume", resume);
+
       const uploadResumeResponse = await fetch("/api/uploadResume", {
         method: "POST",
         body: resumeData,
@@ -829,14 +839,16 @@ const Application = () => {
                 <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
                   Resume*
                 </Typography>
-                {formData.resumeName && !resume && (
+                {formData.resumeName && !resume ? (
                   <Box
                     sx={{
-                      mb: 2,
                       p: 2,
                       bgcolor: "rgba(74, 123, 167, 0.1)",
                       borderRadius: 2,
                       border: "1px solid #4A7BA7",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
                     }}
                   >
                     <Typography
@@ -853,86 +865,119 @@ const Application = () => {
                       <UploadFileIcon sx={{ fontSize: 24 }} />
                       Current Resume: {formData.resumeName}
                     </Typography>
-                  </Box>
-                )}
-                <Box
-                  sx={{
-                    border: "2px dashed",
-                    borderColor: resume ? "#4A7BA7" : "#ccc",
-                    borderRadius: 2,
-                    p: 3,
-                    textAlign: "center",
-                    bgcolor: resume
-                      ? "rgba(74, 123, 167, 0.05)"
-                      : "transparent",
-                    transition: "all 0.2s ease",
-                    "&:hover": {
-                      borderColor: "#4A7BA7",
-                      bgcolor: "rgba(74, 123, 167, 0.05)",
-                    },
-                  }}
-                >
-                  <input
-                    type="file"
-                    accept=".pdf, .docx"
-                    onChange={handleFileChange}
-                    id="resume-upload"
-                    style={{ display: "none" }}
-                  />
-                  <label htmlFor="resume-upload">
-                    <Button
-                      component="span"
-                      variant="outlined"
-                      startIcon={<UploadFileIcon />}
-                      sx={{
-                        mb: resume ? 2 : 0,
-                        borderColor: "#4A7BA7",
-                        color: "#4A7BA7",
-                        border: "2px solid",
-                        borderRadius: 12,
-                        px: 3,
-                        py: 1,
-                        textTransform: "none",
-                        fontWeight: 600,
-                        "&:hover": {
-                          borderColor: "#3E6B94",
-                          bgcolor: "rgba(74, 123, 167, 0.1)",
-                        },
-                      }}
+                    <input
+                      type="file"
+                      accept=".pdf, .docx"
+                      onChange={handleFileChange}
+                      id="resume-upload"
+                      style={{ display: "none" }}
+                    />
+                    <label
+                      htmlFor="resume-upload"
+                      style={{ display: "flex", justifyContent: "center" }}
                     >
-                      Choose File
-                    </Button>
-                  </label>
-                  {resume && (
-                    <Box sx={{ mt: 2 }}>
-                      <Typography
-                        variant="body2"
+                      <Button
+                        component="span"
+                        variant="outlined"
                         sx={{
+                          borderColor: "#4A7BA7",
                           color: "#4A7BA7",
-                          fontWeight: 500,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: 1,
+                          border: "2px solid",
+                          borderRadius: 12,
+                          px: 3,
+                          py: 1,
+                          textTransform: "none",
+                          fontWeight: 600,
+                          "&:hover": {
+                            borderColor: "#3E6B94",
+                            bgcolor: "rgba(74, 123, 167, 0.1)",
+                          },
                         }}
                       >
-                        <UploadFileIcon sx={{ fontSize: 20 }} />
-                        {resumeName || resume.name}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        sx={{ color: "#666", mt: 0.5, display: "block" }}
+                        Change Resume
+                      </Button>
+                    </label>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      border: "2px dashed",
+                      borderColor: resume ? "#4A7BA7" : "#ccc",
+                      borderRadius: 2,
+                      p: 3,
+                      textAlign: "center",
+                      bgcolor: resume
+                        ? "rgba(74, 123, 167, 0.05)"
+                        : "transparent",
+                      transition: "all 0.2s ease",
+                      "&:hover": {
+                        borderColor: "#4A7BA7",
+                        bgcolor: "rgba(74, 123, 167, 0.05)",
+                      },
+                    }}
+                  >
+                    <input
+                      type="file"
+                      accept=".pdf, .docx"
+                      onChange={handleFileChange}
+                      id="resume-upload"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="resume-upload">
+                      <Button
+                        component="span"
+                        variant="outlined"
+                        startIcon={<UploadFileIcon />}
+                        sx={{
+                          mb: resume ? 2 : 0,
+                          borderColor: "#4A7BA7",
+                          color: "#4A7BA7",
+                          border: "2px solid",
+                          borderRadius: 12,
+                          px: 3,
+                          py: 1,
+                          textTransform: "none",
+                          fontWeight: 600,
+                          "&:hover": {
+                            borderColor: "#3E6B94",
+                            bgcolor: "rgba(74, 123, 167, 0.1)",
+                          },
+                        }}
                       >
+                        Choose File
+                      </Button>
+                    </label>
+                    {resume && (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: "#4A7BA7",
+                            fontWeight: 500,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <UploadFileIcon sx={{ fontSize: 20 }} />
+                          {resumeName || resume.name}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{ color: "#666", mt: 0.5, display: "block" }}
+                        >
+                          PDF or DOCX files only
+                        </Typography>
+                      </Box>
+                    )}
+                    {!resume && (
+                      <Typography variant="body2" sx={{ color: "#666", mt: 2 }}>
                         PDF or DOCX files only
                       </Typography>
-                    </Box>
-                  )}
-                  {!resume && (
-                    <Typography variant="body2" sx={{ color: "#666", mt: 2 }}>
-                      PDF or DOCX files only
-                    </Typography>
-                  )}
-                </Box>
+                    )}
+                  </Box>
+                )}
               </Box>
 
               {resumePreviewUrl && (
