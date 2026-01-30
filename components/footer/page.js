@@ -40,15 +40,17 @@ function Footer() {
           justifyContent: "space-between",
           alignItems: { xs: "center", md: "flex-end" },
           gap: { xs: "1.5rem", md: "2rem" },
+          position: "relative",
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            flex: { xs: "1", md: "0 0 auto" },
+            alignItems: { xs: "center", md: "flex-start" },
+            flex: { xs: "1", md: "1" },
             order: { xs: 1, md: 0 },
+            minWidth: { md: 0 },
           }}
         >
           <Typography
@@ -57,11 +59,11 @@ function Footer() {
             sx={{
               fontFamily: "var(--font-cinzel-bold)",
               fontWeight: 700,
-              fontSize: { xs: "1.5rem", md: "2.5rem" },
+              fontSize: { xs: "1.6rem", md: "2rem", lg: "3rem" },
               color: "#fcf0da",
               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
               pb: { xs: "0.6rem", md: "1rem" },
-              textAlign: "center",
+              textAlign: { xs: "center", md: "left" },
             }}
           >
             HackUSF 2026
@@ -70,7 +72,7 @@ function Footer() {
             sx={{
               display: "flex",
               gap: "1.5rem",
-              justifyContent: "center",
+              justifyContent: { xs: "center", md: "flex-start" },
             }}
           >
             <IconButton
@@ -129,10 +131,14 @@ function Footer() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
             gap: "0.75rem",
-            flex: 1,
+            flex: { xs: "1", md: "1" },
             order: { xs: 3, md: 0 },
             pt: { xs: "1.5rem", md: 0 },
+            position: { md: "absolute" },
+            left: { md: "50%" },
+            transform: { md: "translateX(-50%)" },
           }}
         >
           <Typography
@@ -166,9 +172,10 @@ function Footer() {
             flexDirection: "column",
             alignItems: { xs: "center", md: "flex-end" },
             gap: "0.75rem",
-            flex: { xs: "1", md: "0 0 auto" },
+            flex: { xs: "1", md: "1" },
             order: { xs: 2, md: 0 },
             mt: { xs: "-0.5rem", md: 0 },
+            minWidth: { md: 0 },
           }}
         >
           <Link

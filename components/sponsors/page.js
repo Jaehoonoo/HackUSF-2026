@@ -8,13 +8,7 @@ import Image from "next/image";
 // Higher tier = bigger size
 // Plat/Gold are considered "large" sponsors, Silver/Bronze are "small" sponsors
 // Fewer sponsors from a "large" catagory can fit on a row than from a "small" catagory
-const platinumSponsors = [
-  {
-    src: "/images/sponsors/googleLogo.png",
-    alt: "Google",
-    link: "https://about.google/",
-  },
-];
+const platinumSponsors = [];
 
 const goldSponsors = [
   {
@@ -27,17 +21,17 @@ const goldSponsors = [
     alt: "TampaBay Wave",
     link: "https://www.tampabaywave.org/",
   },
-
 ];
 
 const silverSponsors = [
-
-
+  {
+    src: "/images/sponsors/googleLogo.png",
+    alt: "Google",
+    link: "https://about.google/",
+  },
 ];
 
-const bronzeSponsors = [
-
-];
+const bronzeSponsors = [];
 
 const partners = [
   {
@@ -45,7 +39,6 @@ const partners = [
     alt: "USF College of Engineering",
     link: "https://www.usf.edu/engineering/",
   },
-
 ];
 
 // CompanyBubble: Combines Bubble and DecorBubble for flexboard
@@ -183,37 +176,23 @@ const SponsorSection = ({ sponsors, isMobile }) => {
         flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
-        gap: { xs: 1, sm: 2, md: 4 }, // Reduced gap on mobile
-        px: { xs: 1, sm: 1.5, md: 2 }, // Reduced padding on mobile
-        py: { xs: 1, sm: 1.5, md: 2 }, // Reduced padding on mobile
+        gap: { xs: 1, sm: 2, md: 4 },
+        px: { xs: 1, sm: 1.5, md: 2 },
+        py: { xs: 1, sm: 1.5, md: 2 },
         mx: "auto",
+        maxWidth: "100%",
       }}
     >
-      
       {sponsors.map((sponsor, index) => (
-        <Box
+        <CompanyBubble
           key={index}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            // Big sponsors: span 3 columns on mobile (2 per row), 4 columns on desktop (3 per row)
-            // Small sponsors: span 2 columns on mobile (3 per row), 3 columns on desktop (4 per row)
-            gridColumn: {
-              xs: sponsor.isBigSponsor ? "span 3" : "span 2",
-              md: sponsor.isBigSponsor ? "span 4" : "span 3",
-            },
-          }}
-        >
-          <CompanyBubble
-            logo={sponsor.src}
-            logoAlt={sponsor.alt}
-            link={sponsor.link}
-            isMobile={isMobile}
-            size={sponsor.size}
-            decorSize={sponsor.decorSize}
-          />
-        </Box>
+          logo={sponsor.src}
+          logoAlt={sponsor.alt}
+          link={sponsor.link}
+          isMobile={isMobile}
+          size={sponsor.size}
+          decorSize={sponsor.decorSize}
+        />
       ))}
     </Box>
   );
@@ -278,11 +257,19 @@ function Sponsors() {
   }));
 
   const seaCreatures = [
-    { src: "/images/dolphin.png", pos: { left: { xs: "-8%", md: "-5%" }, bottom: { xs: "-5%", md: "-2%" } }, size: { w: { xs: 220, md: 520 }, h: { xs: 145, md: 340 } }, objectPos: "left bottom" },
-    { src: "/images/seahorse.webp", pos: { right: { xs: "-8%", md: "2%" }, top: { xs: "36%", md: "48%" } }, size: { w: { xs: 100, md: 280 }, h: { xs: 130, md: 360 } }, objectPos: "right center", hideOnMobile: true },
-    { src: "/images/stingray.png", pos: { left: { xs: "18%", md: "32%" }, bottom: { xs: "18%", md: "42%" } }, size: { w: { xs: 160, md: 400 }, h: { xs: 75, md: 190 } }, objectPos: "left bottom", hideOnMobile: true },
-    { src: "/images/whale2.png", pos: { right: { xs: "-5%", md: "4%" }, top: { xs: "-2%", md: "0%" } }, size: { w: { xs: 180, md: 450 }, h: { xs: 105, md: 260 } }, objectPos: "right top" },
-    { src: "/images/whale2.webp", pos: { right: { xs: "0%", md: "24%" }, bottom: { xs: "18%", md: "16%" } }, size: { w: { xs: 170, md: 420 }, h: { xs: 100, md: 240 } }, objectPos: "right bottom" },
+    {
+      src: "/images/dolphin.png",
+      pos: { left: { xs: "-8%", md: "-5%" }, bottom: { xs: "-5%", md: "-2%" } },
+      size: { w: { xs: 220, md: 520 }, h: { xs: 145, md: 340 } },
+      objectPos: "left bottom",
+    },
+    {
+      src: "/images/stingray.png",
+      pos: { left: { xs: "30%", md: "60%" }, bottom: { xs: "18%", md: "42%" } },
+      size: { w: { xs: 160, md: 300 }, h: { xs: 75, md: 190 } },
+      objectPos: "right center",
+      hideOnMobile: true,
+    },
   ];
 
   return (
@@ -300,7 +287,10 @@ function Sponsors() {
         <Box
           key={idx}
           sx={{
-            display: { xs: creature.hideOnMobile ? "none" : "block", md: "block" },
+            display: {
+              xs: creature.hideOnMobile ? "none" : "block",
+              md: "block",
+            },
             position: "absolute",
             ...creature.pos,
             width: creature.size.w,
@@ -391,18 +381,10 @@ function Sponsors() {
           >
             Sponsors
           </Typography>
-          <Box sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 4,
-            width: "100%",
-            }}>
-            <SponsorSection sponsors={largeSponsors} isMobile={isMobile} />
-            <SponsorSection sponsors={smallSponsors} isMobile={isMobile} />
-          </Box>
-
+          <SponsorSection
+            sponsors={[...largeSponsors, ...smallSponsors]}
+            isMobile={isMobile}
+          />
         </Box>
 
         {/* Partners Flexboard */}
