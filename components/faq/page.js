@@ -242,6 +242,27 @@ export default function FAQ() {
         pb: { xs: 4, md: 6 },
       }}
     >
+      {/* Whale - bottom left */}
+      <Box
+        sx={{
+          position: "absolute",
+          left: { xs: "-15%", md: "-5%" },
+          bottom: { xs: "-7%", md: "5%" },
+          width: { xs: 350, sm: 450, md: 900 },
+          height: { xs: 200, sm: 260, md: 800 },
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      >
+        <Image
+          src="/images/sponsors/whale.png"
+          alt=""
+          fill
+          sizes="(max-width: 600px) 350px, (max-width: 900px) 450px, 550px"
+          style={{ objectFit: "contain" }}
+          loading="lazy"
+        />
+      </Box>
       <Box sx={{ mx: "auto", px: { xs: 3, md: 6 }, py: { xs: 4, md: 8 } }}>
         {/* Centered title */}
         <Box sx={{ textAlign: "center", mb: { xs: 2, md: 4 } }}>
