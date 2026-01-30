@@ -298,27 +298,7 @@ function Sponsors() {
           zIndex: 1,
         }}
       ></Box>
-      <Box
-        sx={{
-          position: "absolute",
-          left: { xs: "0%", md: "12%" },
-          top: { xs: "35%", md: "38%" },
-          width: { xs: 240, md: 360 },
-          height: { xs: 160, md: 220 },
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      >
-        <Image
-          src="/images/sponsors/fish-school-left.png"
-          alt=""
-          fill
-          sizes="(max-width: 600px) 120px, 180px"
-          style={{ objectFit: "contain" }}
-          loading="lazy"
-        />
-      </Box>
-      {/* Hippocampi (seahorse) - right side, approx where fish were */}
+      {/* Hippocampi (seahorse) - right side */}
       <Box
         sx={{
           position: "absolute",
