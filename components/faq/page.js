@@ -165,7 +165,7 @@ export default function FAQ() {
         sx={{
           width: { xs: "100%", md: "80%", lg: "60%" },
           mx: "auto",
-          mt: { xs: 8, md: 12 },
+          mt: { xs: 6, sm: 8, md: 12 },
           px: { xs: 2, md: 0 },
         }}
       >
@@ -175,7 +175,7 @@ export default function FAQ() {
             expanded={expanded === idx}
             onChange={() => handleChange(idx)}
             sx={{
-              bgcolor: "#FcF0DA",
+              bgcolor: "#FCF0DA",
               borderRadius: 2,
               mb: { xs: 1.5, md: 3 }, // spacing between items
               width: "100%",
@@ -200,7 +200,12 @@ export default function FAQ() {
                 sx={{
                   fontFamily: "Cinzel",
                   fontWeight: 700,
-                  fontSize: { xs: "1.2rem", md: "1.5rem", lg: "1.9rem" },
+                  fontSize: {
+                    xs: "1rem",
+                    sm: "1.2rem",
+                    md: "1.5rem",
+                    lg: "1.9rem",
+                  },
                   lineHeight: "100%",
                   letterSpacing: 0,
                 }}
