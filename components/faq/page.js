@@ -179,7 +179,7 @@ export default function FAQ() {
               borderRadius: 2,
               mb: { xs: 1.5, md: 3 }, // spacing between items
               width: "100%",
-              p: "1.0rem",
+              p: { xs: "0.4rem", lg: "1rem" },
               pr: "1.6rem",
               // base shadow and transform for smoother lift effect
               boxShadow: "0 8px 20px rgba(0,0,0,0.10)",
@@ -298,7 +298,7 @@ export default function FAQ() {
               onClick={() => handleCategoryClick(box.key)}
               sx={{
                 bgcolor: activeCategory === box.key ? "#FFD37C" : "#FBF1DA",
-                p: "1rem",
+                p: { xs: "0.4rem", lg: "1rem" },
                 borderRadius: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -335,7 +335,12 @@ export default function FAQ() {
                 sx={{
                   fontFamily: "Cinzel",
                   fontWeight: 700,
-                  fontSize: { xs: "1.3rem", md: "1.6rem", lg: "2.0rem" },
+                  fontSize: {
+                    xs: "1.1rem",
+                    sm: "1.3rem",
+                    md: "1.6rem",
+                    lg: "2.0rem",
+                  },
                   textAlign: "center",
                 }}
               >
