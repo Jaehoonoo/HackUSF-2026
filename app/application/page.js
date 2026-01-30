@@ -688,6 +688,16 @@ const Application = () => {
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
               />
 
+              <TextField
+                fullWidth
+                label="LinkedIn"
+                value={socials.linkedin || ""}
+                onChange={handleSocialsChange("linkedin")}
+                placeholder="https://linkedin.com/in/yourprofile"
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+
               <Box>
                 <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
                   Social Links (optional)
@@ -699,14 +709,6 @@ const Application = () => {
                     gap: 2,
                   }}
                 >
-                  <TextField
-                    fullWidth
-                    label="LinkedIn"
-                    value={socials.linkedin || ""}
-                    onChange={handleSocialsChange("linkedin")}
-                    placeholder="https://linkedin.com/in/yourprofile"
-                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
-                  />
                   <TextField
                     fullWidth
                     label="GitHub"
@@ -737,10 +739,7 @@ const Application = () => {
                     value={socials.other || ""}
                     onChange={handleSocialsChange("other")}
                     placeholder="Any other social links"
-                    sx={{
-                      gridColumn: { xs: "1", sm: "1 / -1" },
-                      "& .MuiOutlinedInput-root": { borderRadius: 2 },
-                    }}
+                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                   />
                 </Box>
               </Box>
