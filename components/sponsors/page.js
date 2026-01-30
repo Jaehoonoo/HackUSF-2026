@@ -439,7 +439,7 @@ function Sponsors() {
             sx={{
               fontFamily: "var(--font-cinzel-bold)",
               fontWeight: 700,
-              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem", lg: "4rem" },
               color: "#fcf0da",
               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
               textAlign: "center",
@@ -468,7 +468,7 @@ function Sponsors() {
             sx={{
               fontFamily: "var(--font-cinzel-bold)",
               fontWeight: 700,
-              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem", lg: "4rem" },
               color: "#fcf0da",
               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
               textAlign: "center",

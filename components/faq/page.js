@@ -249,7 +249,7 @@ export default function FAQ() {
             sx={{
               fontFamily: "Cinzel",
               fontWeight: 700,
-              fontSize: { xs: "32px", md: "64px" },
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem", lg: "4rem" },
               lineHeight: "100%",
               letterSpacing: 0,
               color: "#fcf0da",
