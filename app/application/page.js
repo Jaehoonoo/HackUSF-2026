@@ -774,6 +774,7 @@ const Application = () => {
                         >
                           MLH Code of Conduct
                         </a>
+                        *
                       </>
                     }
                   />
@@ -814,6 +815,7 @@ const Application = () => {
                         >
                           MLH Contest Terms and Conditions.
                         </a>
+                        *
                       </>
                     }
                   />

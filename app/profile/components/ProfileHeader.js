@@ -18,7 +18,6 @@ export default function ProfileHeader() {
       sx={{
         bgcolor: "#385BB2",
         boxShadow: "none",
-        borderBottom: "4px solid #2D5F7F",
       }}
     >
       <Toolbar

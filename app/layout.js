@@ -31,9 +31,7 @@ export const metadata = {
   description:
     "Join USF GDG Hackathon 2026! Innovate and compete in HackUSF at the University of South Florida. Build projects, win prizes, and network.",
   icons: {
-    icon: "/gdsclogo.webp",
-    shortcut: "/gdsclogo.webp",
-    apple: "/gdsclogo.webp",
+    icon: "/favicon.ico",
   },
 };
 

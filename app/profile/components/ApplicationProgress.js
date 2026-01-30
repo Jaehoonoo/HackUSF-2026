@@ -25,7 +25,7 @@ const STATUS_CONTENT = {
     showEdit: true,
   },
   in_review: {
-    banner: "In review",
+    banner: "In Review",
     message: "We are carefully reviewing your application!",
     borderColor: "#7BDE95",
     textColor: "#3A8B52",
