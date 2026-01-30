@@ -2,11 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 
 import { renderAsync } from "docx-preview";
 
 import { useRouter } from "next/navigation";
+
+import { db } from "@/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 import {
   Autocomplete,
@@ -39,6 +42,7 @@ import swal from "sweetalert";
 
 const Application = () => {
   const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
 
   const docxPreviewRef = useRef(null);
   const [resume, setResume] = useState(null); //resume file
@@ -117,39 +121,59 @@ const Application = () => {
     }
   }, [isSignedIn, isLoaded]);
 
-  // get existing application
+  // get existing application with real-time listener
   useEffect(() => {
     if (!(typeof userId == "string")) return;
+    
+    // Create profile first (only on mount)
     fetch("/api/createProfile", {
       method: "POST",
-      body: JSON.stringify({
-        userId,
-      }),
+      body: JSON.stringify({ userId }),
     }).then((res) => console.log("Profile created/exists"));
-    fetch(`/api/getApplication?userId=${encodeURIComponent(userId)}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      // if result is successful && result is truthy then set result
-      .then((result) => {
-        if (result.success && result && result.data) {
-          const data = result.data;
+
+    // Set up real-time listener for application data
+    const userDocRef = doc(db, "users", userId);
+    
+    const unsubscribe = onSnapshot(
+      userDocRef,
+      { includeMetadataChanges: true }, // Enable offline persistence
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          
+          // Check if data is from cache (offline) or server
+          const source = docSnap.metadata.fromCache ? "cache" : "server";
+          console.log("Application data loaded from:", source);
 
           // Ensure new fields exist
+          const mergedData = { ...formData };
           for (const property in formData) {
-            // console.log("property: ", property, "undefined: ", data[property] == undefined, "formData property: ", formData[property])
-            if (data[property] == undefined)
-              data[property] = formData[property];
-            // console.log("data[property] after assignment: ", data[property])
+            if (data[property] !== undefined) {
+              mergedData[property] = data[property];
+            }
           }
 
-          setFormData(data);
+          setFormData(mergedData);
         }
-      });
+      },
+      (error) => {
+        console.error("Error listening to application:", error);
+      }
+    );
+
+    // Cleanup listener on unmount
+    return () => unsubscribe();
   }, [userId]);
+
+  // Auto-fill email from Clerk user data after application data loads
+  useEffect(() => {
+    if (user?.primaryEmailAddress?.emailAddress && formData.email === "") {
+      setFormData((prev) => ({
+        ...prev,
+        email: user.primaryEmailAddress.emailAddress,
+      }));
+    }
+  }, [user, formData.email]);
 
   const makeHandleChange = (key) => (event) => {
     const { type, checked, value } = event.target;
