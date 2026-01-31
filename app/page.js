@@ -22,15 +22,18 @@ export default function Home() {
     // Trigger fade-in whenever the component mounts or pathname changes to "/"
     setIsLoaded(false);
     setCloudsReady(false);
-    const timer = setTimeout(() => setIsLoaded(true), 150);
+    const timer = setTimeout(() => setIsLoaded(true), 200);
 
     // Wait for window load and layout to stabilize before showing clouds
+    // Add minimum delay to ensure layout is stable even on fast deployments
     const showClouds = () => {
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         requestAnimationFrame(() => {
-          setCloudsReady(true);
+          requestAnimationFrame(() => {
+            setCloudsReady(true);
+          });
         });
-      });
+      }, 100); // Minimum delay to ensure layout stability
     };
 
     if (document.readyState === "complete") {
@@ -45,7 +48,7 @@ export default function Home() {
         // Page restored from cache, reset and reload
         setIsLoaded(false);
         setCloudsReady(false);
-        setTimeout(() => setIsLoaded(true), 50);
+        setTimeout(() => setIsLoaded(true), 100);
         showClouds();
       }
     };
