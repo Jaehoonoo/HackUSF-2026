@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Paper, Typography, Box, Button } from "@mui/material";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import ProgressTimeline from "./ProgressTimeline";
 import AcceptedQrCode from "./AcceptedQrCode";
 import { db } from "@/firebase";
@@ -78,26 +78,25 @@ export default function ApplicationProgress() {
       return;
     }
 
-    const fetchStatus = async () => {
-      try {
-        const cachedStatus = cachedProfileRef.current.status;
-        const cachedRsvp = cachedProfileRef.current.rsvp;
-        if (
-          cachedProfileRef.current.userId === userId &&
-          isFinalized(cachedStatus, cachedRsvp)
-        ) {
-          setStatus(cachedStatus);
-          setRsvp(cachedRsvp);
-          return;
-        }
+    const docRef = doc(db, "users", userId);
 
-        const docRef = doc(db, "users", userId);
-        const snap = await getDoc(docRef);
+    // Set up real-time listener with cache support
+    const unsubscribe = onSnapshot(
+      docRef,
+      { includeMetadataChanges: true },
+      (snap) => {
+        const fromCache = snap.metadata.fromCache;
+        console.log(
+          `Profile status loaded from: ${fromCache ? "cache" : "server"}`,
+        );
+
         const data = snap.exists() ? snap.data() : null;
         const nextStatus = normalizeStatus(data?.status || "");
         const nextRsvp = Boolean(data?.rsvp);
+
         setStatus(nextStatus);
         setRsvp(nextRsvp);
+
         if (isFinalized(nextStatus, nextRsvp)) {
           cachedProfileRef.current = {
             userId,
@@ -105,13 +104,16 @@ export default function ApplicationProgress() {
             rsvp: nextRsvp,
           };
         }
-      } catch (error) {
+      },
+      (error) => {
+        console.error("Error fetching profile status:", error);
         setStatus("empty");
         setRsvp(false);
-      }
-    };
+      },
+    );
 
-    fetchStatus();
+    // Cleanup listener on unmount or when userId changes
+    return () => unsubscribe();
   }, [isLoaded, userId]);
 
   const setMealGroupforUser = async () => {

@@ -72,7 +72,7 @@ export default function Home() {
           >
             <Box sx={{ position: "relative", width: "100%", height: "auto" }}>
               <Image
-                src="/images/stairs (7).svg"
+                src="/images/stairs (8).svg"
                 alt="Temple Stairs Background"
                 width={1920}
                 height={1080}
@@ -87,6 +87,61 @@ export default function Home() {
                   zIndex: -1,
                 }}
               />
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "1.6%",
+                  right: "5%",
+                  width: "10%",
+                  height: "auto",
+                  zIndex: -2,
+                  animation: "circularFloat 15s linear infinite",
+                  "@keyframes circularFloat": {
+                    "0%": {
+                      transform: "translate(0, 0) rotate(0deg)",
+                    },
+                    "12.5%": {
+                      transform: "translate(18px, -8px) rotate(2deg)",
+                    },
+                    "25%": {
+                      transform: "translate(22px, -18px) rotate(-1deg)",
+                    },
+                    "37.5%": {
+                      transform: "translate(12px, -25px) rotate(3deg)",
+                    },
+                    "50%": {
+                      transform: "translate(-5px, -22px) rotate(-2deg)",
+                    },
+                    "62.5%": {
+                      transform: "translate(-18px, -15px) rotate(1deg)",
+                    },
+                    "75%": {
+                      transform: "translate(-20px, -8px) rotate(-3deg)",
+                    },
+                    "87.5%": {
+                      transform: "translate(-10px, -3px) rotate(2deg)",
+                    },
+                    "100%": {
+                      transform: "translate(0, 0) rotate(0deg)",
+                    },
+                  },
+                }}
+              >
+                <Image
+                  src="/images/Birds.svg"
+                  alt="Birds"
+                  width={1920}
+                  height={1080}
+                  priority
+                  placeholder="blur"
+                  blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23f59212'/%3E%3C/svg%3E"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                  }}
+                />
+              </Box>
               <Box
                 sx={{
                   position: "absolute",
@@ -327,10 +382,10 @@ export default function Home() {
         <Box
           sx={{
             position: "absolute",
-            left: { xs: "28%", md: "8%" },
+            left: { xs: "2%", md: "8%" },
             top: { xs: "2%", md: "0%" },
-            width: { xs: 100, md: 450 },
-            height: { xs: 60, md: 350 },
+            width: { xs: 300, md: 450 },
+            height: { xs: 200, md: 350 },
             zIndex: 0,
             pointerEvents: "none",
             opacity: 0.8,
@@ -349,7 +404,7 @@ export default function Home() {
         <Box
           sx={{
             position: "absolute",
-            left: { xs: "0%", md: "14%" },
+            left: "70%",
             top: { xs: "22%", md: "20%" },
             width: { xs: 90, md: 150 },
             height: { xs: 55, md: 90 },
@@ -370,10 +425,10 @@ export default function Home() {
         <Box
           sx={{
             position: "absolute",
-            left: { xs: "18%", md: "0%" },
-            top: { xs: "18%", md: "22%" },
-            width: { xs: 85, md: 500 },
-            height: { xs: 50, md: 300 },
+            left: { xs: "8%", md: "0%" },
+            top: { xs: "15%", md: "22%" },
+            width: { xs: 200, md: 500 },
+            height: { xs: 150, md: 300 },
             zIndex: 0,
             pointerEvents: "none",
             opacity: 0.8,
@@ -435,10 +490,10 @@ export default function Home() {
         <Box
           sx={{
             position: "absolute",
-            right: { xs: "2%", md: "5%" },
-            top: { xs: "58%", md: "60%" },
-            width: { xs: 80, md: 135 },
-            height: { xs: 50, md: 82 },
+            right: "50%",
+            top: "60%",
+            width: { xs: 100, md: 135 },
+            height: { xs: 80, md: 82 },
             zIndex: 0,
             pointerEvents: "none",
             opacity: 0.75,
@@ -449,28 +504,6 @@ export default function Home() {
             alt=""
             fill
             sizes="135px"
-            style={{ objectFit: "contain" }}
-            loading="lazy"
-          />
-        </Box>
-        {/* Row 5 - bottom */}
-        <Box
-          sx={{
-            position: "absolute",
-            right: { xs: "28%", md: "32%" },
-            bottom: { xs: "5%", md: "8%" },
-            width: { xs: 78, md: 400 },
-            height: { xs: 46, md: 300 },
-            zIndex: 0,
-            pointerEvents: "none",
-            opacity: 0.8,
-          }}
-        >
-          <Image
-            src="/images/vecteezy_a-group-of-sea-fish_41272473.png"
-            alt=""
-            fill
-            sizes="128px"
             style={{ objectFit: "contain" }}
             loading="lazy"
           />

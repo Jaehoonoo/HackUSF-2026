@@ -17,9 +17,9 @@ const goldSponsors = [
     link: "https://www.oracle.com/",
   },
   {
-    src: "/images/sponsors/tampaBayWave.png",
-    alt: "TampaBay Wave",
-    link: "https://www.tampabaywave.org/",
+    src: "/images/sponsors/nextera (1).png",
+    alt: "NextEra Energy",
+    link: "https://www.nexteraenergy.com/",
   },
 ];
 
@@ -31,7 +31,13 @@ const silverSponsors = [
   },
 ];
 
-const bronzeSponsors = [];
+const bronzeSponsors = [
+  {
+    src: "/images/sponsors/tampaBayWave.png",
+    alt: "TampaBay Wave",
+    link: "https://www.tampabaywave.org/",
+  },
+];
 
 const partners = [
   {
@@ -55,6 +61,12 @@ const CompanyBubble = ({
   const actualSize = isMobile ? size * 0.45 : size;
   const actualDecorSize = isMobile ? decorSize * 0.5 : decorSize;
 
+  // Generate random animation values for each bubble
+  const randomDuration = React.useMemo(() => 4 + Math.random() * 4, []); // 4-8 seconds
+  const randomDelay = React.useMemo(() => Math.random() * 2, []); // 0-2 seconds delay
+  const randomX = React.useMemo(() => -15 + Math.random() * 30, []); // -15px to 15px
+  const randomY = React.useMemo(() => -25 + Math.random() * 15, []); // -25px to -10px
+
   const bubbleContent = (
     <Box
       sx={{
@@ -64,7 +76,19 @@ const CompanyBubble = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        m: { xs: 0.5, sm: 1, md: 2 }, // Reduced margin on mobile
+        overflow: "visible",
+        animation: `float ${randomDuration}s ease-in-out ${randomDelay}s infinite`,
+        "@keyframes float": {
+          "0%, 100%": {
+            transform: "translate(0px, 0px)",
+          },
+          "33%": {
+            transform: `translate(${randomX}px, ${randomY}px)`,
+          },
+          "66%": {
+            transform: `translate(${-randomX}px, ${randomY * 0.7}px)`,
+          },
+        },
       }}
     >
       {/* Main Bubble with company logo */}
@@ -79,6 +103,7 @@ const CompanyBubble = ({
           transition: "transform 0.3s ease",
           "&:hover": {
             transform: "scale(1.05)",
+            animation: "none",
           },
         }}
       >
@@ -125,12 +150,12 @@ const CompanyBubble = ({
           </Typography>
         )}
       </Box>
-      {/* Decor Bubble (smaller bubble on bottom right) */}
+      {/* Decor Bubble (smaller bubble on bottom right) - positioned to stay within bounds */}
       <Box
         sx={{
           position: "absolute",
-          right: isMobile ? 4 : 9,
-          bottom: isMobile ? -1 : -2,
+          right: isMobile ? -actualDecorSize * 0.15 : -actualDecorSize * 0.15,
+          bottom: isMobile ? -actualDecorSize * 0.15 : -actualDecorSize * 0.15,
           width: actualDecorSize,
           height: actualDecorSize,
           pointerEvents: "none",
@@ -173,27 +198,35 @@ const SponsorSection = ({ sponsors, isMobile }) => {
     <Box
       sx={{
         display: "flex",
-        flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
-        gap: { xs: 1, sm: 2, md: 4 },
-        px: { xs: 1, sm: 1.5, md: 2 },
-        py: { xs: 1, sm: 1.5, md: 2 },
-        mx: "auto",
-        maxWidth: "100%",
+        width: "100%",
+        overflow: "visible",
+        py: { xs: 2, sm: 3, md: 4 },
+        px: { xs: 1, sm: 2 },
       }}
     >
-      {sponsors.map((sponsor, index) => (
-        <CompanyBubble
-          key={index}
-          logo={sponsor.src}
-          logoAlt={sponsor.alt}
-          link={sponsor.link}
-          isMobile={isMobile}
-          size={sponsor.size}
-          decorSize={sponsor.decorSize}
-        />
-      ))}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: { xs: 1, sm: 2, md: 4 },
+        }}
+      >
+        {sponsors.map((sponsor, index) => (
+          <CompanyBubble
+            key={index}
+            logo={sponsor.src}
+            logoAlt={sponsor.alt}
+            link={sponsor.link}
+            isMobile={isMobile}
+            size={sponsor.size}
+            decorSize={sponsor.decorSize}
+          />
+        ))}
+      </Box>
     </Box>
   );
 };
@@ -256,22 +289,6 @@ function Sponsors() {
     isBigSponsor: false,
   }));
 
-  const seaCreatures = [
-    {
-      src: "/images/dolphin.png",
-      pos: { left: { xs: "-8%", md: "-5%" }, bottom: { xs: "-5%", md: "-2%" } },
-      size: { w: { xs: 220, md: 520 }, h: { xs: 145, md: 340 } },
-      objectPos: "left bottom",
-    },
-    {
-      src: "/images/stingray.png",
-      pos: { left: { xs: "30%", md: "60%" }, bottom: { xs: "18%", md: "42%" } },
-      size: { w: { xs: 160, md: 300 }, h: { xs: 75, md: 190 } },
-      objectPos: "right center",
-      hideOnMobile: true,
-    },
-  ];
-
   return (
     <Box
       component="section"
@@ -279,37 +296,9 @@ function Sponsors() {
       sx={{
         position: "relative",
         py: { xs: 4, md: 6 },
-        overflow: "hidden",
+        overflow: "visible",
       }}
     >
-      {/* Scattered sea creatures - background layer, low opacity */}
-      {seaCreatures.map((creature, idx) => (
-        <Box
-          key={idx}
-          sx={{
-            display: {
-              xs: creature.hideOnMobile ? "none" : "block",
-              md: "block",
-            },
-            position: "absolute",
-            ...creature.pos,
-            width: creature.size.w,
-            height: creature.size.h,
-            pointerEvents: "none",
-            zIndex: 0,
-            opacity: 0.52,
-          }}
-        >
-          <Image
-            src={creature.src}
-            alt=""
-            fill
-            sizes="(max-width: 600px) 150px, 250px"
-            style={{ objectFit: "contain", objectPosition: creature.objectPos }}
-            loading="lazy"
-          />
-        </Box>
-      ))}
       {/* Hippocampi (seahorse) - right side, hidden on mobile */}
       <Box
         sx={{
@@ -327,7 +316,6 @@ function Sponsors() {
           src="/images/sponsors/seahorse.png"
           alt=""
           fill
-          sizes="(max-width: 600px) 100px, 150px"
           style={{ objectFit: "contain" }}
           loading="lazy"
         />
@@ -363,6 +351,7 @@ function Sponsors() {
             pt: { xs: 4, md: 6 },
             pb: { xs: 2, md: 4 },
             zIndex: 2,
+            overflow: "visible",
           }}
         >
           <Typography
@@ -394,6 +383,7 @@ function Sponsors() {
             pt: { xs: 2, md: 4 },
             pb: { xs: 6, md: 10 },
             zIndex: 2,
+            overflow: "visible",
           }}
         >
           <Typography
