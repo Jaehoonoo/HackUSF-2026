@@ -15,19 +15,38 @@ import FAQ from "@/components/faq/page";
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [cloudsReady, setCloudsReady] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     // Trigger fade-in whenever the component mounts or pathname changes to "/"
     setIsLoaded(false);
+    setCloudsReady(false);
     const timer = setTimeout(() => setIsLoaded(true), 50);
+
+    // Wait for window load and layout to stabilize before showing clouds
+    const showClouds = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setCloudsReady(true);
+        });
+      });
+    };
+
+    if (document.readyState === "complete") {
+      showClouds();
+    } else {
+      window.addEventListener("load", showClouds);
+    }
 
     // Handle browser back/forward button (for external navigation)
     const handlePageShow = (event) => {
       if (event.persisted) {
         // Page restored from cache, reset and reload
         setIsLoaded(false);
+        setCloudsReady(false);
         setTimeout(() => setIsLoaded(true), 50);
+        showClouds();
       }
     };
 
@@ -35,6 +54,7 @@ export default function Home() {
 
     return () => {
       clearTimeout(timer);
+      window.removeEventListener("load", showClouds);
       window.removeEventListener("pageshow", handlePageShow);
     };
   }, [pathname]);
@@ -186,7 +206,7 @@ export default function Home() {
                   pointerEvents: "none",
                 }}
               >
-                {isLoaded && (
+                {cloudsReady && (
                   <Image
                     src="/images/clouds.svg"
                     alt="sunset-bg"
