@@ -61,11 +61,25 @@ const CompanyBubble = ({
   const actualSize = isMobile ? size * 0.45 : size;
   const actualDecorSize = isMobile ? decorSize * 0.5 : decorSize;
 
-  // Generate random animation values for each bubble
-  const randomDuration = React.useMemo(() => 4 + Math.random() * 4, []); // 4-8 seconds
-  const randomDelay = React.useMemo(() => Math.random() * 2, []); // 0-2 seconds delay
-  const randomX = React.useMemo(() => -15 + Math.random() * 30, []); // -15px to 15px
-  const randomY = React.useMemo(() => -25 + Math.random() * 15, []); // -25px to -10px
+  // Track if component is mounted to avoid hydration mismatch
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  // Generate random animation values for each bubble - only after mount
+  const [randomValues] = React.useState(() => ({
+    duration: 6 + Math.random() * 4, // 6-10 seconds (slower)
+    delay: Math.random() * 2, // 0-2 seconds delay
+    x: -8 + Math.random() * 16, // -8px to 8px (less horizontal movement)
+    y: -12 + Math.random() * 8, // -12px to -4px (less vertical movement)
+  }));
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Generate unique keyframe name to avoid conflicts
+  const keyframeName = React.useRef(
+    `float-${Math.random().toString(36).substr(2, 9)}`,
+  ).current;
 
   const bubbleContent = (
     <Box
@@ -77,20 +91,30 @@ const CompanyBubble = ({
         alignItems: "center",
         justifyContent: "center",
         overflow: "visible",
-        animation: `float ${randomDuration}s ease-in-out ${randomDelay}s infinite`,
-        "@keyframes float": {
-          "0%, 100%": {
-            transform: "translate(0px, 0px)",
-          },
-          "33%": {
-            transform: `translate(${randomX}px, ${randomY}px)`,
-          },
-          "66%": {
-            transform: `translate(${-randomX}px, ${randomY * 0.7}px)`,
-          },
-        },
       }}
+      style={
+        isMounted
+          ? {
+              animation: `${keyframeName} ${randomValues.duration}s ease-in-out ${randomValues.delay}s infinite`,
+            }
+          : undefined
+      }
     >
+      {isMounted && (
+        <style>{`
+          @keyframes ${keyframeName} {
+            0%, 100% {
+              transform: translate(0px, 0px);
+            }
+            33% {
+              transform: translate(${randomValues.x}px, ${randomValues.y}px);
+            }
+            66% {
+              transform: translate(${-randomValues.x}px, ${randomValues.y * 0.7}px);
+            }
+          }
+        `}</style>
+      )}
       {/* Main Bubble with company logo */}
       <Box
         sx={{
