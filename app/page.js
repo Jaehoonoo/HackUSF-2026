@@ -549,6 +549,33 @@ export default function Home() {
           <Box id="faqs">
             <FAQ />
           </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              display: "flex",
+              justifyContent: { xs: "flex-end", md: "center" },
+              alignItems: "center",
+              height: { xs: 180, sm: 200, md: 260, lg: 300 },
+              pt: "8%",
+            }}
+          >
+            <Image
+              src="/images/trident (2).png"
+              alt="Trident"
+              width={180}
+              height={300}
+              style={{
+                objectFit: "contain",
+                maxWidth: "100%",
+                height: "auto",
+                opacity: 0.7,
+              }}
+              loading="lazy"
+            />
+          </Box>
           <Footer />
         </Box>
       </Box>
