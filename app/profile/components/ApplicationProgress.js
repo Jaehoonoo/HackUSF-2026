@@ -141,33 +141,40 @@ export default function ApplicationProgress() {
     }
   };
 
-  const fetchMealGroup = async () => {
-    if (!userId) return;
-    setMealGroupLoading(true);
-    try {
-      const response = await fetch(
-        `/api/getMealGroup?userId=${encodeURIComponent(userId)}`,
-      );
-      const payload = await response.json();
-      if (!response.ok || !payload.success) {
-        throw new Error(
-          payload.error || payload.message || "Unable to load meal group.",
-        );
-      }
-      setMealGroup(payload.data?.mealGroup || "");
-    } catch (error) {
-      setRsvpError(error.message || "Unable to load meal group.");
-    } finally {
-      setMealGroupLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (status !== "accepted" || !rsvp) return;
-    if (mealGroup || mealGroupLoading) return;
-    fetchMealGroup();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, rsvp]);
+    if (status !== "accepted" || !rsvp || !userId) {
+      setMealGroup("");
+      return;
+    }
+
+    setMealGroupLoading(true);
+    const docRef = doc(db, "users", userId);
+
+    // Set up real-time listener for meal group with cache support
+    const unsubscribe = onSnapshot(
+      docRef,
+      { includeMetadataChanges: true },
+      (snap) => {
+        const fromCache = snap.metadata.fromCache;
+        console.log(
+          `Meal group loaded from: ${fromCache ? "cache" : "server"}`,
+        );
+
+        const data = snap.exists() ? snap.data() : null;
+        const mealGroupValue = data?.mealGroup || "";
+        setMealGroup(mealGroupValue);
+        setMealGroupLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching meal group:", error);
+        setRsvpError("Unable to load meal group.");
+        setMealGroupLoading(false);
+      },
+    );
+
+    // Cleanup listener on unmount or when dependencies change
+    return () => unsubscribe();
+  }, [status, rsvp, userId]);
 
   const handleRsvpConfirm = async () => {
     if (!userId) return;
