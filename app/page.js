@@ -3,6 +3,7 @@
 import { Box } from "@mui/material";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 import Header from "@/components/header/page";
 import Hero from "@/components/hero/page";
@@ -14,10 +15,29 @@ import FAQ from "@/components/faq/page";
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+    // Trigger fade-in whenever the component mounts or pathname changes to "/"
+    setIsLoaded(false);
+    const timer = setTimeout(() => setIsLoaded(true), 50);
+
+    // Handle browser back/forward button (for external navigation)
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        // Page restored from cache, reset and reload
+        setIsLoaded(false);
+        setTimeout(() => setIsLoaded(true), 50);
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("pageshow", handlePageShow);
+    };
+  }, [pathname]);
 
   return (
     <Box
@@ -71,6 +91,19 @@ export default function Home() {
             }}
           >
             <Box sx={{ position: "relative", width: "100%", height: "auto" }}>
+              {/* White background layer */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "26%",
+                  left: 0,
+                  width: "100%",
+                  height: "62%",
+                  minHeight: "800px",
+                  backgroundColor: "#f5f5f5",
+                  zIndex: -50,
+                }}
+              />
               <Image
                 src="/images/stairs (8).svg"
                 alt="Temple Stairs Background"
@@ -78,7 +111,7 @@ export default function Home() {
                 height={1080}
                 priority
                 placeholder="blur"
-                blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23f59212'/%3E%3C/svg%3E"
+                blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23f5f5f5'/%3E%3C/svg%3E"
                 style={{
                   position: "relative",
                   width: "100%",
@@ -149,6 +182,7 @@ export default function Home() {
                   left: 0,
                   width: "100%",
                   height: "100%",
+                  minHeight: "100vh",
                   pointerEvents: "none",
                 }}
               >
@@ -163,7 +197,6 @@ export default function Home() {
                     position: "absolute",
                     top: "20%",
                     left: "50%",
-                    transform: "translateX(-50%) translateY(-50%) scale(1.1)",
                     width: "115%",
                     height: "auto",
                     zIndex: -10,
@@ -180,7 +213,6 @@ export default function Home() {
                     position: "absolute",
                     top: "40%",
                     left: "50%",
-                    transform: "translateX(-40%) translateY(-50%) scale(1.1)",
                     width: "110%",
                     height: "auto",
                     zIndex: 1,

@@ -133,30 +133,31 @@
   background-color: #F57C00;
 }
 
-/* Floating animation */
-@keyframes float {
+/* Floating animation - vertical only */
+@keyframes floatVertical {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) translateX(0px);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-10px) translateX(0px);
   }
 }
 
 .floating-islands {
-  animation: float 5s ease-in-out infinite;
+  animation: floatVertical 5s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* Cloud drift animation */
 @keyframes cloudDrift {
   0% {
-    transform: translateX(-50%) translateY(-50%) translateX(-20px);
+    transform: translateX(-50%) translateY(-50%) scale(1.1) translateX(-20px);
   }
   50% {
-    transform: translateX(-50%) translateY(-50%) translateX(20px);
+    transform: translateX(-50%) translateY(-50%) scale(1.1) translateX(20px);
   }
   100% {
-    transform: translateX(-50%) translateY(-50%) translateX(-20px);
+    transform: translateX(-50%) translateY(-50%) scale(1.1) translateX(-20px);
   }
 }
 
@@ -167,13 +168,13 @@
 /* Cloud drift animation 2 - slower and larger movement */
 @keyframes cloudDrift2 {
   0% {
-    transform: translateX(-40%) translateY(-50%) translateX(30px);
+    transform: translateX(-40%) translateY(-50%) scale(1.1) translateX(30px);
   }
   50% {
-    transform: translateX(-40%) translateY(-50%) translateX(-30px);
+    transform: translateX(-40%) translateY(-50%) scale(1.1) translateX(-30px);
   }
   100% {
-    transform: translateX(-40%) translateY(-50%) translateX(30px);
+    transform: translateX(-40%) translateY(-50%) scale(1.1) translateX(30px);
   }
 }
 
