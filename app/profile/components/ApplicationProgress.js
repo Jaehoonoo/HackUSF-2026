@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Paper, Typography, Box, Button } from "@mui/material";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, getDocFromCache } from "firebase/firestore";
 import ProgressTimeline from "./ProgressTimeline";
 import AcceptedQrCode from "./AcceptedQrCode";
 import { db } from "@/firebase";
@@ -79,6 +79,24 @@ export default function ApplicationProgress() {
     }
 
     const docRef = doc(db, "users", userId);
+
+    // Try to load from cache immediately for instant display
+    (async () => {
+      try {
+        const cachedSnap = await getDocFromCache(docRef);
+        if (cachedSnap.exists()) {
+          const data = cachedSnap.data();
+          const cachedStatus = normalizeStatus(data?.status || "");
+          const cachedRsvp = Boolean(data?.rsvp);
+          setStatus(cachedStatus);
+          setRsvp(cachedRsvp);
+          console.log("Profile status loaded from: cache (immediate)");
+        }
+      } catch (error) {
+        // Cache miss is expected on first load, listener will handle it
+        console.log("No cache available, waiting for listener");
+      }
+    })();
 
     // Set up real-time listener with cache support
     const unsubscribe = onSnapshot(
