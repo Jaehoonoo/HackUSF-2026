@@ -22,7 +22,7 @@ export default function Home() {
     // Trigger fade-in whenever the component mounts or pathname changes to "/"
     setIsLoaded(false);
     setCloudsReady(false);
-    const timer = setTimeout(() => setIsLoaded(true), 50);
+    const timer = setTimeout(() => setIsLoaded(true), 150);
 
     // Wait for window load and layout to stabilize before showing clouds
     const showClouds = () => {
