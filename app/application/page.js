@@ -124,7 +124,7 @@ const Application = () => {
   // get existing application with real-time listener
   useEffect(() => {
     if (!(typeof userId == "string")) return;
-    
+
     // Create profile first (only on mount)
     fetch("/api/createProfile", {
       method: "POST",
@@ -133,14 +133,14 @@ const Application = () => {
 
     // Set up real-time listener for application data
     const userDocRef = doc(db, "users", userId);
-    
+
     const unsubscribe = onSnapshot(
       userDocRef,
       { includeMetadataChanges: true }, // Enable offline persistence
       (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
-          
+
           // Check if data is from cache (offline) or server
           const source = docSnap.metadata.fromCache ? "cache" : "server";
           console.log("Application data loaded from:", source);
@@ -158,7 +158,7 @@ const Application = () => {
       },
       (error) => {
         console.error("Error listening to application:", error);
-      }
+      },
     );
 
     // Cleanup listener on unmount
@@ -519,7 +519,7 @@ const Application = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="School"
+                    label="School (Other if not listed)"
                     placeholder="Type to search for a school"
                     error={!!errors.school}
                     helperText={errors.school}
@@ -693,9 +693,22 @@ const Application = () => {
                         value={restriction}
                         name="dietaryRestrictions"
                         onChange={handleCheckboxChange}
+                        sx={{
+                          padding: { xs: 2, sm: 1 }, // Larger touch target on mobile
+                        }}
                       />
                     }
                     label={restriction}
+                    sx={{
+                      width: "100%",
+                      marginLeft: 0,
+                      marginRight: 0,
+                      paddingY: { xs: 0.5, sm: 0 }, // Extra vertical spacing on mobile
+                      "& .MuiFormControlLabel-label": {
+                        fontSize: { xs: "1rem", sm: "0.875rem" },
+                        paddingLeft: 1,
+                      },
+                    }}
                   />
                 ))}
 
