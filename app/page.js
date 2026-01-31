@@ -186,22 +186,26 @@ export default function Home() {
                   pointerEvents: "none",
                 }}
               >
-                <Image
-                  src="/images/clouds.svg"
-                  alt="sunset-bg"
-                  width={1920}
-                  height={1080}
-                  priority
-                  className="drifting-cloud"
-                  style={{
-                    position: "absolute",
-                    top: "20%",
-                    left: "50%",
-                    width: "115%",
-                    height: "auto",
-                    zIndex: -10,
-                  }}
-                />
+                {isLoaded && (
+                  <Image
+                    src="/images/clouds.svg"
+                    alt="sunset-bg"
+                    width={1920}
+                    height={1080}
+                    priority
+                    className="drifting-cloud"
+                    style={{
+                      position: "absolute",
+                      top: "20%",
+                      left: "50%",
+                      transform: "translateX(-50%) translateY(-50%) scale(1.1)",
+                      width: "115%",
+                      height: "auto",
+                      zIndex: -10,
+                      willChange: "transform",
+                    }}
+                  />
+                )}
                 <Image
                   src="/images/clouds 2.svg"
                   alt="sunset-bg"
@@ -213,9 +217,11 @@ export default function Home() {
                     position: "absolute",
                     top: "40%",
                     left: "50%",
+                    transform: "translateX(-40%) translateY(-50%) scale(1.1)",
                     width: "110%",
                     height: "auto",
                     zIndex: 1,
+                    willChange: "transform",
                   }}
                 />
               </Box>
