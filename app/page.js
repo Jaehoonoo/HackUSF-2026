@@ -182,6 +182,7 @@ export default function Home() {
                   left: 0,
                   width: "100%",
                   height: "100%",
+                  minHeight: "100vh",
                   pointerEvents: "none",
                 }}
               >
@@ -196,7 +197,6 @@ export default function Home() {
                     position: "absolute",
                     top: "20%",
                     left: "50%",
-                    transform: "translateX(-50%) translateY(-50%) scale(1.1)",
                     width: "115%",
                     height: "auto",
                     zIndex: -10,
@@ -213,7 +213,6 @@ export default function Home() {
                     position: "absolute",
                     top: "40%",
                     left: "50%",
-                    transform: "translateX(-40%) translateY(-50%) scale(1.1)",
                     width: "110%",
                     height: "auto",
                     zIndex: 1,
