@@ -13,6 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { SignedOut, SignedIn } from "@clerk/nextjs";
+import { FaDiscord } from "react-icons/fa";
 
 const sections = ["About", "Tracks", "Sponsors/Partners", "FAQs"];
 
@@ -113,8 +114,33 @@ function Header() {
               flexGrow: 1,
               display: { xs: "flex", md: "none" },
               justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 1,
             }}
           >
+            <IconButton
+              size="large"
+              aria-label="Discord"
+              href="https://discord.gg/FP3NQpBqQu"
+              target="_blank"
+              rel="noopener noreferrer"
+              disableRipple
+              sx={{
+                color: "#fad37a",
+                padding: "8px",
+                transition: "transform 150ms ease, color 150ms ease",
+                "&:hover": {
+                  transform: "scale(1.07)",
+                  backgroundColor: "rgba(250, 211, 122, 0.1)",
+                  color: "#f8b727",
+                },
+                "&:active": {
+                  transform: "scale(0.95)",
+                },
+              }}
+            >
+              <FaDiscord size={28} />
+            </IconButton>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -303,6 +329,31 @@ function Header() {
               gap: 1,
             }}
           >
+            <IconButton
+              size="large"
+              aria-label="Discord"
+              href="https://discord.gg/FP3NQpBqQu"
+              target="_blank"
+              rel="noopener noreferrer"
+              disableRipple
+              sx={{
+                color: "#fad470",
+                textShadow: "1px 1px 2px rgba(27, 24, 24, 0.7)",
+                padding: "8px",
+                transition: "transform 150ms ease, color 150ms ease",
+                "&:hover": {
+                  transform: "scale(1.07)",
+                  backgroundColor: "transparent",
+                  color: "#f8b727",
+                },
+                "&:active": {
+                  transform: "scale(0.95)",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <FaDiscord size={32} />
+            </IconButton>
             {sections.map((section) => (
               <Button
                 key={section}

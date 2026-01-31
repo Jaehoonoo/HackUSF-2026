@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Paper, Typography, Box, Button } from "@mui/material";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import ProgressTimeline from "./ProgressTimeline";
 import AcceptedQrCode from "./AcceptedQrCode";
 import { db } from "@/firebase";
@@ -78,26 +78,25 @@ export default function ApplicationProgress() {
       return;
     }
 
-    const fetchStatus = async () => {
-      try {
-        const cachedStatus = cachedProfileRef.current.status;
-        const cachedRsvp = cachedProfileRef.current.rsvp;
-        if (
-          cachedProfileRef.current.userId === userId &&
-          isFinalized(cachedStatus, cachedRsvp)
-        ) {
-          setStatus(cachedStatus);
-          setRsvp(cachedRsvp);
-          return;
-        }
+    const docRef = doc(db, "users", userId);
 
-        const docRef = doc(db, "users", userId);
-        const snap = await getDoc(docRef);
+    // Set up real-time listener with cache support
+    const unsubscribe = onSnapshot(
+      docRef,
+      { includeMetadataChanges: true },
+      (snap) => {
+        const fromCache = snap.metadata.fromCache;
+        console.log(
+          `Profile status loaded from: ${fromCache ? "cache" : "server"}`,
+        );
+
         const data = snap.exists() ? snap.data() : null;
         const nextStatus = normalizeStatus(data?.status || "");
         const nextRsvp = Boolean(data?.rsvp);
+
         setStatus(nextStatus);
         setRsvp(nextRsvp);
+
         if (isFinalized(nextStatus, nextRsvp)) {
           cachedProfileRef.current = {
             userId,
@@ -105,13 +104,16 @@ export default function ApplicationProgress() {
             rsvp: nextRsvp,
           };
         }
-      } catch (error) {
+      },
+      (error) => {
+        console.error("Error fetching profile status:", error);
         setStatus("empty");
         setRsvp(false);
-      }
-    };
+      },
+    );
 
-    fetchStatus();
+    // Cleanup listener on unmount or when userId changes
+    return () => unsubscribe();
   }, [isLoaded, userId]);
 
   const setMealGroupforUser = async () => {
@@ -139,33 +141,40 @@ export default function ApplicationProgress() {
     }
   };
 
-  const fetchMealGroup = async () => {
-    if (!userId) return;
-    setMealGroupLoading(true);
-    try {
-      const response = await fetch(
-        `/api/getMealGroup?userId=${encodeURIComponent(userId)}`,
-      );
-      const payload = await response.json();
-      if (!response.ok || !payload.success) {
-        throw new Error(
-          payload.error || payload.message || "Unable to load meal group.",
-        );
-      }
-      setMealGroup(payload.data?.mealGroup || "");
-    } catch (error) {
-      setRsvpError(error.message || "Unable to load meal group.");
-    } finally {
-      setMealGroupLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (status !== "accepted" || !rsvp) return;
-    if (mealGroup || mealGroupLoading) return;
-    fetchMealGroup();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, rsvp]);
+    if (status !== "accepted" || !rsvp || !userId) {
+      setMealGroup("");
+      return;
+    }
+
+    setMealGroupLoading(true);
+    const docRef = doc(db, "users", userId);
+
+    // Set up real-time listener for meal group with cache support
+    const unsubscribe = onSnapshot(
+      docRef,
+      { includeMetadataChanges: true },
+      (snap) => {
+        const fromCache = snap.metadata.fromCache;
+        console.log(
+          `Meal group loaded from: ${fromCache ? "cache" : "server"}`,
+        );
+
+        const data = snap.exists() ? snap.data() : null;
+        const mealGroupValue = data?.mealGroup || "";
+        setMealGroup(mealGroupValue);
+        setMealGroupLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching meal group:", error);
+        setRsvpError("Unable to load meal group.");
+        setMealGroupLoading(false);
+      },
+    );
+
+    // Cleanup listener on unmount or when dependencies change
+    return () => unsubscribe();
+  }, [status, rsvp, userId]);
 
   const handleRsvpConfirm = async () => {
     if (!userId) return;

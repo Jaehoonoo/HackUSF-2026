@@ -253,14 +253,14 @@ export default function FAQ() {
           position: "absolute",
           left: { xs: "-15%", md: "-5%" },
           bottom: { xs: "-7%", md: "5%" },
-          width: { xs: 350, sm: 450, md: 900 },
-          height: { xs: 200, sm: 260, md: 800 },
+          width: { xs: 400, sm: 450, md: 900 },
+          height: { xs: 250, sm: 260, md: 800 },
           pointerEvents: "none",
           zIndex: 0,
         }}
       >
         <Image
-          src="/images/sponsors/whale.png"
+          src="/images/whale.svg"
           alt=""
           fill
           sizes="(max-width: 600px) 350px, (max-width: 900px) 450px, 550px"
