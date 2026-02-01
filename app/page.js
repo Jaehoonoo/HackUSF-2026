@@ -22,7 +22,7 @@ export default function Home() {
     // Trigger fade-in whenever the component mounts or pathname changes to "/"
     setIsLoaded(false);
     setCloudsReady(false);
-    const timer = setTimeout(() => setIsLoaded(true), 200);
+    const timer = setTimeout(() => setIsLoaded(true), 50);
 
     // Wait for window load and layout to stabilize before showing clouds
     // Add minimum delay to ensure layout is stable even on fast deployments
@@ -33,7 +33,7 @@ export default function Home() {
             setCloudsReady(true);
           });
         });
-      }, 100); // Minimum delay to ensure layout stability
+      });
     };
 
     if (document.readyState === "complete") {
@@ -48,7 +48,7 @@ export default function Home() {
         // Page restored from cache, reset and reload
         setIsLoaded(false);
         setCloudsReady(false);
-        setTimeout(() => setIsLoaded(true), 100);
+        setTimeout(() => setIsLoaded(true), 50);
         showClouds();
       }
     };
@@ -209,26 +209,23 @@ export default function Home() {
                   pointerEvents: "none",
                 }}
               >
-                {cloudsReady && (
-                  <Image
-                    src="/images/clouds.svg"
-                    alt="sunset-bg"
-                    width={1920}
-                    height={1080}
-                    priority
-                    className="drifting-cloud"
-                    style={{
-                      position: "absolute",
-                      top: "20%",
-                      left: "50%",
-                      transform: "translateX(-50%) translateY(-50%) scale(1.1)",
-                      width: "115%",
-                      height: "auto",
-                      zIndex: -10,
-                      willChange: "transform",
-                    }}
-                  />
-                )}
+                <Image
+                  src="/images/clouds.svg"
+                  alt="sunset-bg"
+                  width={1920}
+                  height={1080}
+                  priority
+                  className="drifting-cloud"
+                  style={{
+                    position: "absolute",
+                    top: "10%",
+                    left: "50%",
+                    transform: "translateX(-50%) scale(1.1)",
+                    width: "115%",
+                    height: "auto",
+                    zIndex: -10,
+                  }}
+                />
                 <Image
                   src="/images/clouds 2.svg"
                   alt="sunset-bg"
@@ -238,13 +235,12 @@ export default function Home() {
                   className="drifting-cloud-2"
                   style={{
                     position: "absolute",
-                    top: "40%",
+                    top: "25%",
                     left: "50%",
-                    transform: "translateX(-40%) translateY(-50%) scale(1.1)",
+                    transform: "translateX(-40%) scale(1.1)",
                     width: "110%",
                     height: "auto",
                     zIndex: 1,
-                    willChange: "transform",
                   }}
                 />
               </Box>
