@@ -21,15 +21,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore with persistent cache and multi-tab support
+// Initialize Firestore with persistent cache only on client side
+const isBrowser = typeof window !== "undefined";
 const db = initializeFirestore(app, {
-  localCache: persistentLocalCache({
-    tabManager: persistentMultipleTabManager(),
-  }),
+  localCache: isBrowser
+    ? persistentLocalCache({
+        tabManager: persistentMultipleTabManager(),
+      })
+    : undefined,
 });
 
 console.log(
-  "✅ Firestore initialized with persistent cache and multi-tab support",
+  isBrowser
+    ? "✅ Firestore initialized with persistent cache and multi-tab support"
+    : "✅ Firestore initialized (server-side)",
 );
 
 export { db };
