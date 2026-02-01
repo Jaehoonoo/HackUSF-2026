@@ -123,7 +123,6 @@ export default function Home() {
                   width: "100%",
                   height: "62%",
                   minHeight: "800px",
-                  backgroundColor: "#f5f5f5",
                   zIndex: -50,
                 }}
               />
