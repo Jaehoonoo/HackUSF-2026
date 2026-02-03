@@ -44,8 +44,10 @@ export default function AdminDashboard() {
       const response = await res.json();
 
       if (response.success) {
-        // Use submittedUsers by default (users needing review)
-        const allUsers = response.data.allUsers || [];
+        // Filter to only show users with a non-empty status
+        const allUsers = (response.data.allUsers || []).filter(
+          (user) => user.status && user.status.trim() !== "",
+        );
         setUsers(allUsers);
         setFilteredUsers(allUsers);
       }
