@@ -77,7 +77,7 @@ function Footer() {
           >
             <IconButton
               component="a"
-              href="https://discord.gg/FP3NQpBqQu"
+              href="https://discord.gg/dWTWYPPdN6"
               target="_blank"
               rel="noopener noreferrer"
               sx={{

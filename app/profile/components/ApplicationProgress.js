@@ -233,7 +233,7 @@ export default function ApplicationProgress() {
   );
 
   return (
-    <Paper className="hackusf-card" sx={{ borderRadius: 16, p: 4, mb: 4 }}>
+    <Paper className="hackusf-card" sx={{ borderRadius: 16, p: 4, mb: 2 }}>
       <Typography
         align="center"
         sx={{ mb: 3, fontSize: "1.5rem", fontWeight: 700 }}

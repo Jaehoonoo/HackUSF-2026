@@ -191,7 +191,7 @@ const emailTemplates = {
                         <p class="step-desc">
                             Connect with fellow hackers, get real-time updates, and find your team on Discord.
                         </p>
-                        <a href="https://discord.gg/FP3NQpBqQu" class="button button-discord">Join Discord</a>
+                        <a href="https://discord.gg/dWTWYPPdN6" class="button button-discord">Join Discord</a>
                     </div>
                     
                     <div class="step">
@@ -484,7 +484,7 @@ const emailTemplates = {
                 
                 <div class="action-box">
                     <p>Join our community and stay in the loop</p>
-                    <a href="https://discord.gg/FP3NQpBqQu" class="button">Join Discord Server</a>
+                    <a href="https://discord.gg/dWTWYPPdN6" class="button">Join Discord Server</a>
                 </div>
                 
                 <p class="message" style="margin-bottom: 0;">
