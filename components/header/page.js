@@ -121,7 +121,7 @@ function Header() {
             <IconButton
               size="large"
               aria-label="Discord"
-              href="https://discord.gg/FP3NQpBqQu"
+              href="https://discord.gg/dWTWYPPdN6"
               target="_blank"
               rel="noopener noreferrer"
               disableRipple
@@ -332,7 +332,7 @@ function Header() {
             <IconButton
               size="large"
               aria-label="Discord"
-              href="https://discord.gg/FP3NQpBqQu"
+              href="https://discord.gg/dWTWYPPdN6"
               target="_blank"
               rel="noopener noreferrer"
               disableRipple
