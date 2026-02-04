@@ -29,9 +29,74 @@ const libreBaskervilleSans = Libre_Baskerville({
 export const metadata = {
   title: "HackUSF 2026",
   description:
-    "Join USF GDG Hackathon 2026! Innovate and compete in HackUSF at the University of South Florida. Build projects, win prizes, and network.",
+    "Join HackUSF 2026, the premier hackathon at University of South Florida! Build innovative projects, compete for prizes, network with students and industry professionals. Open to all skill levels. Register now.",
+  keywords: [
+    "HackUSF",
+    "HackUSF 2026",
+    "USF hackathon",
+    "University of South Florida hackathon",
+    "Tampa hackathon",
+    "student hackathon",
+    "tech competition",
+    "coding competition",
+    "programming competition",
+    "GDG",
+    "Google Developer Group",
+    "USF GDG",
+    "hackathon Tampa",
+    "Florida hackathon",
+    "college hackathon",
+    "university hackathon",
+    "tech event USF",
+    "student tech event",
+    "innovation competition",
+    "software development",
+  ],
+  authors: [{ name: "USF GDG" }],
+  creator: "USF GDG",
+  publisher: "University of South Florida GDG",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://hackusf.com",
+    siteName: "HackUSF 2026",
+    title: "HackUSF 2026",
+    description:
+      "Join HackUSF 2026 at the University of South Florida! Compete, build, and innovate. Open to all students. Register now!",
+    images: [
+      {
+        url: "https://hackusf.com/images/gdg-sun.png",
+        width: 1200,
+        height: 630,
+        alt: "HackUSF 2026 Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HackUSF 2026",
+    description:
+      "Join HackUSF 2026 at University of South Florida! Build projects, compete for prizes, and network with students and professionals.",
+    images: ["https://hackusf.com/images/gdg-sun.png"],
+    creator: "@USFGDG",
+  },
   icons: {
     icon: "/favicon.ico",
+  },
+  metadataBase: new URL("https://hackusf.com"),
+  alternates: {
+    canonical: "https://hackusf.com",
   },
 };
 
