@@ -45,6 +45,11 @@ const partners = [
     alt: "USF College of Engineering",
     link: "https://www.usf.edu/engineering/",
   },
+  {
+    src: "/images/sponsors/Pure-Buttons-Blue-Gradient-Logo-RGB.png",
+    alt: "Pure Buttons Logo",
+    link: "https://www.purebuttons.com/?ajs_uid=01963cf1-6fe7-46e5-8b9b-9f3b45e49a41&utm_campaign=Member+Event+-+Pure+Buttons+Intro&utm_content=Pure+Buttons+Intro&utm_medium=Email&utm_source=Customer.io",
+  },
 ];
 
 // CompanyBubble: Combines Bubble and DecorBubble for flexboard
