@@ -92,12 +92,28 @@ export const metadata = {
     creator: "@USFGDG",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", type: "image/png", sizes: "96x96" },
+      {
+        url: "/web-app-manifest-192x192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
+      {
+        url: "/web-app-manifest-512x512.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+    shortcut: "/favicon.ico",
   },
   metadataBase: new URL("https://hackusf.com"),
   alternates: {
     canonical: "https://hackusf.com",
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }) {
