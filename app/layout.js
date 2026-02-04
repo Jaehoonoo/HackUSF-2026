@@ -41,11 +41,6 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <head>
           <link rel="icon" href="/favicon.ico" />
-          <desc>
-            Join USF GDG Hackathon 2026! Innovate and compete in HackUSF at the
-            University of South Florida. Build projects, win prizes, and
-            network.
-          </desc>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </head>
         <body
