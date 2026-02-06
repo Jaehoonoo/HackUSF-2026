@@ -22,7 +22,7 @@ const faqData = {
     {
       question: "Who can attend?",
       answer:
-        "If you're a current college student or graduated within the last year, you're invited! Beginners are more than welcome too.",
+        "If you're 18+ and a current college student or graduated within the last year, you're invited! Beginners are more than welcome too.",
     },
     {
       question: "How much experience do I need?",
