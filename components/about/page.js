@@ -121,7 +121,7 @@ function About() {
               <Typography sx={styles.statValue}>24 Hours</Typography>
               <Typography sx={styles.statValue}>200+ Hackers</Typography>
               <Typography sx={styles.statValue}>50+ Projects</Typography>
-              <Typography sx={styles.statValue}>$8,000 Prizes</Typography>
+              <Typography sx={styles.statValue}>$8,000+ Prizes</Typography>
             </Box>
           </Box>
         </Box>
