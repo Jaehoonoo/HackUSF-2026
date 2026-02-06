@@ -83,7 +83,8 @@ export default function AdminDashboard() {
           u.firstName?.toLowerCase().includes(query) ||
           u.lastName?.toLowerCase().includes(query) ||
           u.email?.toLowerCase().includes(query) ||
-          u.university?.toLowerCase().includes(query),
+          u.school?.toLowerCase().includes(query) ||
+          u.otherSchool?.toLowerCase().includes(query),
       );
     }
 
@@ -276,7 +277,7 @@ export default function AdminDashboard() {
                   <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
                   <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
                   <TableCell sx={{ fontWeight: 700 }}>School</TableCell>
-                  <TableCell sx={{ fontWeight: 700 }}>Year</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>Level of Study</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -316,8 +317,14 @@ export default function AdminDashboard() {
                           size="small"
                         />
                       </TableCell>
-                      <TableCell>{user.university}</TableCell>
-                      <TableCell>{user.graduationYear}</TableCell>
+                      <TableCell>
+                        {user.school === "Other"
+                          ? user.otherSchool || "Not specified"
+                          : user.school || "Not specified"}
+                      </TableCell>
+                      <TableCell>
+                        {user.levelOfStudy || "Not specified"}
+                      </TableCell>
                     </TableRow>
                   ))
                 )}
