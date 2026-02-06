@@ -23,23 +23,24 @@ const emailTemplates = {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light only">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 20px;
+            background: linear-gradient(135deg, #fcf1da 0%, #ffffff 100%);
+            padding: 24px;
         }
         .email-wrapper { max-width: 600px; margin: 0 auto; }
         .email-container { 
             background: #ffffff;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(24, 46, 78, 0.15);
         }
         .header { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #a63a34 0%, #6e3629 100%);
             padding: 48px 40px;
             text-align: center;
         }
@@ -54,42 +55,43 @@ const emailTemplates = {
             color: rgba(255, 255, 255, 0.9);
             font-size: 16px;
         }
-        .content { padding: 48px 40px; }
+        .content { padding: 48px 40px; background: #ffffff; }
         .greeting { 
             font-size: 24px;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #6e3629 !important;
             margin-bottom: 16px;
         }
         .message { 
             font-size: 16px;
-            color: #4a5568;
+            color: #6e3629 !important;
             margin-bottom: 32px;
             line-height: 1.7;
         }
         .alert-box {
-            background: linear-gradient(135deg, #ecb432ff 0%, #e5802dff 100%);
+            background: linear-gradient(135deg, #ffd37c 0%, #fcb727 100%);
             border-radius: 12px;
             padding: 20px 24px;
             margin-bottom: 32px;
+            border: 2px solid #c5944c;
         }
-        .alert-box p {
-            color: #1a1a1a;
+        .info-box p {
+            color: #6e3629 !important;
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
             margin: 0;
         }
         .steps-container { margin: 32px 0; }
         .step {
-            background: #f7fafc;
+            background: #fcf1da;
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 16px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #a63a34;
         }
         .step-number {
             display: inline-block;
-            background: #667eea;
+            background: linear-gradient(135deg, #a63a34 0%, #6e3629 100%);
             color: white;
             width: 28px;
             height: 28px;
@@ -103,51 +105,52 @@ const emailTemplates = {
         .step-title {
             font-size: 18px;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #6e3629 !important;
             margin-bottom: 8px;
         }
         .step-desc {
             font-size: 15px;
-            color: #4a5568;
+            color: #6e3629 !important;
             margin-bottom: 16px;
         }
         .button {
             display: inline-block;
             padding: 14px 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #a63a34 0%, #6e3629 100%);
             color: #ffffff !important;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
             font-size: 15px;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(166, 58, 52, 0.4);
         }
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 6px 20px rgba(166, 58, 52, 0.6);
         }
         .button-discord {
-            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+            background: linear-gradient(135deg, #a63a34 0%, #6e3629 100%);
+            box-shadow: 0 4px 12px rgba(166, 58, 52, 0.4);
         }
         .button-discord:hover {
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
+            box-shadow: 0 6px 20px rgba(166, 58, 52, 0.6);
         }
         .footer {
-            background: #f7fafc;
+            background: linear-gradient(135deg, #fcf1da 0%, #ffffff 100%);
             padding: 32px 40px;
             text-align: center;
-            border-top: 1px solid #e2e8f0;
+            border-top: 2px solid #c5944c;
         }
         .footer p {
-            color: #718096;
+            color: #6e3629 !important;
             font-size: 14px;
             margin-bottom: 8px;
         }
         .footer a {
-            color: #667eea;
+            color: #a63a34 !important;
             text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -209,7 +212,7 @@ const emailTemplates = {
             <div class="footer">
                 <p>Questions? Email us at <a href="mailto:gdscatusf@gmail.com">gdscatusf@gmail.com</a></p>
                 <p style="font-weight: 600; color: #1a1a1a; margin-top: 12px;">See you soon! 💙</p>
-                <p style="color: #a0aec0; font-size: 13px;">The GDG Team</p>
+                <p style="color: #6e3629 !important; font-size: 13px; font-weight: 600;">The GDG Team</p>
             </div>
         </div>
     </div>
@@ -225,12 +228,13 @@ const emailTemplates = {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light only">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+            background: linear-gradient(135deg, #cfc6b7 0%, #fcf1da 100%);
             padding: 40px 20px;
         }
         .email-wrapper { max-width: 600px; margin: 0 auto; }
@@ -238,10 +242,10 @@ const emailTemplates = {
             background: #ffffff;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(110, 54, 41, 0.1);
         }
         .header { 
-            background: linear-gradient(135deg, #7a9dceff 0%, #4e72a4ff 100%);
+            background: linear-gradient(135deg, #a63a34 0%, #6e3629 100%);
             padding: 48px 40px;
             text-align: center;
         }
@@ -251,28 +255,28 @@ const emailTemplates = {
             font-weight: 700;
             letter-spacing: -0.5px;
         }
-        .content { padding: 48px 40px; }
+        .content { padding: 48px 40px; background: #ffffff; }
         .greeting { 
             font-size: 24px;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #6e3629 !important;
             margin-bottom: 16px;
         }
         .message { 
             font-size: 16px;
-            color: #4a5568;
+            color: #6e3629 !important;
             margin-bottom: 24px;
             line-height: 1.7;
         }
         .highlight-box {
-            background: #f7fafc;
-            border-left: 4px solid #6366f1;
+            background: linear-gradient(135deg, #fcf1da 0%, #ffffff 100%);
+            border-left: 4px solid #b04701;
             border-radius: 8px;
             padding: 24px;
             margin: 32px 0;
         }
         .highlight-box p {
-            color: #1a1a1a;
+            color: #6e3629 !important;
             font-size: 15px;
             margin-bottom: 12px;
         }
@@ -280,19 +284,20 @@ const emailTemplates = {
             margin-bottom: 0;
         }
         .footer {
-            background: #f7fafc;
+            background: linear-gradient(135deg, #fcf1da 0%, #ffffff 100%);
             padding: 32px 40px;
             text-align: center;
-            border-top: 1px solid #e2e8f0;
+            border-top: 2px solid #cfc6b7;
         }
         .footer p {
-            color: #718096;
+            color: #6e3629 !important;
             font-size: 14px;
             margin-bottom: 8px;
         }
         .footer a {
-            color: #6366f1;
+            color: #a63a34 !important;
             text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -331,7 +336,7 @@ const emailTemplates = {
             <div class="footer">
                 <p>Questions? Email us at <a href="mailto:gdscatusf@gmail.com">gdscatusf@gmail.com</a></p>
                 <p style="font-weight: 600; color: #1a1a1a; margin-top: 12px;">Best wishes,</p>
-                <p style="color: #a0aec0; font-size: 13px;">The GDG Team</p>
+                <p style="color: #6e3629 !important; font-size: 13px; font-weight: 600;">The GDG Team</p>
             </div>
         </div>
     </div>
@@ -347,12 +352,13 @@ const emailTemplates = {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light only">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            background: linear-gradient(135deg, #ffaf78 0%, #f06b06 100%);
             padding: 40px 20px;
         }
         .email-wrapper { max-width: 600px; margin: 0 auto; }
@@ -360,10 +366,10 @@ const emailTemplates = {
             background: #ffffff;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 60px rgba(176, 71, 1, 0.2);
         }
         .header { 
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(135deg, #f06b06 0%, #b04701 100%);
             padding: 48px 40px;
             text-align: center;
         }
@@ -378,79 +384,82 @@ const emailTemplates = {
             color: rgba(255, 255, 255, 0.95);
             font-size: 16px;
         }
-        .content { padding: 48px 40px; }
+        .content { padding: 48px 40px; background: #ffffff; }
         .greeting { 
             font-size: 24px;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #6e3629 !important;
             margin-bottom: 16px;
         }
         .message { 
             font-size: 16px;
-            color: #4a5568;
+            color: #6e3629 !important;
             margin-bottom: 24px;
             line-height: 1.7;
         }
         .status-box {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(135deg, #fcb727 0%, #f06b06 100%);
             border-radius: 12px;
             padding: 24px;
             margin: 32px 0;
-            border-left: 4px solid #f59e0b;
+            border: 2px solid #b04701;
         }
         .status-box .title {
             font-size: 18px;
-            font-weight: 600;
-            color: #fff;
+            font-weight: 700;
+            color: #ffffff;
             margin-bottom: 12px;
         }
         .status-box p {
-            color: #fff;
+            color: #ffffff;
             font-size: 15px;
             margin: 0;
         }
         .action-box {
-            background: #f7fafc;
+            background: linear-gradient(135deg, #fcf1da 0%, #ffffff 100%);
             border-radius: 12px;
             padding: 24px;
             margin: 24px 0;
             text-align: center;
+            border: 2px solid #c5944c;
         }
         .action-box p {
-            color: #4a5568;
+            color: #6e3629 !important;
             font-size: 15px;
             margin-bottom: 16px;
+            font-weight: 500;
         }
         .button {
             display: inline-block;
             padding: 14px 32px;
-            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+            background: linear-gradient(135deg, #a63a34 0%, #6e3629 100%);
             color: #ffffff !important;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
             font-size: 15px;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+            box-shadow: 0 4px 12px rgba(166, 58, 52, 0.4);
         }
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
+            box-shadow: 0 6px 20px rgba(166, 58, 52, 0.6);
         }
         .footer {
-            background: #f7fafc;
+            background: linear-gradient(135deg, #fcf1da 0%, #ffffff 100%);
             padding: 32px 40px;
             text-align: center;
-            border-top: 1px solid #e2e8f0;
+            border-top: 2px solid #f06b06;
         }
         .footer p {
-            color: #718096;
+            color: #6e3629 !important;
             font-size: 14px;
             margin-bottom: 8px;
         }
         .footer a {
-            color: #f59e0b;
+            color: #f06b06 !important;
             text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -495,7 +504,7 @@ const emailTemplates = {
             <div class="footer">
                 <p>Questions? Email us at <a href="mailto:gdscatusf@gmail.com">gdscatusf@gmail.com</a></p>
                 <p style="font-weight: 600; color: #1a1a1a; margin-top: 12px;">Fingers crossed! 🤞</p>
-                <p style="color: #a0aec0; font-size: 13px;">The GDG Team</p>
+                <p style="color: #6e3629 !important; font-size: 13px; font-weight: 600;">The GDG Team</p>
             </div>
         </div>
     </div>
