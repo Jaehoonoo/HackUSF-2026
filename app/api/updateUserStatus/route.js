@@ -1,5 +1,6 @@
 import { db } from "@/firebase";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { sendStatusEmail } from "@/utils/emailService";
 
 export async function POST(req) {
   try {
@@ -59,25 +60,13 @@ export async function POST(req) {
           statusUpdatedAt: new Date().toISOString(),
         });
 
-        // 3. Send email based on status
+        // 3. Send email based on status using direct utility function
         try {
-          const emailResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/sendEmail`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                userId,
-                firstName,
-                email,
-                status,
-              }),
-            },
-          );
-
-          const emailResult = await emailResponse.json();
+          const emailResult = await sendStatusEmail({
+            email,
+            firstName,
+            status,
+          });
 
           if (!emailResult.success) {
             // Email failed, but status was already updated
