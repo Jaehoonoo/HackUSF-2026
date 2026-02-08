@@ -93,9 +93,9 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
       { url: "/images/favicon.svg", type: "image/svg+xml" },
       { url: "/images/favicon-96x96.png", type: "image/png", sizes: "96x96" },
+      { url: "/favicon.ico", sizes: "any" },
       {
         url: "/images/web-app-manifest-192x192.png",
         type: "image/png",
@@ -107,7 +107,7 @@ export const metadata = {
         sizes: "512x512",
       },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: "/images/favicon.svg",
   },
   metadataBase: new URL("https://hackusf.com"),
   alternates: {
@@ -121,7 +121,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <head>
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </head>
         <body
