@@ -50,6 +50,11 @@ const partners = [
     alt: "Pure Buttons Logo",
     link: "https://www.purebuttons.com/?ajs_uid=01963cf1-6fe7-46e5-8b9b-9f3b45e49a41&utm_campaign=Member+Event+-+Pure+Buttons+Intro&utm_content=Pure+Buttons+Intro&utm_medium=Email&utm_source=Customer.io",
   },
+  {
+    src: "/images/sponsors/mostpreferredlogo.png",
+    alt: "IEEE Computer Society Logo",
+    link: "https://www.linkedin.com/company/ieee-cs-at-usf/posts/?feedView=all",
+  },
 ];
 
 // CompanyBubble: Combines Bubble and DecorBubble for flexboard
