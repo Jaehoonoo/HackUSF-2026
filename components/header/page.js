@@ -86,8 +86,10 @@ function Header() {
         overflow: "visible",
       }}
     >
-      <Box sx={{ width: "100%", px: 2, position: "relative" }}>
-        <Toolbar disableGutters>
+      <Box
+        sx={{ width: "100%", px: 2, position: "relative", overflow: "visible" }}
+      >
+        <Toolbar disableGutters sx={{ overflow: "visible" }}>
           <Box
             sx={{
               position: "absolute",
@@ -178,17 +180,20 @@ function Header() {
                 sx={{ fontSize: "clamp(40px, 6vw, 45px)", color: "#fad37a" }}
               />
             </IconButton>
+            {/* MLH Trust Badge - Mobile */}
             <Box
               component="a"
               href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=gray"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                display: "block",
+                display: { xs: "flex", md: "none" },
+                alignItems: "flex-start",
+                alignSelf: "flex-start",
+                height: "40px",
+                overflow: "visible",
                 width: "50px",
                 minWidth: "50px",
-                maxWidth: "50px",
-                zIndex: 10000,
               }}
             >
               <img
@@ -427,18 +432,21 @@ function Header() {
                 Login
               </Button>
             </SignedOut>
+            {/* MLH Trust Badge - Desktop */}
             <Box
               component="a"
               href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=gray"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                display: "block",
+                display: "flex",
+                alignItems: "flex-start",
+                alignSelf: "flex-start",
+                height: "40px",
+                overflow: "visible",
                 width: { md: "70px", lg: "80px", xl: "100px" },
                 minWidth: "60px",
-                maxWidth: "100px",
                 ml: 2,
-                zIndex: 10000,
               }}
             >
               <img
