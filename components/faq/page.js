@@ -240,9 +240,9 @@ export default function FAQ() {
       component="section"
       id="faq"
       sx={{
-        bgcolor: "transparent", // blue background
-        minHeight: "100vh", // full screen height
-        position: "relative", // allows absolute positioning if needed later
+        bgcolor: "transparent",
+        minHeight: "100vh",
+        position: "relative",
         pt: 1,
         pb: { xs: 4, md: 6 },
       }}
