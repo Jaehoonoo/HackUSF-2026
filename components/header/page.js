@@ -141,25 +141,6 @@ function Header() {
             >
               <FaDiscord size={28} />
             </IconButton>
-            <Box
-              component="a"
-              href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=gray"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                display: "block",
-                width: "50px",
-                minWidth: "50px",
-                maxWidth: "50px",
-                zIndex: 10000,
-              }}
-            >
-              <img
-                src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-gray.svg"
-                alt="Major League Hacking 2026 Hackathon Season"
-                style={{ width: "100%" }}
-              />
-            </Box>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -197,6 +178,25 @@ function Header() {
                 sx={{ fontSize: "clamp(40px, 6vw, 45px)", color: "#fad37a" }}
               />
             </IconButton>
+            <Box
+              component="a"
+              href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=gray"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                display: "block",
+                width: "50px",
+                minWidth: "50px",
+                maxWidth: "50px",
+                zIndex: 10000,
+              }}
+            >
+              <img
+                src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-gray.svg"
+                alt="Major League Hacking 2026 Hackathon Season"
+                style={{ width: "100%" }}
+              />
+            </Box>
             <Menu
               id="menu-appbar"
               PaperProps={{
@@ -434,9 +434,9 @@ function Header() {
               rel="noopener noreferrer"
               sx={{
                 display: "block",
-                width: "60px",
+                width: { md: "70px", lg: "80px", xl: "100px" },
                 minWidth: "60px",
-                maxWidth: "80px",
+                maxWidth: "100px",
                 ml: 2,
                 zIndex: 10000,
               }}
