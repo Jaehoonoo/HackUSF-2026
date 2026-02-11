@@ -41,6 +41,11 @@ const bronzeSponsors = [
 
 const partners = [
   {
+    src: "/images/sponsors/mlh-logo-color.svg",
+    alt: "MLH Logo",
+    link: "https://mlh.io/",
+  },
+  {
     src: "/images/sponsors/USFCollegeofengineeringlogo.webp",
     alt: "USF College of Engineering",
     link: "https://www.usf.edu/engineering/",
