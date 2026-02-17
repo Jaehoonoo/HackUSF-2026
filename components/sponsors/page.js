@@ -51,7 +51,7 @@ const partners = [
     link: "https://mlh.io/",
   },
   {
-    src: "/images/sponsors/college-of-engineering-logo-rembg.png",
+    src: "/images/sponsors/college-of-engineering-lightbg.png",
     alt: "USF College of Engineering",
     link: "https://www.usf.edu/engineering/",
   },
