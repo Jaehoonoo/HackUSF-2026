@@ -37,6 +37,11 @@ const bronzeSponsors = [
     alt: "TampaBay Wave",
     link: "https://www.tampabaywave.org/",
   },
+  {
+    src: "/images/sponsors/TD SYNNEX_Logo.png",
+    alt: "TD SYNNEX",
+    link: "https://www.tdsynnex.com/",
+  },
 ];
 
 const partners = [
