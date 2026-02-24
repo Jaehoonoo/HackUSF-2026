@@ -77,8 +77,8 @@ export const metadata = {
     images: [
       {
         url: "https://hackusf.com/images/2.png",
-        width: 1200,
-        height: 630,
+        width: 1024,
+        height: 1024,
         alt: "HackUSF 2026 Logo",
       },
     ],
