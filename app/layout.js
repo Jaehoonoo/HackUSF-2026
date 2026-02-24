@@ -88,7 +88,7 @@ export const metadata = {
     title: "HackUSF 2026",
     description:
       "Join HackUSF 2026 at University of South Florida! Build projects, compete for prizes, and network with students and professionals.",
-    images: ["https://hackusf.com/images/gdg-sun.png"],
+    images: ["https://hackusf.com/images/2.png"],
     creator: "@USFGDG",
   },
   icons: {

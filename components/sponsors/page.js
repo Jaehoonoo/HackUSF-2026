@@ -8,7 +8,13 @@ import Image from "next/image";
 // Higher tier = bigger size
 // Plat/Gold are considered "large" sponsors, Silver/Bronze are "small" sponsors
 // Fewer sponsors from a "large" catagory can fit on a row than from a "small" catagory
-const platinumSponsors = [];
+const platinumSponsors = [
+  {
+    src: "/images/sponsors/gcp - Edited.png",
+    alt: "Google Cloud Platform",
+    link: "https://cloud.google.com/",
+  },
+];
 
 const goldSponsors = [
   {
@@ -32,11 +38,6 @@ const silverSponsors = [
 ];
 
 const bronzeSponsors = [
-  {
-    src: "/images/sponsors/tampaBayWave.png",
-    alt: "TampaBay Wave",
-    link: "https://www.tampabaywave.org/",
-  },
   {
     src: "/images/sponsors/TD SYNNEX_Logo.png",
     alt: "TD SYNNEX",
