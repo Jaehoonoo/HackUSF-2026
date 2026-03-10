@@ -334,6 +334,17 @@ const Application = () => {
 
   const handleFileChange = (event) => {
     const nextFile = event?.target?.files?.[0];
+
+    if (nextFile && nextFile.size / (1024 * 1024) > 1.5) {
+      setErrors((prev) => ({ ...prev, resume: "Resume must be under 1.5MB" }));
+      event.target.value = "";
+      return;
+    }
+    setErrors((prev) => {
+      const { resume, ...rest } = prev;
+      return rest;
+    });
+
     setResume(nextFile || null);
     const newResumeName = nextFile ? nextFile.name : null;
     setResumeName(newResumeName);

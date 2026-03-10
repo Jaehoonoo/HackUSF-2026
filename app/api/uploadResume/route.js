@@ -21,10 +21,10 @@ export async function POST(request) {
     console.log(`File Type: ${resume.type}`);
 
     // check file constraints
-    if (resume.size / (1024 * 1024) > 1) {
+    if (resume.size / (1024 * 1024) > 1.5) {
       return NextResponse.json(
         {
-          error: "Resume file too large (Max 1MB)",
+          error: "Resume file too large (Max 1.5MB)",
           fileSize: resume.size,
         },
         { status: 400 },
