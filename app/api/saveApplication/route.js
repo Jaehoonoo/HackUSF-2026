@@ -52,7 +52,8 @@ export async function POST(req) {
 
     // Only set status to "submitted" if it was previously empty or doesn't exist
     let status = "submitted";
-    if (userSnap.exists() && userSnap.data().status) {
+    const wasAlreadySubmitted = userSnap.exists() && userSnap.data().status;
+    if (wasAlreadySubmitted) {
       status = userSnap.data().status;
     }
 
@@ -93,10 +94,14 @@ export async function POST(req) {
       );
     }
 
-    // Append to Google Sheets (non-blocking — don't fail the request if Sheets is down)
-    appendUserToSheet({ ...newUserObject, id: data.userId }).catch((err) =>
-      console.error("Sheets append failed (non-critical):", err.message),
-    );
+    // Append to Google Sheets only on first-time submissions to avoid duplicates
+    if (!wasAlreadySubmitted) {
+      try {
+        await appendUserToSheet({ ...newUserObject, id: data.userId });
+      } catch (err) {
+        console.error("Sheets append failed (non-critical):", err.message);
+      }
+    }
 
     return new Response(
       JSON.stringify({
