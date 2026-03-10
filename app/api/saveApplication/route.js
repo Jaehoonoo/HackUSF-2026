@@ -1,6 +1,7 @@
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { NextResponse } from "next/server";
+import { appendUserToSheet } from "@/utils/googleSheets";
 
 export async function POST(req) {
   try {
@@ -91,6 +92,11 @@ export async function POST(req) {
         { status: 404 },
       );
     }
+
+    // Append to Google Sheets (non-blocking — don't fail the request if Sheets is down)
+    appendUserToSheet({ ...newUserObject, id: data.userId }).catch((err) =>
+      console.error("Sheets append failed (non-critical):", err.message),
+    );
 
     return new Response(
       JSON.stringify({
