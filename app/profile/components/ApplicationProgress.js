@@ -115,6 +115,15 @@ export default function ApplicationProgress() {
         setStatus(nextStatus);
         setRsvp(nextRsvp);
 
+        // If still "submitted" and it's March 13+, bump to in_review
+        if (nextStatus === "submitted" && !fromCache) {
+          fetch("/api/checkReviewDate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId }),
+          }).catch((err) => console.error("checkReviewDate failed:", err));
+        }
+
         if (isFinalized(nextStatus, nextRsvp)) {
           cachedProfileRef.current = {
             userId,

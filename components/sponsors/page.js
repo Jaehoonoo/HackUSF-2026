@@ -32,9 +32,14 @@ const goldSponsors = [
 const silverSponsors = [
   {
     src: "/images/sponsors/googleLogo.png",
-    alt: "Google",
+    alt: "Google Logo",
     link: "https://about.google/",
   },
+  // {
+  //   src: "/images/sponsors/.png",
+  //   alt: "Moffitt Cancer Center Logo",
+  //   link: "https://www.moffitt.org/",
+  // },
 ];
 
 const bronzeSponsors = [
