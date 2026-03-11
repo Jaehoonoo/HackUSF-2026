@@ -35,11 +35,11 @@ const silverSponsors = [
     alt: "Google Logo",
     link: "https://about.google/",
   },
-  // {
-  //   src: "/images/sponsors/.png",
-  //   alt: "Moffitt Cancer Center Logo",
-  //   link: "https://www.moffitt.org/",
-  // },
+  {
+    src: "/images/sponsors/moffitt-logo.png",
+    alt: "Moffitt Cancer Center Logo",
+    link: "https://www.moffitt.org/",
+  },
 ];
 
 const bronzeSponsors = [
