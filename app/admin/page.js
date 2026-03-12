@@ -17,10 +17,8 @@ import {
   Chip,
   CircularProgress,
   TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
+  Tabs,
+  Tab,
 } from "@mui/material";
 
 export default function AdminDashboard() {
@@ -31,6 +29,15 @@ export default function AdminDashboard() {
   const [actionLoading, setActionLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [tabValue, setTabValue] = useState(0);
+
+  const STATUS_TABS = [
+    { label: "All", value: "all" },
+    { label: "Submitted", value: "submitted" },
+    { label: "Accepted", value: "accepted" },
+    { label: "Waitlisted", value: "waitlisted" },
+    { label: "Rejected", value: "rejected" },
+  ];
 
   // 1. Load all users on mount
   useEffect(() => {
@@ -63,7 +70,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     let filtered = users;
 
-    // Filter by status
+    // Filter by status tab
     if (statusFilter !== "all") {
       filtered = filtered.filter((u) => {
         if (statusFilter === "submitted") {
@@ -91,6 +98,24 @@ export default function AdminDashboard() {
     setFilteredUsers(filtered);
   }, [statusFilter, searchQuery, users]);
 
+  // Get count for each status tab
+  const getTabCount = (status) => {
+    if (status === "all") return users.length;
+    if (status === "submitted") {
+      return users.filter(
+        (u) =>
+          !u.status || u.status === "submitted" || u.status === "in_review",
+      ).length;
+    }
+    return users.filter((u) => u.status === status).length;
+  };
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+    setStatusFilter(STATUS_TABS[newValue].value);
+    setSelectedUsers(new Set());
+  };
+
   // 3. Handle user selection (checkbox)
   const toggleUser = (userId) => {
     const newSelected = new Set(selectedUsers);
@@ -105,7 +130,7 @@ export default function AdminDashboard() {
   // 4. Handle select all
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelectedUsers(new Set(filteredUsers.map((u) => u.id)));
+      setSelectedUsers(new Set(filteredUsers.slice(0, 300).map((u) => u.id)));
     } else {
       setSelectedUsers(new Set());
     }
@@ -187,71 +212,95 @@ export default function AdminDashboard() {
         </Box>
       ) : (
         <>
-          {/* Filters and Actions */}
-          <Paper sx={{ p: 3, mb: 3 }}>
-            <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-              {/* Search */}
-              <TextField
-                label="Search"
-                placeholder="Name, email, or school..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                sx={{ minWidth: 300 }}
-              />
+          {/* Status Tabs */}
+          <Paper sx={{ mb: 3 }}>
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                "& .MuiTab-root": { textTransform: "none", fontWeight: 600 },
+              }}
+            >
+              {STATUS_TABS.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  label={
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      {tab.label}
+                      <Chip
+                        label={getTabCount(tab.value)}
+                        size="small"
+                        color={
+                          tab.value === "accepted"
+                            ? "success"
+                            : tab.value === "rejected"
+                              ? "error"
+                              : tab.value === "waitlisted"
+                                ? "warning"
+                                : "default"
+                        }
+                        sx={{ height: 22, fontSize: "0.75rem" }}
+                      />
+                    </Box>
+                  }
+                />
+              ))}
+            </Tabs>
 
-              {/* Status Filter */}
-              <FormControl sx={{ minWidth: 200 }}>
-                <InputLabel>Status Filter</InputLabel>
-                <Select
-                  value={statusFilter}
-                  label="Status Filter"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  <MenuItem value="all">All ({users.length})</MenuItem>
-                  <MenuItem value="submitted">Submitted</MenuItem>
-                  <MenuItem value="accepted">Accepted</MenuItem>
-                  <MenuItem value="rejected">Rejected</MenuItem>
-                  <MenuItem value="waitlisted">Waitlisted</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+            <Box sx={{ p: 3 }}>
+              <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+                {/* Search */}
+                <TextField
+                  label="Search"
+                  placeholder="Name, email, or school..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  sx={{ minWidth: 300 }}
+                  size="small"
+                />
+              </Box>
 
-            {/* Action Buttons */}
-            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => handleBulkAction("accepted")}
-                disabled={actionLoading || selectedUsers.size === 0}
-              >
-                Accept Selected ({selectedUsers.size})
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => handleBulkAction("rejected")}
-                disabled={actionLoading || selectedUsers.size === 0}
-              >
-                Reject Selected ({selectedUsers.size})
-              </Button>
-              <Button
-                variant="contained"
-                color="warning"
-                onClick={() => handleBulkAction("waitlisted")}
-                disabled={actionLoading || selectedUsers.size === 0}
-              >
-                Waitlist Selected ({selectedUsers.size})
-              </Button>
-
-              {selectedUsers.size > 0 && (
+              {/* Action Buttons */}
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                 <Button
-                  variant="outlined"
-                  onClick={() => setSelectedUsers(new Set())}
-                  disabled={actionLoading}
+                  variant="contained"
+                  color="success"
+                  onClick={() => handleBulkAction("accepted")}
+                  disabled={actionLoading || selectedUsers.size === 0}
                 >
-                  Clear Selection
+                  Accept Selected ({selectedUsers.size})
                 </Button>
-              )}
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleBulkAction("rejected")}
+                  disabled={actionLoading || selectedUsers.size === 0}
+                >
+                  Reject Selected ({selectedUsers.size})
+                </Button>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={() => handleBulkAction("waitlisted")}
+                  disabled={actionLoading || selectedUsers.size === 0}
+                >
+                  Waitlist Selected ({selectedUsers.size})
+                </Button>
+
+                {selectedUsers.size > 0 && (
+                  <Button
+                    variant="outlined"
+                    onClick={() => setSelectedUsers(new Set())}
+                    disabled={actionLoading}
+                  >
+                    Clear Selection
+                  </Button>
+                )}
+              </Box>
             </Box>
           </Paper>
 
@@ -264,11 +313,12 @@ export default function AdminDashboard() {
                     <Checkbox
                       checked={
                         filteredUsers.length > 0 &&
-                        selectedUsers.size === filteredUsers.length
+                        selectedUsers.size ===
+                          Math.min(filteredUsers.length, 300)
                       }
                       indeterminate={
                         selectedUsers.size > 0 &&
-                        selectedUsers.size < filteredUsers.length
+                        selectedUsers.size < Math.min(filteredUsers.length, 300)
                       }
                       onChange={handleSelectAll}
                     />
