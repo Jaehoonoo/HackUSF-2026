@@ -149,7 +149,7 @@ export default function Hero() {
           }}
           onClick={handleClick}
         >
-          Apply Now
+          Profile
         </Button>
       </Box>
       <Box
