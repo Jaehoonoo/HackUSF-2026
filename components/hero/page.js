@@ -149,7 +149,7 @@ export default function Hero() {
           }}
           onClick={handleClick}
         >
-          Profile
+          Login
         </Button>
       </Box>
       <Box
