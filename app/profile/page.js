@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Container, Typography } from "@mui/material";
 import ApplicationProgress from "./components/ApplicationProgress";
 import GradientDivider from "./components/GradientDivider";
@@ -13,7 +15,6 @@ export default function Page() {
   if (isLoaded) {
     if (!isSignedIn) {
       router.push("/sign-in");
-      return null;
     }
   }
 
