@@ -3,8 +3,20 @@ import ApplicationProgress from "./components/ApplicationProgress";
 import GradientDivider from "./components/GradientDivider";
 import ProfileHeader from "./components/ProfileHeader";
 import { SiDiscord } from "react-icons/si";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
+
+  if (isLoaded) {
+    if (!isSignedIn) {
+      router.push("/sign-in");
+      return null;
+    }
+  }
+
   return (
     <Box
       className="profile-page"
