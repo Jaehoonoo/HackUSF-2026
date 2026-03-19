@@ -1,8 +1,17 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
+const isApplicationRoute = createRouteMatcher(['/application(.*)']);
+
+// Set to true to close applications and redirect /application to /profile
+const APPLICATIONS_CLOSED = true;
 
 export default clerkMiddleware(async (auth, req) => {
+  // Block application route if applications are closed
+  if (APPLICATIONS_CLOSED && isApplicationRoute(req)) {
+    return Response.redirect(new URL('/profile', req.url));
+  }
+
   // Protect admin routes
   if (isAdminRoute(req)) {
     const { sessionClaims } = await auth();
