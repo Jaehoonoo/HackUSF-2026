@@ -10,21 +10,21 @@ import AcceptedQrCode from "./AcceptedQrCode";
 import { db } from "@/firebase";
 
 const STATUS_CONTENT = {
-  empty: {
-    banner: "Applications open",
-    message: "Start your HackUSF application when you are ready!",
-    borderColor: "#FFB84D",
-    textColor: "#C9851A",
-    showApply: true,
-  },
   // empty: {
-  //   banner: "Applications Closed",
-  //   message:
-  //     "We are no longer accepting applications for HackUSF 2026. Stay tuned for next year!",
+  //   banner: "Applications open",
+  //   message: "Start your HackUSF application when you are ready!",
   //   borderColor: "#FFB84D",
   //   textColor: "#C9851A",
-  //   showApply: false,
+  //   showApply: true,
   // },
+  empty: {
+    banner: "Applications Closed",
+    message:
+      "We are no longer accepting applications for HackUSF 2026. Stay tuned for next year!",
+    borderColor: "#FFB84D",
+    textColor: "#C9851A",
+    showApply: false,
+  },
   submitted: {
     banner: "Submitted",
     message: "Thanks for applying! We will email you ASAP.",
