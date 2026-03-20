@@ -17,7 +17,6 @@ export async function GET(req) {
 
     const docRef = adminDb.collection("users").doc(userId);
     const docSnapshot = await docRef.get();
-    console.log("Document snapshot:", docSnapshot);
 
     if (!docSnapshot.exists) {
       return new Response(JSON.stringify({
