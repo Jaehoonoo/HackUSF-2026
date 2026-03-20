@@ -17,6 +17,7 @@ export async function GET(req) {
 
     const docRef = adminDb.collection("users").doc(userId);
     const docSnapshot = await docRef.get();
+    console.log("Document snapshot:", docSnapshot);
 
     if (!docSnapshot.exists) {
       return new Response(JSON.stringify({
@@ -27,6 +28,7 @@ export async function GET(req) {
 
     const userData = docSnapshot.data();
     let workshopsNum = userData.workshopsNum;
+    let checkInVal = userData.checkIn !== undefined ? userData.checkIn : null;
 
     // If the field doesn't exist, initialize it to 0
     if (workshopsNum === undefined) {
@@ -38,7 +40,8 @@ export async function GET(req) {
 
     return new Response(JSON.stringify({
       success: true,
-      workshopsNum: workshopsNum
+      workshopsNum: workshopsNum,
+      checkIn: checkInVal
     }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
