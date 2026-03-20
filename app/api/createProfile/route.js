@@ -20,10 +20,17 @@ export async function POST(req) {
     const userSnap = await getDoc(userDocRef);
 
     if (userSnap.exists()) {
-      // Update existing user with Discord ID if it's missing
-      if (discordId && !userSnap.data().discordId) {
-        await setDoc(userDocRef, { discordId }, { merge: true });
+      const existingUser = userSnap.data();
+      const profileUpdates = {};
+
+      if (discordId && !existingUser.discordId) {
+        profileUpdates.discordId = discordId;
       }
+
+      if (Object.keys(profileUpdates).length > 0) {
+        await setDoc(userDocRef, profileUpdates, { merge: true });
+      }
+
       return new Response(
         JSON.stringify({ success: true, message: "Profile already exists" }),
         { status: 200 },

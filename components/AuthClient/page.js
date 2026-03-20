@@ -17,12 +17,9 @@ export default function CreateProfileOnSignIn() {
       return;
     }
 
-    // Mark as created before making the API call
-    localStorage.setItem(createdKey, "true");
-
     const createProfile = async () => {
       try {
-        await fetch("/api/createProfile", {
+        const response = await fetch("/api/createProfile", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -30,9 +27,14 @@ export default function CreateProfileOnSignIn() {
             email: user.primaryEmailAddress?.emailAddress || "",
           }),
         });
+
+        if (!response.ok) {
+          throw new Error(`Profile creation failed with status ${response.status}`);
+        }
+
+        localStorage.setItem(createdKey, "true");
       } catch (error) {
         console.error("Failed to create profile:", error);
-        // Remove the flag if the API call fails so it retries next time
         localStorage.removeItem(createdKey);
       }
     };
