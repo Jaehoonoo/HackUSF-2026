@@ -12,10 +12,10 @@ export default function AdminDashboardHome() {
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {/* Button to User Management */}
-        <Link href="/admin/users">
+        {/* Button to CheckIn */}
+        <Link href="/admin/checkIn">
           <Button variant="contained" size="large">
-            User Management
+            Check In
           </Button>
         </Link>
 
@@ -30,6 +30,13 @@ export default function AdminDashboardHome() {
         <Link href="/admin/workshopIn">
           <Button variant="contained" size="large">
             Workshop Scanner
+          </Button>
+        </Link>
+
+         {/* Button to T-Shirt Validation */}
+        <Link href="/admin/shirtValidation">
+          <Button variant="contained" size="large">
+            Shirt Validation
           </Button>
         </Link>
       </Box>
