@@ -1,6 +1,8 @@
 import { adminDb } from "@/firebaseadmin";
 
 // This API route retrieves the workshopsNum for a user. If the field doesn't exist, it initializes it to 0
+// Also returns the checkIn value if it exists, otherwise returns null. 
+// And return shirtReceived if it exists, otherwise returns it with a default value of false.
 export async function GET(req) {
   try {
     const userId = new URL(
@@ -28,19 +30,32 @@ export async function GET(req) {
     const userData = docSnapshot.data();
     let workshopsNum = userData.workshopsNum;
     let checkInVal = userData.checkIn !== undefined ? userData.checkIn : null;
+    let shirtReceived = userData.shirtReceived;
 
+    let updates = {};
+    
     // If the field doesn't exist, initialize it to 0
     if (workshopsNum === undefined) {
-      await docRef.update({
-        workshopsNum: 0
-      });
+      updates.workshopsNum = 0;
       workshopsNum = 0;
+    }
+
+    // If shirtReceived doesn't exist, initialize it to false
+    if (shirtReceived === undefined) {
+      updates.shirtReceived = false;
+      shirtReceived = false;
+    }
+
+    // Apply any missing fields to the document
+    if (Object.keys(updates).length > 0) {
+      await docRef.update(updates);
     }
 
     return new Response(JSON.stringify({
       success: true,
       workshopsNum: workshopsNum,
-      checkIn: checkInVal
+      checkIn: checkInVal,
+      shirtReceived: shirtReceived
     }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
