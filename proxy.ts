@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 const isApplicationRoute = createRouteMatcher(['/application(.*)']);
@@ -9,7 +10,7 @@ const APPLICATIONS_CLOSED = true;
 export default clerkMiddleware(async (auth, req) => {
   // Block application route if applications are closed
   if (APPLICATIONS_CLOSED && isApplicationRoute(req)) {
-    return Response.redirect(new URL('/profile', req.url));
+    return NextResponse.redirect(new URL('/profile', req.url));
   }
 
   // Protect admin routes
@@ -31,7 +32,7 @@ export default clerkMiddleware(async (auth, req) => {
     if (publicMetadata?.role !== 'admin' && metadata?.role !== 'admin') {
       console.log('Access denied - redirecting to home');
       // Redirect to home if not admin
-      return Response.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/', req.url));
     }
     
     console.log('Access granted - user is admin');

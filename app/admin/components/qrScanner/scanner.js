@@ -1,9 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import {
+  Html5Qrcode,
+  Html5QrcodeScannerState,
+  Html5QrcodeSupportedFormats
+} from 'html5-qrcode';
 import { Box, Button, CircularProgress } from '@mui/material';
 import Image from 'next/image';
 
 const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanContextKey = "" }) => {
+  const scannerElementId = useId().replace(/:/g, '-');
   const [isScanning, setIsScanning] = useState(false);
   const isScanningRef = useRef(isScanning); // REF to track current scanning state
   const [scanResult, setScanResult] = useState(null);
@@ -15,11 +20,65 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
   const scannerDivRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const isMountedRef = useRef(false);
   const ignoreScanRef = useRef(false);
   const lastScannedRef = useRef(null);
   const scanningInProgressRef = useRef(false);
   const onScanSuccessRef = useRef(onScanSuccess);
   const onScanErrorRef = useRef(onScanError);
+  const resumeTimeoutRef = useRef(null);
+
+  const createScannerInstance = () => {
+    if (!scannerDivRef.current) {
+      return null;
+    }
+
+    return new Html5Qrcode(scannerElementId);
+  };
+
+  const clearResumeTimeout = () => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+  };
+
+  const finalizeStoppedState = () => {
+    videoRef.current = null;
+    setIsScanning(false);
+    setIsPaused(false);
+    setLastFrameUrl('');
+  };
+
+  const stopScannerInstance = async () => {
+    clearResumeTimeout();
+    ignoreScanRef.current = true;
+    lastScannedRef.current = null;
+    scanningInProgressRef.current = false;
+
+    if (!scannerRef.current) {
+      return;
+    }
+
+    try {
+      const state = scannerRef.current.getState();
+
+      if (
+        state === Html5QrcodeScannerState.SCANNING
+        || state === Html5QrcodeScannerState.PAUSED
+      ) {
+        await scannerRef.current.stop();
+      }
+    } catch (error) {
+      console.warn('Scanner stop skipped:', error?.message || error);
+    }
+
+    try {
+      scannerRef.current.clear();
+    } catch (error) {
+      console.warn('Scanner clear skipped:', error?.message || error);
+    }
+  };
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -27,6 +86,7 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
   }, [isScanning]);
 
   const resetScannerState = () => {
+    clearResumeTimeout();
     setScanResult(null);
     setError(null);
     setIsPaused(false);
@@ -36,41 +96,58 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     scanningInProgressRef.current = false;
 
     if (videoRef.current) {
-      videoRef.current.play();
+      scannerRef.current?.resume();
     }
   };
 
-  useEffect(() => {
-    if (scannerDivRef.current) {
-      scannerRef.current = new Html5Qrcode('qr-reader');
+  const resetAndRecreateScanner = async () => {
+    await stopScannerInstance();
+
+    if (!isMountedRef.current) {
+      return;
     }
+
+    scannerRef.current = createScannerInstance();
+    finalizeStoppedState();
+    resetScannerState();
+  };
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    scannerRef.current = createScannerInstance();
 
     canvasRef.current = document.createElement('canvas');
 
     return () => {
-      if (scannerRef.current && isScanningRef.current) {
-        scannerRef.current.stop().catch(() => {});
-      }
+      isMountedRef.current = false;
+      stopScannerInstance().finally(() => {
+        scannerRef.current = null;
+        videoRef.current = null;
+        canvasRef.current = null;
+      });
     };
-  }, []);
+  }, [scannerElementId]);
 
   useEffect(() => {
     if (isScanning) {
       setTimeout(() => {
-        const video = document.querySelector('#qr-reader video');
-        if (video) videoRef.current = video;
+        const video = document.querySelector(`#${scannerElementId} video`);
+        if (video) {
+          videoRef.current = video;
+        }
       }, 500);
     }
-  }, [isScanning]);
+  }, [isScanning, scannerElementId]);
 
   useEffect(() => {
     if (resetSignal === 0) return;
-    resetScannerState();
+    resetAndRecreateScanner();
   }, [resetSignal]);
 
   useEffect(() => {
     if (!scanContextKey) return;
-    resetScannerState();
+    resetAndRecreateScanner();
   }, [scanContextKey]);
 
   useEffect(() => {
@@ -85,12 +162,14 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     if (!videoRef.current || !canvasRef.current) return;
     const video = videoRef.current;
     const canvas = canvasRef.current;
+
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     setFrameDimensions({ width: video.videoWidth, height: video.videoHeight });
 
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
     const frameUrl = canvas.toDataURL('image/jpeg');
     setLastFrameUrl(frameUrl);
   };
@@ -105,17 +184,35 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     captureFrame();
     setIsPaused(true);
     ignoreScanRef.current = true;
-    if (videoRef.current) videoRef.current.pause();
+
+    if (videoRef.current) {
+      try {
+        scannerRef.current?.pause(true);
+      } catch (error) {
+        console.warn('Scanner pause skipped:', error?.message || error);
+      }
+    }
   };
 
   const resumeScanning = () => {
     setIsPaused(false);
     ignoreScanRef.current = false;
     setLastFrameUrl('');
-    if (videoRef.current) videoRef.current.play();
+
+    if (videoRef.current) {
+      try {
+        scannerRef.current?.resume();
+      } catch (error) {
+        console.warn('Scanner resume skipped:', error?.message || error);
+      }
+    }
   };
 
   const startScanner = () => {
+    if (!scannerRef.current) {
+      scannerRef.current = createScannerInstance();
+    }
+
     if (!scannerRef.current) {
       setError("Scanner not initialized.");
       return;
@@ -137,6 +234,10 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       if (ignoreScanRef.current || scanningInProgressRef.current) return;
       if (lastScannedRef.current === decodedText) return;
 
+      if (lastScannedRef.current === decodedText) {
+        return;
+      }
+
       scanningInProgressRef.current = true;
       pauseScanning();
 
@@ -146,15 +247,24 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
         onScanSuccessRef.current?.(decodedText);
       }
 
-      setTimeout(() => {
+      clearResumeTimeout();
+      resumeTimeoutRef.current = setTimeout(() => {
+        if (!isMountedRef.current) {
+          return;
+        }
+
         lastScannedRef.current = null;
         resumeScanning();
         scanningInProgressRef.current = false;
+        resumeTimeoutRef.current = null;
+        console.log("Resuming scan after processing");
       }, 2000);
     };
 
-    const handleError = (err) => {
-      onScanErrorRef.current?.(err);
+    const handleError = (scanError) => {
+      if (onScanErrorRef.current) {
+        onScanErrorRef.current(scanError);
+      }
     };
 
     scannerRef.current.start(
@@ -163,35 +273,68 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       handleSuccess,
       handleError
     ).then(() => {
+      if (!isMountedRef.current) {
+        return;
+      }
+
       setIsScanning(true);
       console.log("Scanner started");
     }).catch((err) => {
+      if (!isMountedRef.current) {
+        return;
+      }
+
       console.error("Error starting scanner:", err);
       setError(`Failed to start scanner: ${err.message || err}`);
     });
   };
 
   const stopScanner = () => {
-    if (scannerRef.current && isScanningRef.current) {
-      scannerRef.current.stop().then(() => {
-        setIsScanning(false);
-        setIsPaused(false);
-        setLastFrameUrl('');
-      }).catch((err) => {
-        console.error("Error stopping scanner:", err);
-        setIsScanning(false);
-        setIsPaused(false);
+    if (scannerRef.current && isScanning) {
+      stopScannerInstance().then(() => {
+        if (!isMountedRef.current) {
+          return;
+        }
+
+        scannerRef.current = createScannerInstance();
+        finalizeStoppedState();
       });
     }
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', position: 'relative' }}>
-      <div id="qr-reader" ref={scannerDivRef} style={{ width: '275px', position: 'relative' }}>
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      position: 'relative',
+    }}>
+      <div id={scannerElementId} ref={scannerDivRef} style={{ width: '275px', position: 'relative' }}>
         {isPaused && lastFrameUrl && (
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-              <Image src={lastFrameUrl} alt="Paused frame" fill style={{ objectFit: 'cover' }} loader={({ src }) => src} unoptimized priority />
+              <Image
+                src={lastFrameUrl}
+                alt="Paused frame"
+                fill
+                style={{ objectFit: 'cover' }}
+                loader={({ src }) => src}
+                unoptimized={true}
+                priority
+              />
             </div>
             <div style={{ position: 'absolute', backgroundColor: 'rgba(0,0,0,0.5)', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <CircularProgress color="info" />
