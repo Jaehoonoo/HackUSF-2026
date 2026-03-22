@@ -10,6 +10,7 @@ import Image from 'next/image';
 const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanContextKey = "" }) => {
   const scannerElementId = useId().replace(/:/g, '-');
   const [isScanning, setIsScanning] = useState(false);
+  const isScanningRef = useRef(isScanning); // REF to track current scanning state
   const [scanResult, setScanResult] = useState(null);
   const [error, setError] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -78,6 +79,11 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       console.warn('Scanner clear skipped:', error?.message || error);
     }
   };
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    isScanningRef.current = isScanning;
+  }, [isScanning]);
 
   const resetScannerState = () => {
     clearResumeTimeout();
@@ -154,7 +160,6 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
 
   const captureFrame = () => {
     if (!videoRef.current || !canvasRef.current) return;
-
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
@@ -170,17 +175,13 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
   };
 
   const isValidScan = (data) => {
-    if (data === null || typeof data !== 'string') {
-      return false;
-    }
-
+    if (data === null || typeof data !== 'string') return false;
     const pattern = /^user_[a-zA-Z0-9]{27}$/;
     return pattern.test(data);
   };
 
   const pauseScanning = () => {
     captureFrame();
-
     setIsPaused(true);
     ignoreScanRef.current = true;
 
@@ -226,28 +227,24 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     const config = {
       fps: 10,
       qrbox: { width: 180, height: 180 },
-      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
     };
 
     const handleSuccess = (decodedText) => {
       if (ignoreScanRef.current || scanningInProgressRef.current) return;
+      if (lastScannedRef.current === decodedText) return;
 
       if (lastScannedRef.current === decodedText) {
         return;
       }
 
       scanningInProgressRef.current = true;
-
-      console.log("Scan detected:", decodedText);
       pauseScanning();
 
       if (isValidScan(decodedText)) {
         lastScannedRef.current = decodedText;
         setScanResult(decodedText);
-
-        if (onScanSuccessRef.current) {
-          onScanSuccessRef.current(decodedText);
-        }
+        onScanSuccessRef.current?.(decodedText);
       }
 
       clearResumeTimeout();
@@ -339,15 +336,7 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
                 priority
               />
             </div>
-            <div style={{
-              position: 'absolute',
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+            <div style={{ position: 'absolute', backgroundColor: 'rgba(0,0,0,0.5)', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <CircularProgress color="info" />
             </div>
           </div>
@@ -356,33 +345,14 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
 
       <Box sx={{ mt: 2 }}>
         {!isScanning ? (
-          <Button
-            variant="contained"
-            onClick={startScanner}
-          >
-            Start Scanner
-          </Button>
+          <Button variant="contained" onClick={startScanner}>Start Scanner</Button>
         ) : (
-          <Button
-            variant="contained"
-            onClick={stopScanner}
-            disabled={isPaused}
-          >
-            Stop Scanner
-          </Button>
+          <Button variant="contained" onClick={stopScanner} disabled={isPaused}>Stop Scanner</Button>
         )}
       </Box>
 
       {isPaused && (
-        <div style={{
-          marginTop: '6px',
-          padding: '8px',
-          backgroundColor: '#FEF9C3',
-          border: '1px solid #F59E0B',
-          color: '#92400E',
-          borderRadius: '4px',
-          textAlign: 'center'
-        }}>
+        <div style={{ marginTop: '6px', padding: '8px', backgroundColor: '#FEF9C3', border: '1px solid #F59E0B', color: '#92400E', borderRadius: '4px', textAlign: 'center' }}>
           Processing scan...
         </div>
       )}
