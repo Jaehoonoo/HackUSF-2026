@@ -20,7 +20,6 @@ function formatShirtReceived(val) {
 }
 
 export default function ShirtValidationPage() {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [userId, setUserId] = useState(null);
   const [workshopsNum, setWorkshopsNum] = useState(null);
   const [shirtReceived, setShirtReceived] = useState(null);
@@ -42,19 +41,6 @@ export default function ShirtValidationPage() {
   }, []);
 
   useEffect(() => {
-    const checkCameraPermission = async () => {
-      try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
-        setHasCameraPermission(true);
-      } catch (error) {
-        console.error("Camera permission denied:", error);
-        setHasCameraPermission(false);
-      }
-    };
-    checkCameraPermission();
-  }, []);
-
-  useEffect(() => {
     if (!userId) {
       setWorkshopsNum(null);
       setShirtReceived(null);
@@ -70,10 +56,10 @@ export default function ShirtValidationPage() {
       });
   }, [userId, applyWorkshopsResponse]);
 
-  const handleScanSuccess = (scannedUserId) => {
+  const handleScanSuccess = useCallback((scannedUserId) => {
     setShirtFeedback(null);
     setUserId(scannedUserId);
-  };
+  }, []);
 
   const handleShirtReceivedClick = async () => {
     if (!userId) return;
@@ -144,20 +130,10 @@ export default function ShirtValidationPage() {
         </Button>
 
         <Box sx={{ width: "100%", mt: 4, textAlign: "left" }}>
-          {hasCameraPermission === null && (
-            <Alert severity="info">Checking camera permissions...</Alert>
-          )}
-          {hasCameraPermission === false && (
-            <Alert severity="error">
-              Camera access is required. Please enable permissions and refresh.
-            </Alert>
-          )}
-          {hasCameraPermission === true && (
-            <QRScannerComponent
-              onScanSuccess={handleScanSuccess}
-              scanContextKey="shirt-validation"
-            />
-          )}
+          <QRScannerComponent
+            onScanSuccess={handleScanSuccess}
+            scanContextKey=""
+          />
         </Box>
       </Box>
     </Container>
