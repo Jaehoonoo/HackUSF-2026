@@ -17,7 +17,7 @@ export async function GET(req) {
       }), { status: 401 });
     }
 
-    const docRef = adminDb.collection("users").doc(userId);
+    const docRef = adminDb.collection("testUsers").doc(userId);
     const docSnapshot = await docRef.get();
 
     if (!docSnapshot.exists) {

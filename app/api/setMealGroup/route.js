@@ -6,7 +6,7 @@ export async function POST(req) {
     let assignedGroup = null;
     const body = await req.json()
     const { userId } = body;
-    const userRef = adminDb.collection("users").doc(userId);
+    const userRef = adminDb.collection("testUsers").doc(userId);
     const mealGroupSizesRef = adminDb.collection("userCounts").doc("mealGroupCounts");
     const GROUPS = ["Primordials", "Olympians", "Titans", "Demigods", "Daemones"]
 

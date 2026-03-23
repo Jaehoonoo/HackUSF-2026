@@ -23,7 +23,7 @@ export async function POST(req) {
       );
     }
 
-    const userRef = adminDb.collection("users").doc(userId);
+    const userRef = adminDb.collection("testUsers").doc(userId);
     const userSnap = await userRef.get();
 
     if (!userSnap.exists) {

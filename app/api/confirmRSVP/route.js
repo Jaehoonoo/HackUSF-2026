@@ -7,7 +7,7 @@ export async function POST(req){
         // Get the JSON data sent from the frontend (contains userId and RSVP status)
         const data = await req.json();
         // Create a referenece to the specific user document in Firestore by using the userId
-        const userDocRef = doc(db, "users", data.userId,); 
+        const userDocRef = doc(db, "testUsers", data.userId,); 
         // Actual users data fetched from firestore; used to verify existance and access data
         const userSnap = await getDoc(userDocRef);
         
