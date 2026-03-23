@@ -4,7 +4,7 @@ import {
   Html5QrcodeScannerState,
   Html5QrcodeSupportedFormats
 } from 'html5-qrcode';
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Alert, Box, Button, CircularProgress } from '@mui/material';
 import Image from 'next/image';
 
 const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanContextKey = "" }) => {
@@ -33,6 +33,30 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     }
 
     return new Html5Qrcode(scannerElementId);
+  };
+
+  const getFriendlyCameraError = (error) => {
+    const message = `${error?.message || error || ''}`.toLowerCase();
+
+    if (
+      message.includes('notallowederror')
+      || message.includes('permission')
+      || message.includes('denied')
+      || message.includes('access denied')
+    ) {
+      return 'Camera access was denied. Enable camera permission for this site in your browser settings, then try again.';
+    }
+
+    if (
+      message.includes('notfounderror')
+      || message.includes('device not found')
+      || message.includes('no camera')
+      || message.includes('could not start video source')
+    ) {
+      return 'No camera was found for this device or browser.';
+    }
+
+    return `Failed to start scanner: ${error?.message || error}`;
   };
 
   const clearResumeTimeout = () => {
@@ -285,7 +309,7 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       }
 
       console.error("Error starting scanner:", err);
-      setError(`Failed to start scanner: ${err.message || err}`);
+      setError(getFriendlyCameraError(err));
     });
   };
 
@@ -355,6 +379,12 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
         <div style={{ marginTop: '6px', padding: '8px', backgroundColor: '#FEF9C3', border: '1px solid #F59E0B', color: '#92400E', borderRadius: '4px', textAlign: 'center' }}>
           Processing scan...
         </div>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mt: 2, maxWidth: 420 }}>
+          {error}
+        </Alert>
       )}
     </Box>
   );
