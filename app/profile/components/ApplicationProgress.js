@@ -7,6 +7,7 @@ import { Paper, Typography, Box, Button } from "@mui/material";
 import { doc, onSnapshot, getDocFromCache } from "firebase/firestore";
 import ProgressTimeline from "./ProgressTimeline";
 import AcceptedQrCode from "./AcceptedQrCode";
+import WorkshopsNum from "./WorkshopsNum";
 import { db } from "@/firebase";
 
 const STATUS_CONTENT = {
@@ -367,6 +368,7 @@ export default function ApplicationProgress() {
         mealGroup={mealGroup}
         isMealGroupLoading={mealGroupLoading}
       />
+      <WorkshopsNum userId={userId} />
     </Paper>
   );
 }
