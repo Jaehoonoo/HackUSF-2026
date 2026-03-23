@@ -87,7 +87,7 @@ export default function ApplicationProgress() {
       return;
     }
 
-    const docRef = doc(db, "testUsers", userId);
+    const docRef = doc(db, "users", userId);
 
     // Try to load from cache immediately for instant display
     (async () => {
