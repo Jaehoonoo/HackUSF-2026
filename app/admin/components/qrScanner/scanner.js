@@ -15,7 +15,6 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
   const [error, setError] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [lastFrameUrl, setLastFrameUrl] = useState('');
-  const [frameDimensions, setFrameDimensions] = useState({ width: 275, height: 180 });
   const scannerRef = useRef(null);
   const scannerDivRef = useRef(null);
   const videoRef = useRef(null);
@@ -165,7 +164,6 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    setFrameDimensions({ width: video.videoWidth, height: video.videoHeight });
 
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -230,35 +228,37 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
     };
 
-    const handleSuccess = (decodedText) => {
+    const handleSuccess = async (decodedText) => {
       if (ignoreScanRef.current || scanningInProgressRef.current) return;
       if (lastScannedRef.current === decodedText) return;
-
-      if (lastScannedRef.current === decodedText) {
-        return;
-      }
 
       scanningInProgressRef.current = true;
       pauseScanning();
 
-      if (isValidScan(decodedText)) {
-        lastScannedRef.current = decodedText;
-        setScanResult(decodedText);
-        onScanSuccessRef.current?.(decodedText);
+      if (!isValidScan(decodedText)) {
+        scanningInProgressRef.current = false;
+        resumeScanning();
+        return;
       }
 
-      clearResumeTimeout();
-      resumeTimeoutRef.current = setTimeout(() => {
-        if (!isMountedRef.current) {
-          return;
-        }
+      lastScannedRef.current = decodedText;
+      setScanResult(decodedText);
 
-        lastScannedRef.current = null;
-        resumeScanning();
-        scanningInProgressRef.current = false;
-        resumeTimeoutRef.current = null;
-        console.log("Resuming scan after processing");
-      }, 2000);
+      try {
+        await Promise.resolve(onScanSuccessRef.current?.(decodedText));
+      } finally {
+        clearResumeTimeout();
+        resumeTimeoutRef.current = setTimeout(() => {
+          if (!isMountedRef.current) {
+            return;
+          }
+
+          resumeScanning();
+          scanningInProgressRef.current = false;
+          resumeTimeoutRef.current = null;
+          console.log("Resuming scan after processing");
+        }, 600);
+      }
     };
 
     const handleError = (scanError) => {
