@@ -4,7 +4,7 @@ import {
   Html5QrcodeScannerState,
   Html5QrcodeSupportedFormats
 } from 'html5-qrcode';
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Alert, Box, Button, CircularProgress } from '@mui/material';
 import Image from 'next/image';
 
 const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanContextKey = "" }) => {
@@ -15,7 +15,6 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
   const [error, setError] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [lastFrameUrl, setLastFrameUrl] = useState('');
-  const [frameDimensions, setFrameDimensions] = useState({ width: 275, height: 180 });
   const scannerRef = useRef(null);
   const scannerDivRef = useRef(null);
   const videoRef = useRef(null);
@@ -34,6 +33,30 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     }
 
     return new Html5Qrcode(scannerElementId);
+  };
+
+  const getFriendlyCameraError = (error) => {
+    const message = `${error?.message || error || ''}`.toLowerCase();
+
+    if (
+      message.includes('notallowederror')
+      || message.includes('permission')
+      || message.includes('denied')
+      || message.includes('access denied')
+    ) {
+      return 'Camera access was denied. Enable camera permission for this site in your browser settings, then try again.';
+    }
+
+    if (
+      message.includes('notfounderror')
+      || message.includes('device not found')
+      || message.includes('no camera')
+      || message.includes('could not start video source')
+    ) {
+      return 'No camera was found for this device or browser.';
+    }
+
+    return `Failed to start scanner: ${error?.message || error}`;
   };
 
   const clearResumeTimeout = () => {
@@ -165,7 +188,6 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    setFrameDimensions({ width: video.videoWidth, height: video.videoHeight });
 
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -230,35 +252,37 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
     };
 
-    const handleSuccess = (decodedText) => {
+    const handleSuccess = async (decodedText) => {
       if (ignoreScanRef.current || scanningInProgressRef.current) return;
       if (lastScannedRef.current === decodedText) return;
-
-      if (lastScannedRef.current === decodedText) {
-        return;
-      }
 
       scanningInProgressRef.current = true;
       pauseScanning();
 
-      if (isValidScan(decodedText)) {
-        lastScannedRef.current = decodedText;
-        setScanResult(decodedText);
-        onScanSuccessRef.current?.(decodedText);
+      if (!isValidScan(decodedText)) {
+        scanningInProgressRef.current = false;
+        resumeScanning();
+        return;
       }
 
-      clearResumeTimeout();
-      resumeTimeoutRef.current = setTimeout(() => {
-        if (!isMountedRef.current) {
-          return;
-        }
+      lastScannedRef.current = decodedText;
+      setScanResult(decodedText);
 
-        lastScannedRef.current = null;
-        resumeScanning();
-        scanningInProgressRef.current = false;
-        resumeTimeoutRef.current = null;
-        console.log("Resuming scan after processing");
-      }, 2000);
+      try {
+        await Promise.resolve(onScanSuccessRef.current?.(decodedText));
+      } finally {
+        clearResumeTimeout();
+        resumeTimeoutRef.current = setTimeout(() => {
+          if (!isMountedRef.current) {
+            return;
+          }
+
+          resumeScanning();
+          scanningInProgressRef.current = false;
+          resumeTimeoutRef.current = null;
+          console.log("Resuming scan after processing");
+        }, 600);
+      }
     };
 
     const handleError = (scanError) => {
@@ -285,7 +309,7 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       }
 
       console.error("Error starting scanner:", err);
-      setError(`Failed to start scanner: ${err.message || err}`);
+      setError(getFriendlyCameraError(err));
     });
   };
 
@@ -355,6 +379,12 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
         <div style={{ marginTop: '6px', padding: '8px', backgroundColor: '#FEF9C3', border: '1px solid #F59E0B', color: '#92400E', borderRadius: '4px', textAlign: 'center' }}>
           Processing scan...
         </div>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mt: 2, maxWidth: 420 }}>
+          {error}
+        </Alert>
       )}
     </Box>
   );

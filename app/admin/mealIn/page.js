@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -13,9 +13,6 @@ import {
 import QRScannerComponent from "../components/qrScanner/scanner";
 
 export default function MealPage() {
-  // NEW: Camera permission state
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-
   // State for dropdown selections
   const [currentMeal, setCurrentMeal] = useState("");
   const [currentMealGroup, setCurrentMealGroup] = useState("");
@@ -23,21 +20,6 @@ export default function MealPage() {
   // State for processing and results
   const [isProcessing, setIsProcessing] = useState(false);
   const [mealInResult, setMealInResult] = useState(null);
-
-  // ✅ NEW: Check camera permission on mount
-  useEffect(() => {
-    const checkCameraPermission = async () => {
-      try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
-        setHasCameraPermission(true);
-      } catch (error) {
-        console.error("Camera permission denied:", error);
-        setHasCameraPermission(false);
-      }
-    };
-
-    checkCameraPermission();
-  }, []);
 
   const markAsMealed = async (userId, currentMeal, currentMealGroup) => {
     try {
@@ -157,24 +139,11 @@ export default function MealPage() {
           </Alert>
         )}
 
-        {/* 🚨 NEW: Camera handling */}
         <Box sx={{ width: "100%", marginTop: 1 }}>
-          {hasCameraPermission === null && (
-            <Alert severity="info">Checking camera permissions...</Alert>
-          )}
-
-          {hasCameraPermission === false && (
-            <Alert severity="error">
-              Camera access is required. Please enable permissions and refresh.
-            </Alert>
-          )}
-
-          {hasCameraPermission === true && (
-            <QRScannerComponent
-              onScanSuccess={handleScanSuccess}
-              scanContextKey={`${currentMeal}|${currentMealGroup}`}
-            />
-          )}
+          <QRScannerComponent
+            onScanSuccess={handleScanSuccess}
+            scanContextKey={`${currentMeal}|${currentMealGroup}`}
+          />
         </Box>
       </Box>
     </Box>
