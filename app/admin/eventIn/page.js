@@ -2,8 +2,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   Alert,
+  Button,
   Box,
   Container,
   FormControl,
@@ -44,6 +46,10 @@ export default function EventInPage() {
   return (
     <Container maxWidth="sm" sx={{ py: 6 }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Button component={Link} href="/admin" variant="outlined" sx={{ alignSelf: "flex-start" }}>
+          Back to Admin
+        </Button>
+
         <Typography variant="h4" sx={{ fontWeight: 700, textAlign: "center" }}>
           Event Check-In Scanner
         </Typography>

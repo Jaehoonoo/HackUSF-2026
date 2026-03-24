@@ -43,6 +43,8 @@ export async function POST(request) {
 
     const userData = userSnapshot.data() || {};
 
+
+    // Default fields on first scan
     if (!userData.attended) {
       const firstScanPayload = {
         attended: {
