@@ -26,10 +26,10 @@ export default function AdminDashboardHome() {
           </Button>
         </Link>
 
-        {/* Button to Workshop Scanner */}
-        <Link href="/admin/workshopIn">
+        {/* Button to Event Scanner */}
+        <Link href="/admin/eventIn">
           <Button variant="contained" size="large">
-            Workshop Scanner
+            Event Scanner
           </Button>
         </Link>
 
