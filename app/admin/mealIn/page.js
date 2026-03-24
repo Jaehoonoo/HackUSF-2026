@@ -38,9 +38,7 @@ export default function MealPage() {
     }
   };
 
-  // This function will be called when QR is successfully scanned
   const handleScanSuccess = async (userId) => {
-    // Validate that meal and group are selected
     if (!currentMeal || !currentMealGroup) {
       setMealInResult({
         success: false,
@@ -58,23 +56,12 @@ export default function MealPage() {
     setIsProcessing(false);
   };
 
-  // const handleScanError = (error) => {
-  //     // console.error("Scanning error:", error);
-  //     setCheckInResult({
-  //         success: false,
-  //         message: `Scanning error: ${error}`
-  //     });
-  // };
-
-  // Handle dropdown changes
   const handleMealChange = (event) => {
     setCurrentMeal(event.target.value);
-    // setMealInResult(null);
   };
 
   const handleGroupChange = (event) => {
     setCurrentMealGroup(event.target.value);
-    // setMealInResult(null);
   };
 
   return (
@@ -86,12 +73,10 @@ export default function MealPage() {
       padding: 2,
       pb: 10
     }}>
-      {/* Header */}
       <Box mb={1.5} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h4">Meal Check In Page</Typography>
       </Box>
 
-      {/* Main Container */}
       <Box sx={{
         display: "flex",
         flexDirection: "column",
@@ -100,17 +85,16 @@ export default function MealPage() {
         maxWidth: "500px",
         gap: 1.2
       }}>
-        {/* Dropdown Menus */}
+        {/* Dropdowns */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
           <FormControl fullWidth>
             <InputLabel id="meal-type-label">Meal</InputLabel>
             <Select
               labelId="meal-type-label"
-              id="meal-type"
-              label="Meal"
               value={currentMeal}
               onChange={handleMealChange}
-              variant="outlined">
+              label="Meal"
+            >
               <MenuItem value="lunch1">Lunch 1</MenuItem>
               <MenuItem value="dinner">Dinner</MenuItem>
               <MenuItem value="midnightSnack">MidnightSnack</MenuItem>
@@ -123,22 +107,20 @@ export default function MealPage() {
             <InputLabel id="meal-group-label">Group Name</InputLabel>
             <Select
               labelId="meal-group-label"
-              id="group"
-              label="Group Name"
               value={currentMealGroup}
               onChange={handleGroupChange}
-              variant="outlined">
+              label="Group Name"
+            >
               <MenuItem value="Primordials">Primordials</MenuItem>
               <MenuItem value="Olympians">Olympians</MenuItem>
               <MenuItem value="Titans">Titans</MenuItem>
               <MenuItem value="Daemones">Daemones</MenuItem>
               <MenuItem value="Demigods">Demigods</MenuItem>
-
             </Select>
           </FormControl>
         </Box>
 
-        {/* Status Messages */}
+        {/* Status messages */}
         {(!currentMeal || !currentMealGroup) && (
           <Alert severity="info" sx={{ width: "100%" }}>
             Please select both meal type and group before scanning
@@ -152,20 +134,15 @@ export default function MealPage() {
         )}
 
         {mealInResult && (
-          <Alert
-            severity={mealInResult.success ? "success" : "error"}
-            sx={{ width: "100%" }}
-          >
+          <Alert severity={mealInResult.success ? "success" : "error"} sx={{ width: "100%" }}>
             {mealInResult.message}
           </Alert>
         )}
 
-        {/* QR Scanner */}
         <Box sx={{ width: "100%", marginTop: 1 }}>
           <QRScannerComponent
             onScanSuccess={handleScanSuccess}
             scanContextKey={`${currentMeal}|${currentMealGroup}`}
-          // onScanError={handleScanError}
           />
         </Box>
       </Box>

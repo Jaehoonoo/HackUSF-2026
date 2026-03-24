@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 const isApplicationRoute = createRouteMatcher(['/application(.*)']);
@@ -31,7 +32,7 @@ export default clerkMiddleware(async (auth, req) => {
     if (publicMetadata?.role !== 'admin' && metadata?.role !== 'admin') {
       console.log('Access denied - redirecting to home');
       // Redirect to home if not admin
-      return Response.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/', req.url));
     }
     
     console.log('Access granted - user is admin');

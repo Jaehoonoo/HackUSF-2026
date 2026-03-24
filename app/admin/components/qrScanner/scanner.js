@@ -1,26 +1,115 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
-import { Box, Button, CircularProgress } from '@mui/material';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import {
+  Html5Qrcode,
+  Html5QrcodeScannerState,
+  Html5QrcodeSupportedFormats
+} from 'html5-qrcode';
+import { Alert, Box, Button, CircularProgress } from '@mui/material';
 import Image from 'next/image';
 
 const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanContextKey = "" }) => {
+  const scannerElementId = useId().replace(/:/g, '-');
   const [isScanning, setIsScanning] = useState(false);
+  const isScanningRef = useRef(isScanning); // REF to track current scanning state
   const [scanResult, setScanResult] = useState(null);
   const [error, setError] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [lastFrameUrl, setLastFrameUrl] = useState('');
-  const [frameDimensions, setFrameDimensions] = useState({ width: 275, height: 180 });
   const scannerRef = useRef(null);
   const scannerDivRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const isMountedRef = useRef(false);
   const ignoreScanRef = useRef(false);
   const lastScannedRef = useRef(null);
   const scanningInProgressRef = useRef(false);
   const onScanSuccessRef = useRef(onScanSuccess);
   const onScanErrorRef = useRef(onScanError);
+  const resumeTimeoutRef = useRef(null);
+
+  const createScannerInstance = () => {
+    if (!scannerDivRef.current) {
+      return null;
+    }
+
+    return new Html5Qrcode(scannerElementId);
+  };
+
+  const getFriendlyCameraError = (error) => {
+    const message = `${error?.message || error || ''}`.toLowerCase();
+
+    if (
+      message.includes('notallowederror')
+      || message.includes('permission')
+      || message.includes('denied')
+      || message.includes('access denied')
+    ) {
+      return 'Camera access was denied. Enable camera permission for this site in your browser settings, then try again.';
+    }
+
+    if (
+      message.includes('notfounderror')
+      || message.includes('device not found')
+      || message.includes('no camera')
+      || message.includes('could not start video source')
+    ) {
+      return 'No camera was found for this device or browser.';
+    }
+
+    return `Failed to start scanner: ${error?.message || error}`;
+  };
+
+  const clearResumeTimeout = () => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+  };
+
+  const finalizeStoppedState = () => {
+    videoRef.current = null;
+    setIsScanning(false);
+    setIsPaused(false);
+    setLastFrameUrl('');
+  };
+
+  const stopScannerInstance = async () => {
+    clearResumeTimeout();
+    ignoreScanRef.current = true;
+    lastScannedRef.current = null;
+    scanningInProgressRef.current = false;
+
+    if (!scannerRef.current) {
+      return;
+    }
+
+    try {
+      const state = scannerRef.current.getState();
+
+      if (
+        state === Html5QrcodeScannerState.SCANNING
+        || state === Html5QrcodeScannerState.PAUSED
+      ) {
+        await scannerRef.current.stop();
+      }
+    } catch (error) {
+      console.warn('Scanner stop skipped:', error?.message || error);
+    }
+
+    try {
+      scannerRef.current.clear();
+    } catch (error) {
+      console.warn('Scanner clear skipped:', error?.message || error);
+    }
+  };
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    isScanningRef.current = isScanning;
+  }, [isScanning]);
 
   const resetScannerState = () => {
+    clearResumeTimeout();
     setScanResult(null);
     setError(null);
     setIsPaused(false);
@@ -30,51 +119,58 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     scanningInProgressRef.current = false;
 
     if (videoRef.current) {
-      videoRef.current.play();
+      scannerRef.current?.resume();
     }
   };
 
+  const resetAndRecreateScanner = async () => {
+    await stopScannerInstance();
 
-
-  // Initialize scanner when component mounts
-  useEffect(() => {
-    if (scannerDivRef.current) {
-      scannerRef.current = new Html5Qrcode('qr-reader');
+    if (!isMountedRef.current) {
+      return;
     }
 
-    // Create canvas for screenshot
+    scannerRef.current = createScannerInstance();
+    finalizeStoppedState();
+    resetScannerState();
+  };
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    scannerRef.current = createScannerInstance();
+
     canvasRef.current = document.createElement('canvas');
 
-    // Cleanup on unmount
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current.stop().catch(() => { });
-      }
+      isMountedRef.current = false;
+      stopScannerInstance().finally(() => {
+        scannerRef.current = null;
+        videoRef.current = null;
+        canvasRef.current = null;
+      });
     };
-  }, []);
+  }, [scannerElementId]);
 
-
-  // Find and store the video element after scanner starts
   useEffect(() => {
     if (isScanning) {
-      // Find the video element created by Html5Qrcode
       setTimeout(() => {
-        const video = document.querySelector('#qr-reader video');
+        const video = document.querySelector(`#${scannerElementId} video`);
         if (video) {
           videoRef.current = video;
         }
       }, 500);
     }
-  }, [isScanning]);
+  }, [isScanning, scannerElementId]);
 
   useEffect(() => {
     if (resetSignal === 0) return;
-    resetScannerState();
+    resetAndRecreateScanner();
   }, [resetSignal]);
 
   useEffect(() => {
     if (!scanContextKey) return;
-    resetScannerState();
+    resetAndRecreateScanner();
   }, [scanContextKey]);
 
   useEffect(() => {
@@ -85,46 +181,38 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     onScanErrorRef.current = onScanError;
   }, [onScanError]);
 
-  // Function to capture current frame
   const captureFrame = () => {
     if (!videoRef.current || !canvasRef.current) return;
-
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    // Set canvas dimensions to match video
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    setFrameDimensions({ width: video.videoWidth, height: video.videoHeight });
 
-    // Draw current video frame to canvas
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Convert canvas to data URL
     const frameUrl = canvas.toDataURL('image/jpeg');
     setLastFrameUrl(frameUrl);
   };
 
   const isValidScan = (data) => {
-    if (data === null || typeof data !== 'string') {
-      return false;
-    }
-
+    if (data === null || typeof data !== 'string') return false;
     const pattern = /^user_[a-zA-Z0-9]{27}$/;
     return pattern.test(data);
   };
 
   const pauseScanning = () => {
-    // Capture current frame before pausing
     captureFrame();
-
     setIsPaused(true);
     ignoreScanRef.current = true;
 
-    // Pause video playback if available
     if (videoRef.current) {
-      videoRef.current.pause();
+      try {
+        scannerRef.current?.pause(true);
+      } catch (error) {
+        console.warn('Scanner pause skipped:', error?.message || error);
+      }
     }
   };
 
@@ -133,13 +221,20 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     ignoreScanRef.current = false;
     setLastFrameUrl('');
 
-    // Resume video playback if available
     if (videoRef.current) {
-      videoRef.current.play();
+      try {
+        scannerRef.current?.resume();
+      } catch (error) {
+        console.warn('Scanner resume skipped:', error?.message || error);
+      }
     }
   };
 
   const startScanner = () => {
+    if (!scannerRef.current) {
+      scannerRef.current = createScannerInstance();
+    }
+
     if (!scannerRef.current) {
       setError("Scanner not initialized.");
       return;
@@ -154,45 +249,45 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     const config = {
       fps: 10,
       qrbox: { width: 180, height: 180 },
-      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
     };
 
-    const handleSuccess = (decodedText, decodedResult) => {
+    const handleSuccess = async (decodedText) => {
       if (ignoreScanRef.current || scanningInProgressRef.current) return;
+      if (lastScannedRef.current === decodedText) return;
 
-      // Prevent re-processing
-
-      // Prevent repeated calls with the same scanned value
-      if (lastScannedRef.current === decodedText) {
-        return;
-      }
       scanningInProgressRef.current = true;
-
-      console.log("Scan detected:", decodedText);
       pauseScanning();
 
-      if (isValidScan(decodedText)) {
-        lastScannedRef.current = decodedText;
-        setScanResult(decodedText);
-
-        if (onScanSuccessRef.current) {
-          onScanSuccessRef.current(decodedText);
-        }
+      if (!isValidScan(decodedText)) {
+        scanningInProgressRef.current = false;
+        resumeScanning();
+        return;
       }
 
-      // Resume after delay
-      setTimeout(() => {
-        lastScannedRef.current = null; // Allow new scans
-        resumeScanning();
-        scanningInProgressRef.current = false;
-        console.log("Resuming scan after processing");
-      }, 2000); // 2 second pause
+      lastScannedRef.current = decodedText;
+      setScanResult(decodedText);
+
+      try {
+        await Promise.resolve(onScanSuccessRef.current?.(decodedText));
+      } finally {
+        clearResumeTimeout();
+        resumeTimeoutRef.current = setTimeout(() => {
+          if (!isMountedRef.current) {
+            return;
+          }
+
+          resumeScanning();
+          scanningInProgressRef.current = false;
+          resumeTimeoutRef.current = null;
+          console.log("Resuming scan after processing");
+        }, 600);
+      }
     };
 
-
-    const handleError = (error) => {
+    const handleError = (scanError) => {
       if (onScanErrorRef.current) {
-        onScanErrorRef.current(error);
+        onScanErrorRef.current(scanError);
       }
     };
 
@@ -202,25 +297,31 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       handleSuccess,
       handleError
     ).then(() => {
+      if (!isMountedRef.current) {
+        return;
+      }
+
       setIsScanning(true);
       console.log("Scanner started");
     }).catch((err) => {
+      if (!isMountedRef.current) {
+        return;
+      }
+
       console.error("Error starting scanner:", err);
-      setError(`Failed to start scanner: ${err.message || err}`);
+      setError(getFriendlyCameraError(err));
     });
   };
 
   const stopScanner = () => {
     if (scannerRef.current && isScanning) {
-      scannerRef.current.stop().then(() => {
-        setIsScanning(false);
-        setIsPaused(false);
-        setLastFrameUrl('');
-      }).catch((err) => {
-        console.error("Error stopping scanner:", err);
-        // Force update UI state even on error
-        setIsScanning(false);
-        setIsPaused(false);
+      stopScannerInstance().then(() => {
+        if (!isMountedRef.current) {
+          return;
+        }
+
+        scannerRef.current = createScannerInstance();
+        finalizeStoppedState();
       });
     }
   };
@@ -234,7 +335,7 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       height: '100%',
       position: 'relative',
     }}>
-      <div id="qr-reader" ref={scannerDivRef} style={{ width: '275px', position: 'relative' }}>
+      <div id={scannerElementId} ref={scannerDivRef} style={{ width: '275px', position: 'relative' }}>
         {isPaused && lastFrameUrl && (
           <div style={{
             position: 'absolute',
@@ -248,28 +349,18 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            {/* Next.js Image component for optimized image loading */}
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
               <Image
                 src={lastFrameUrl}
                 alt="Paused frame"
                 fill
                 style={{ objectFit: 'cover' }}
-                // Enable base64 data URLs
                 loader={({ src }) => src}
                 unoptimized={true}
                 priority
               />
             </div>
-            <div style={{
-              position: 'absolute',
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+            <div style={{ position: 'absolute', backgroundColor: 'rgba(0,0,0,0.5)', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <CircularProgress color="info" />
             </div>
           </div>
@@ -278,35 +369,22 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
 
       <Box sx={{ mt: 2 }}>
         {!isScanning ? (
-          <Button
-            variant="contained"
-            onClick={startScanner}
-          >
-            Start Scanner
-          </Button>
+          <Button variant="contained" onClick={startScanner}>Start Scanner</Button>
         ) : (
-          <Button
-            variant="contained"
-            onClick={stopScanner}
-            disabled={isPaused}
-          >
-            Stop Scanner
-          </Button>
+          <Button variant="contained" onClick={stopScanner} disabled={isPaused}>Stop Scanner</Button>
         )}
       </Box>
 
       {isPaused && (
-        <div style={{
-          marginTop: '6px',
-          padding: '8px',
-          backgroundColor: '#FEF9C3',
-          border: '1px solid #F59E0B',
-          color: '#92400E',
-          borderRadius: '4px',
-          textAlign: 'center'
-        }}>
+        <div style={{ marginTop: '6px', padding: '8px', backgroundColor: '#FEF9C3', border: '1px solid #F59E0B', color: '#92400E', borderRadius: '4px', textAlign: 'center' }}>
           Processing scan...
         </div>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mt: 2, maxWidth: 420 }}>
+          {error}
+        </Alert>
       )}
     </Box>
   );
