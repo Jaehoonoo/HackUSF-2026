@@ -9,9 +9,9 @@ const APPLICATIONS_CLOSED = true;
 
 export default clerkMiddleware(async (auth, req) => {
   // Block application route if applications are closed
-  if (APPLICATIONS_CLOSED && isApplicationRoute(req)) {
-    return NextResponse.redirect(new URL('/profile', req.url));
-  }
+  // if (APPLICATIONS_CLOSED && isApplicationRoute(req)) {
+  //   return Response.redirect(new URL('/profile', req.url));
+  // }
 
   // Protect admin routes
   if (isAdminRoute(req)) {
