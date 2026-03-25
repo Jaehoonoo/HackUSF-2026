@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { adminDb } from "../../../firebaseadmin";
 import { FieldValue } from "firebase-admin/firestore";
 
-const VALID_EVENT_TYPES = ["workshop", "event", "expo"];
+const VALID_EVENT_TYPES = ["workshop", "activity", "expo"];
 
 export async function POST(request) {
   try {
@@ -42,31 +42,58 @@ export async function POST(request) {
     }
 
     const userData = userSnapshot.data() || {};
+    const hadAttended = Boolean(userData?.attended);
+    const workshops = [...(userData?.attended?.workshops || [])];
+    const activities = [...(userData?.attended?.activities || [])];
+    let expo = userData?.attended?.companyExpo || false;
 
+    if (eventType === "workshop" && workshops.includes(eventId)) {
+      return NextResponse.json({
+        success: true,
+        message: "Already checked in!",
+      });
+    }
 
-    // Default fields on first scan
-    if (!userData.attended) {
-      const firstScanPayload = {
-        attended: {
-          workshops: [],
-          events: [],
-          companyExpo: false,
+    if (eventType === "activity" && activities.includes(eventId)) {
+      return NextResponse.json({
+        success: true,
+        message: "Already checked in!",
+      });
+    }
+
+    if (eventType === "expo" && expo) {
+      return NextResponse.json({
+        success: true,
+        message: "Already checked in!",
+      });
+    }
+
+    if (eventType === "workshop") {
+      workshops.push(eventId);
+    }
+
+    if (eventType === "activity") {
+      activities.push(eventId);
+    }
+
+    if (eventType === "expo") {
+      expo = true;
+    }
+
+    const calculatedPoints = (workshops.length * 50) + (activities.length * 30) + (expo ? 100 : 0);
+
+    if (!hadAttended) {
+      await userRef.set(
+        {
+          attended: {
+            workshops,
+            activities,
+            companyExpo: expo,
+          },
+          totalPoints: calculatedPoints,
         },
-      };
-
-      if (eventType === "workshop") {
-        firstScanPayload.attended.workshops = [eventId];
-      }
-
-      if (eventType === "event") {
-        firstScanPayload.attended.events = [eventId];
-      }
-
-      if (eventType === "expo") {
-        firstScanPayload.attended.companyExpo = true;
-      }
-
-      await userRef.set(firstScanPayload, { merge: true });
+        { merge: true },
+      );
 
       return NextResponse.json({
         success: true,
@@ -74,38 +101,23 @@ export async function POST(request) {
       });
     }
 
+    const updatePayload = {
+      totalPoints: calculatedPoints,
+    };
+
     if (eventType === "workshop") {
-      await userRef.set(
-        {
-          attended: {
-            workshops: FieldValue.arrayUnion(eventId),
-          },
-        },
-        { merge: true },
-      );
+      updatePayload["attended.workshops"] = FieldValue.arrayUnion(eventId);
     }
 
-    if (eventType === "event") {
-      await userRef.set(
-        {
-          attended: {
-            events: FieldValue.arrayUnion(eventId),
-          },
-        },
-        { merge: true },
-      );
+    if (eventType === "activity") {
+      updatePayload["attended.activities"] = FieldValue.arrayUnion(eventId);
     }
 
     if (eventType === "expo") {
-      await userRef.set(
-        {
-          attended: {
-            companyExpo: true,
-          },
-        },
-        { merge: true },
-      );
+      updatePayload["attended.companyExpo"] = true;
     }
+
+    await userRef.update(updatePayload);
 
     return NextResponse.json({
       success: true,
@@ -122,3 +134,7 @@ export async function POST(request) {
     );
   }
 }
+
+// TODO: Keep camera open between scans
+// TODO: Change Events to Activities
+// TODO: Add totalPoints field

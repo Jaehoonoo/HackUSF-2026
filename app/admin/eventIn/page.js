@@ -20,8 +20,8 @@ import QRScannerComponent from "../components/qrScanner/scanner";
 const EVENTS = [
   { id: "react_101", name: "React Workshop", type: "workshop" },
   { id: "nextjs_deep_dive", name: "Next.js Deep Dive", type: "workshop" },
-  { id: "ai_demo_day", name: "AI Demo Day", type: "event" },
-  { id: "founder_panel", name: "Founder Panel", type: "event" },
+  { id: "ai_demo_day", name: "AI Demo Day", type: "activity" },
+  { id: "founder_panel", name: "Founder Panel", type: "activity" },
 ];
 
 export default function EventInPage() {
@@ -70,7 +70,7 @@ export default function EventInPage() {
               <em>Select Type</em>
             </MenuItem>
             <MenuItem value="workshop">Workshop</MenuItem>
-            <MenuItem value="event">Event</MenuItem>
+            <MenuItem value="activity">Activities</MenuItem>
             <MenuItem value="expo">Company Expo</MenuItem>
           </Select>
         </FormControl>
