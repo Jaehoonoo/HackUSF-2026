@@ -13,6 +13,15 @@ async function fetchGetWorkshopsNum(userId) {
   return { ok: res.ok, ...data };
 }
 
+async function fetchGetUserName(userId) {
+  const res = await fetch(
+    `/api/getUserName?userId=${encodeURIComponent(userId)}`,
+    { method: "GET" },
+  );
+  const data = await res.json().catch(() => ({}));
+  return { ok: res.ok, ...data };
+}
+
 function formatShirtReceived(val) {
   if (val === null || val === undefined) return "—";
   if (typeof val === "boolean") return val ? "Yes" : "No";
@@ -21,6 +30,9 @@ function formatShirtReceived(val) {
 
 export default function ShirtValidationPage() {
   const [userId, setUserId] = useState(null);
+  const [scanKey, setScanKey] = useState(0);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
   const [workshopsNum, setWorkshopsNum] = useState(null);
   const [shirtReceived, setShirtReceived] = useState(null);
   const [shirtSubmitting, setShirtSubmitting] = useState(false);
@@ -48,16 +60,66 @@ export default function ShirtValidationPage() {
       return;
     }
 
+    setWorkshopsNum(null);
+    setShirtReceived(null);
+    setShirtFeedback(null);
+
+    let cancelled = false;
     fetchGetWorkshopsNum(userId)
-      .then(applyWorkshopsResponse)
+      .then((data) => {
+        if (cancelled) return;
+        applyWorkshopsResponse(data);
+      })
       .catch(() => {
+        if (cancelled) return;
         setWorkshopsNum(null);
         setShirtReceived(null);
       });
-  }, [userId, applyWorkshopsResponse]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, scanKey, applyWorkshopsResponse]);
+
+  useEffect(() => {
+    if (!userId) {
+      setFirstName(null);
+      setLastName(null);
+      return;
+    }
+
+    setFirstName(null);
+    setLastName(null);
+
+    let cancelled = false;
+    fetchGetUserName(userId)
+      .then((data) => {
+        if (cancelled) return;
+        if (!data.success || !data.data) {
+          setFirstName("");
+          setLastName("");
+          return;
+        }
+        const fn = data.data.firstName ?? "";
+        const ln = data.data.lastName ?? "";
+        setFirstName(fn);
+        setLastName(ln);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFirstName("");
+        setLastName("");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, scanKey]);
 
   const handleScanSuccess = useCallback((scannedUserId) => {
+    setScanKey((k) => k + 1);
     setShirtFeedback(null);
+    setShirtSubmitting(false);
     setUserId(scannedUserId);
   }, []);
 
@@ -109,6 +171,34 @@ export default function ShirtValidationPage() {
         <Typography variant="h4" sx={{ mb: 4, fontWeight: 700 }}>
           Shirt Validation
         </Typography>
+        {userId && (
+          <Box sx={{ mb: 2 }}>
+            {firstName === null && lastName === null ? (
+              <Typography variant="subtitle1">Loading name…</Typography>
+            ) : (
+              <>
+                <Typography variant="subtitle1" component="div">
+                  First name:{" "}
+                  <Box
+                    component="span"
+                    sx={{ fontWeight: firstName ? 600 : 400 }}
+                  >
+                    {firstName || "—"}
+                  </Box>
+                </Typography>
+                <Typography variant="subtitle1" component="div">
+                  Last name:{" "}
+                  <Box
+                    component="span"
+                    sx={{ fontWeight: lastName ? 600 : 400 }}
+                  >
+                    {lastName || "—"}
+                  </Box>
+                </Typography>
+              </>
+            )}
+          </Box>
+        )}
         <Typography variant="body1" sx={{ fontStyle: "italic" }}>
           Workshops Attended:{" "}
           {workshopsNum === null || workshopsNum === undefined
@@ -138,10 +228,15 @@ export default function ShirtValidationPage() {
         <Button
           variant="contained"
           sx={{ mt: 3 }}
-          disabled={!userId || shirtSubmitting || notEnoughWorkshops}
+          disabled={
+            !userId ||
+            shirtSubmitting ||
+            notEnoughWorkshops ||
+            shirtReceived === true
+          }
           onClick={handleShirtReceivedClick}
         >
-          {shirtSubmitting ? "Saving…" : "Shirt received"}
+          {shirtSubmitting ? "Saving…" : "Give Shirt"}
         </Button>
 
         <Box sx={{ width: "100%", mt: 4, textAlign: "left" }}>
