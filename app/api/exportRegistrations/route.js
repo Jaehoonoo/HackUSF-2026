@@ -25,7 +25,7 @@ async function getSheets() {
 
   if (!clientEmail || !privateKey) {
     throw new Error(
-      `Missing credentials — email: ${!!clientEmail}, key: ${!!privateKey}`
+      `Missing credentials — email: ${!!clientEmail}, key: ${!!privateKey}`,
     );
   }
 
@@ -103,13 +103,13 @@ export async function POST() {
         message: `Exported ${users.length} users to Google Sheets.`,
         spreadsheetUrl: `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}`,
       }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      { status: 200, headers: { "Content-Type": "application/json" } },
     );
   } catch (error) {
     console.error("Export error:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
