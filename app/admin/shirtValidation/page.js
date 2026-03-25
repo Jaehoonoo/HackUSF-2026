@@ -98,6 +98,11 @@ export default function ShirtValidationPage() {
     }
   };
 
+  const notEnoughWorkshops =
+    userId != null &&
+    typeof workshopsNum === "number" &&
+    workshopsNum < 2;
+
   return (
     <Container maxWidth="sm" sx={{ py: 6, textAlign: "center" }}>
       <Box>
@@ -114,6 +119,16 @@ export default function ShirtValidationPage() {
           Received Shirt: {formatShirtReceived(shirtReceived)}
         </Typography>
 
+        {notEnoughWorkshops ? (
+          <Alert severity="warning" sx={{ mt: 2, textAlign: "left" }}>
+            Not eligible for receiving T-shirt. Not enough workshops attended.
+          </Alert>
+        ) : userId != null && typeof workshopsNum === "number" ? (
+          <Alert severity="success" sx={{ mt: 2, textAlign: "left" }}>
+            Eligible for receiving T-shirt
+          </Alert>
+        ) : null}
+
         {shirtFeedback && (
           <Alert severity={shirtFeedback.severity} sx={{ mt: 2, textAlign: "left" }}>
             {shirtFeedback.message}
@@ -123,7 +138,7 @@ export default function ShirtValidationPage() {
         <Button
           variant="contained"
           sx={{ mt: 3 }}
-          disabled={!userId || shirtSubmitting}
+          disabled={!userId || shirtSubmitting || notEnoughWorkshops}
           onClick={handleShirtReceivedClick}
         >
           {shirtSubmitting ? "Saving…" : "Shirt received"}
