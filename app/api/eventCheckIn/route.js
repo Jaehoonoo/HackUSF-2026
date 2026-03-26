@@ -43,7 +43,8 @@ export async function POST(request) {
 
     const userData = userSnapshot.data() || {};
     const hadAttended = Boolean(userData?.attended);
-    const workshops = [...(userData?.attended?.workshops || [])];
+    const currentWorkshops = userData?.attended?.workshops || [];
+    const workshops = [...currentWorkshops];
     const activities = [...(userData?.attended?.activities || [])];
     let expo = userData?.attended?.companyExpo || false;
 
@@ -90,6 +91,7 @@ export async function POST(request) {
             activities,
             companyExpo: expo,
           },
+          workshopsNum: eventType === "workshop" ? 1 : 0,
           totalPoints: calculatedPoints,
         },
         { merge: true },
@@ -106,7 +108,9 @@ export async function POST(request) {
     };
 
     if (eventType === "workshop") {
+      const newWorkshopsNum = currentWorkshops.length + 1;
       updatePayload["attended.workshops"] = FieldValue.arrayUnion(eventId);
+      updatePayload.workshopsNum = newWorkshopsNum;
     }
 
     if (eventType === "activity") {
@@ -138,3 +142,4 @@ export async function POST(request) {
 // TODO: Keep camera open between scans
 // TODO: Change Events to Activities
 // TODO: Add totalPoints field
+// TODO: Calc workshopsNums
