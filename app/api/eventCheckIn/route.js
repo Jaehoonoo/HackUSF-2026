@@ -138,3 +138,4 @@ export async function POST(request) {
 // TODO: Keep camera open between scans
 // TODO: Change Events to Activities
 // TODO: Add totalPoints field
+// TODO: Calc workshopsNumm 
