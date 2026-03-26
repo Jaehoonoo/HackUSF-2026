@@ -37,6 +37,7 @@ export default function ShirtValidationPage() {
   const [shirtReceived, setShirtReceived] = useState(null);
   const [shirtSubmitting, setShirtSubmitting] = useState(false);
   const [shirtFeedback, setShirtFeedback] = useState(null);
+  const [isScanned, setIsScanned] = useState(false);
 
   const applyWorkshopsResponse = useCallback((data) => {
     if (!data.success) {
@@ -213,7 +214,9 @@ export default function ShirtValidationPage() {
           <Alert severity="warning" sx={{ mt: 2, textAlign: "left" }}>
             Not eligible for receiving T-shirt. Not enough workshops attended.
           </Alert>
-        ) : userId != null && typeof workshopsNum === "number" ? (
+        ) : userId != null &&
+          typeof workshopsNum === "number" &&
+          shirtReceived !== true ? (
           <Alert severity="success" sx={{ mt: 2, textAlign: "left" }}>
             Eligible for receiving T-shirt
           </Alert>
@@ -224,6 +227,10 @@ export default function ShirtValidationPage() {
             {shirtFeedback.message}
           </Alert>
         )}
+
+        {shirtReceived && (<Alert severity="warning" sx={{ mt: 2, textAlign: "left" }}>
+            Shirt already given out.
+          </Alert>)}
 
         <Button
           variant="contained"
