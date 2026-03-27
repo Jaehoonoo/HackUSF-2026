@@ -6,8 +6,16 @@ import {
 } from 'html5-qrcode';
 import { Alert, Box, Button, CircularProgress } from '@mui/material';
 import Image from 'next/image';
+import swal from 'sweetalert';
 
-const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanContextKey = "" }) => {
+const QRScannerComponent = ({
+  onScanSuccess,
+  onScanError,
+  resetSignal = 0,
+  scanContextKey = "",
+  eventType = "",
+  eventId = "",
+}) => {
   const scannerElementId = useId().replace(/:/g, '-');
   const [isScanning, setIsScanning] = useState(false);
   const isScanningRef = useRef(isScanning); // REF to track current scanning state
@@ -230,6 +238,38 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
     }
   };
 
+  const checkInToEvent = async (userId) => {
+    try {
+      const response = await fetch('/api/eventCheckIn', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, eventType, eventId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.success) {
+        return {
+          success: false,
+          message: data?.message || 'Failed to record event check-in',
+        };
+      }
+
+      return {
+        success: true,
+        message: data?.message || 'Check-in recorded',
+      };
+    } catch (error) {
+      console.error('Event check-in request failed:', error);
+      return {
+        success: false,
+        message: error?.message || 'Failed to record event check-in',
+      };
+    }
+  };
+
   const startScanner = () => {
     if (!scannerRef.current) {
       scannerRef.current = createScannerInstance();
@@ -269,6 +309,20 @@ const QRScannerComponent = ({ onScanSuccess, onScanError, resetSignal = 0, scanC
       setScanResult(decodedText);
 
       try {
+        if (eventType) {
+          if (eventType !== 'expo' && !eventId) {
+            await swal('Missing Event', 'Select an event before scanning attendees.', 'warning');
+          } else {
+            const checkInResult = await checkInToEvent(decodedText);
+
+            if (checkInResult.success) {
+              await swal('Success', checkInResult.message, 'success');
+            } else {
+              await swal('Check-In Failed', checkInResult.message, 'error');
+            }
+          }
+        }
+
         await Promise.resolve(onScanSuccessRef.current?.(decodedText));
       } finally {
         clearResumeTimeout();
