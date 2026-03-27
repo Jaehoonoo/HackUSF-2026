@@ -30,7 +30,6 @@ function formatShirtReceived(val) {
 
 export default function ShirtValidationPage() {
   const [userId, setUserId] = useState(null);
-  const [scanKey, setScanKey] = useState(0);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [workshopsNum, setWorkshopsNum] = useState(null);
@@ -53,76 +52,48 @@ export default function ShirtValidationPage() {
     );
   }, []);
 
-  useEffect(() => {
-    if (!userId) {
+  const fetchUserData = useCallback(
+    async (id) => {
       setWorkshopsNum(null);
       setShirtReceived(null);
       setShirtFeedback(null);
-      return;
-    }
-
-    setWorkshopsNum(null);
-    setShirtReceived(null);
-    setShirtFeedback(null);
-
-    let cancelled = false;
-    fetchGetWorkshopsNum(userId)
-      .then((data) => {
-        if (cancelled) return;
-        applyWorkshopsResponse(data);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setWorkshopsNum(null);
-        setShirtReceived(null);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [userId, scanKey, applyWorkshopsResponse]);
-
-  useEffect(() => {
-    if (!userId) {
       setFirstName(null);
       setLastName(null);
-      return;
-    }
 
-    setFirstName(null);
-    setLastName(null);
+      try {
+        const [workshopsData, nameData] = await Promise.all([
+          fetchGetWorkshopsNum(id),
+          fetchGetUserName(id),
+        ]);
 
-    let cancelled = false;
-    fetchGetUserName(userId)
-      .then((data) => {
-        if (cancelled) return;
-        if (!data.success || !data.data) {
+        applyWorkshopsResponse(workshopsData);
+
+        if (!nameData.success || !nameData.data) {
           setFirstName("");
           setLastName("");
-          return;
+        } else {
+          setFirstName(nameData.data.firstName ?? "");
+          setLastName(nameData.data.lastName ?? "");
         }
-        const fn = data.data.firstName ?? "";
-        const ln = data.data.lastName ?? "";
-        setFirstName(fn);
-        setLastName(ln);
-      })
-      .catch(() => {
-        if (cancelled) return;
+      } catch {
+        setWorkshopsNum(null);
+        setShirtReceived(null);
         setFirstName("");
         setLastName("");
-      });
+      }
+    },
+    [applyWorkshopsResponse],
+  );
 
-    return () => {
-      cancelled = true;
-    };
-  }, [userId, scanKey]);
-
-  const handleScanSuccess = useCallback((scannedUserId) => {
-    setScanKey((k) => k + 1);
-    setShirtFeedback(null);
-    setShirtSubmitting(false);
-    setUserId(scannedUserId);
-  }, []);
+  const handleScanSuccess = useCallback(
+    (scannedUserId) => {
+      setShirtFeedback(null);
+      setShirtSubmitting(false);
+      setUserId(scannedUserId);
+      fetchUserData(scannedUserId);
+    },
+    [fetchUserData],
+  );
 
   const handleShirtReceivedClick = async () => {
     if (!userId) return;
@@ -162,12 +133,13 @@ export default function ShirtValidationPage() {
   };
 
   const notEnoughWorkshops =
-    userId != null &&
-    typeof workshopsNum === "number" &&
-    workshopsNum < 2;
+    userId != null && typeof workshopsNum === "number" && workshopsNum < 2;
 
   return (
     <Container maxWidth="sm" sx={{ py: 6, textAlign: "center" }}>
+      <Button href="/admin" variant="outlined" sx={{ alignSelf: "flex-start" }}>
+        Back to Admin
+      </Button>
       <Box>
         <Typography variant="h4" sx={{ mb: 4, fontWeight: 700 }}>
           Shirt Validation
@@ -223,14 +195,19 @@ export default function ShirtValidationPage() {
         ) : null}
 
         {shirtFeedback && (
-          <Alert severity={shirtFeedback.severity} sx={{ mt: 2, textAlign: "left" }}>
+          <Alert
+            severity={shirtFeedback.severity}
+            sx={{ mt: 2, textAlign: "left" }}
+          >
             {shirtFeedback.message}
           </Alert>
         )}
 
-        {shirtReceived && (<Alert severity="warning" sx={{ mt: 2, textAlign: "left" }}>
+        {shirtReceived && (
+          <Alert severity="warning" sx={{ mt: 2, textAlign: "left" }}>
             Shirt already given out.
-          </Alert>)}
+          </Alert>
+        )}
 
         <Button
           variant="contained"

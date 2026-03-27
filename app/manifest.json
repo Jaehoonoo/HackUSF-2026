@@ -2,7 +2,7 @@
   "name": "HackUSF 2026",
   "short_name": "HackUSF",
   "description": "Join HackUSF 2026 - University of South Florida's premier hackathon",
-  "start_url": "/",
+  "start_url": "/admin",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#385BB2",

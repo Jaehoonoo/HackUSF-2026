@@ -13,7 +13,7 @@ export default function AdminDashboardHome() {
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {/* Button to CheckIn */}
-        <Link href="/admin/checkIn">
+        <Link href="/admin/hackCheckIn">
           <Button variant="contained" size="large">
             Check In
           </Button>
@@ -33,7 +33,7 @@ export default function AdminDashboardHome() {
           </Button>
         </Link>
 
-         {/* Button to T-Shirt Validation */}
+        {/* Button to T-Shirt Validation */}
         <Link href="/admin/shirtValidation">
           <Button variant="contained" size="large">
             Shirt Validation
