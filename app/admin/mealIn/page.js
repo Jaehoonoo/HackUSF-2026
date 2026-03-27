@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
   Alert,
+  Button,
 } from "@mui/material";
 import QRScannerComponent from "../components/qrScanner/scanner";
 
@@ -25,11 +26,12 @@ export default function MealPage() {
     try {
       const response = await fetch(`/api/mealCheckIn`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: userId,
           currentMeal: currentMeal,
-          currentMealGroup: currentMealGroup
-        })
+          currentMealGroup: currentMealGroup,
+        }),
       });
       return await response.json();
     } catch (error) {
@@ -38,23 +40,27 @@ export default function MealPage() {
     }
   };
 
-  const handleScanSuccess = async (userId) => {
-    if (!currentMeal || !currentMealGroup) {
-      setMealInResult({
-        success: false,
-        message: "Please select both meal type and location group before scanning"
-      });
-      return;
-    }
+  const handleScanSuccess = useCallback(
+    async (userId) => {
+      if (!currentMeal || !currentMealGroup) {
+        setMealInResult({
+          success: false,
+          message:
+            "Please select both meal type and location group before scanning",
+        });
+        return;
+      }
 
-    setIsProcessing(true);
-    setMealInResult(null);
+      setIsProcessing(true);
+      setMealInResult(null);
 
-    const result = await markAsMealed(userId, currentMeal, currentMealGroup);
-    setMealInResult(result);
+      const result = await markAsMealed(userId, currentMeal, currentMealGroup);
+      setMealInResult(result);
 
-    setIsProcessing(false);
-  };
+      setIsProcessing(false);
+    },
+    [currentMeal, currentMealGroup],
+  );
 
   const handleMealChange = (event) => {
     setCurrentMeal(event.target.value);
@@ -65,28 +71,50 @@ export default function MealPage() {
   };
 
   return (
-    <Box height="100%" sx={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: 2,
-      pb: 10
-    }}>
-      <Box mb={1.5} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <Box
+      height="100%"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 2,
+        pb: 10,
+      }}
+    >
+      <Button href="/admin" variant="outlined" sx={{ alignSelf: "flex-start" }}>
+        Back to Admin
+      </Button>
+      <Box
+        mb={1.5}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography variant="h4">Meal Check In Page</Typography>
       </Box>
 
-      <Box sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
-        maxWidth: "500px",
-        gap: 1.2
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
+          maxWidth: "500px",
+          gap: 1.2,
+        }}
+      >
         {/* Dropdowns */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            width: "100%",
+          }}
+        >
           <FormControl fullWidth>
             <InputLabel id="meal-type-label">Meal</InputLabel>
             <Select
@@ -133,11 +161,25 @@ export default function MealPage() {
           </Alert>
         )}
 
-        {mealInResult && (
-          <Alert severity={mealInResult.success ? "success" : "error"} sx={{ width: "100%" }}>
-            {mealInResult.message}
-          </Alert>
-        )}
+        {mealInResult &&
+          (() => {
+            const msg =
+              mealInResult.message || mealInResult.error || "Unknown error";
+            let severity = "error";
+            if (mealInResult.success) {
+              severity = "success";
+            } else if (
+              msg.toLowerCase().includes("already scanned") ||
+              msg.toLowerCase().includes("meal group")
+            ) {
+              severity = "warning";
+            }
+            return (
+              <Alert severity={severity} sx={{ width: "100%" }}>
+                {msg}
+              </Alert>
+            );
+          })()}
 
         <Box sx={{ width: "100%", marginTop: 1 }}>
           <QRScannerComponent

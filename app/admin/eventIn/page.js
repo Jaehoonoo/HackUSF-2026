@@ -18,10 +18,29 @@ import QRScannerComponent from "../components/qrScanner/scanner";
 
 // TODO: Replace with real event info
 const EVENTS = [
-  { id: "react_101", name: "React Workshop", type: "workshop" },
-  { id: "nextjs_deep_dive", name: "Next.js Deep Dive", type: "workshop" },
-  { id: "ai_demo_day", name: "AI Demo Day", type: "activity" },
-  { id: "founder_panel", name: "Founder Panel", type: "activity" },
+  {
+    id: "google_cloud_workshop",
+    name: "Google Cloud Workshop",
+    type: "workshop",
+  },
+  {
+    id: "github_copilot_hacking",
+    name: "Hacking with Github Copilot Workshop",
+    type: "workshop",
+  },
+  {
+    id: "intro_to_google_ai_studio",
+    name: "Intro to Google AI Studio Workshop",
+    type: "workshop",
+  },
+  {
+    id: "next_era_energy_workshop",
+    name: "NextEra Energy Workshop",
+    type: "workshop",
+  },
+  { id: "opening_ceremony", name: "Opening Ceremony", type: "activity" },
+  { id: "team_formation", name: "Team Formation", type: "activity" },
+  { id: "closing_ceremony", name: "Closing Ceremony", type: "activity" },
 ];
 
 export default function EventInPage() {
@@ -43,10 +62,19 @@ export default function EventInPage() {
     setEventId("");
   };
 
+  // Use a key so the scanner fully remounts when event selection changes,
+  // preventing stale lastScannedRef from blocking new scans after switching events
+  const scannerKey = `${eventType}:${eventId}`;
+
   return (
     <Container maxWidth="sm" sx={{ py: 6 }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Button component={Link} href="/admin" variant="outlined" sx={{ alignSelf: "flex-start" }}>
+        <Button
+          component={Link}
+          href="/admin"
+          variant="outlined"
+          sx={{ alignSelf: "flex-start" }}
+        >
           Back to Admin
         </Button>
 
@@ -105,9 +133,10 @@ export default function EventInPage() {
         {shouldRenderScanner && (
           <Box sx={{ mt: 1 }}>
             <QRScannerComponent
+              key={scannerKey}
               eventType={eventType}
               eventId={eventId}
-              scanContextKey={`${eventType}:${eventId}`}
+              scanContextKey={scannerKey}
             />
           </Box>
         )}

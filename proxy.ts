@@ -18,16 +18,16 @@ export default clerkMiddleware(async (auth, req) => {
     const { sessionClaims } = await auth();
     
     // Debug: Log the session claims to see what we're getting
-    console.log('Session Claims:', JSON.stringify(sessionClaims, null, 2));
-    console.log('Public Metadata:', sessionClaims?.publicMetadata);
-    console.log('Metadata:', sessionClaims?.metadata);
+    // console.log('Session Claims:', JSON.stringify(sessionClaims, null, 2));
+    // console.log('Public Metadata:', sessionClaims?.publicMetadata);
+    // console.log('Metadata:', sessionClaims?.metadata);
     
     // Check if user has admin role in public metadata (not just metadata)
     const publicMetadata = sessionClaims?.publicMetadata as { role?: string } | undefined;
     const metadata = sessionClaims?.metadata as { role?: string } | undefined;
     
-    console.log('Admin check - publicMetadata.role:', publicMetadata?.role);
-    console.log('Admin check - metadata.role:', metadata?.role);
+    // console.log('Admin check - publicMetadata.role:', publicMetadata?.role);
+    // console.log('Admin check - metadata.role:', metadata?.role);
     
     if (publicMetadata?.role !== 'admin' && metadata?.role !== 'admin') {
       console.log('Access denied - redirecting to home');
@@ -35,7 +35,7 @@ export default clerkMiddleware(async (auth, req) => {
       return NextResponse.redirect(new URL('/', req.url));
     }
     
-    console.log('Access granted - user is admin');
+    // console.log('Access granted - user is admin');
   }
 });
 

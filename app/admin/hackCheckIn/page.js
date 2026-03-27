@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Alert, Box, Typography } from "@mui/material";
+import { Alert, Box, Typography, Button } from "@mui/material";
 import QRScannerComponent from "../components/qrScanner/scanner";
 
 const parseUserIdFromQrPayload = (payload) => {
@@ -74,9 +74,16 @@ export default function HackCheckInPage() {
         pb: 10,
       }}
     >
+      <Button href="/admin" variant="outlined" sx={{ alignSelf: "flex-start" }}>
+        Back to Admin
+      </Button>
       <Box
         mb={1.5}
-        sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
         <Typography variant="h4">Hackathon Check In Page</Typography>
       </Box>
