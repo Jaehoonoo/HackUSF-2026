@@ -17,8 +17,6 @@ import {
   Chip,
   CircularProgress,
   TextField,
-  Tabs,
-  Tab,
 } from "@mui/material";
 
 export default function AdminDashboard() {
@@ -27,19 +25,9 @@ export default function AdminDashboard() {
   const [selectedUsers, setSelectedUsers] = useState(new Set());
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [tabValue, setTabValue] = useState(0);
 
-  const STATUS_TABS = [
-    { label: "All", value: "all" },
-    { label: "Submitted", value: "submitted" },
-    { label: "Accepted", value: "accepted" },
-    { label: "Waitlisted", value: "waitlisted" },
-    { label: "Rejected", value: "rejected" },
-  ];
-
-  // 1. Load all users on mount
+  // 1. Load submitted users once on mount
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -51,12 +39,9 @@ export default function AdminDashboard() {
       const response = await res.json();
 
       if (response.success) {
-        // Filter to only show users with a non-empty status
-        const allUsers = (response.data.allUsers || []).filter(
-          (user) => user.status && user.status.trim() !== "",
-        );
-        setUsers(allUsers);
-        setFilteredUsers(allUsers);
+        const submittedUsers = response.data.submittedUsers || [];
+        setUsers(submittedUsers);
+        setFilteredUsers(submittedUsers);
       }
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -66,55 +51,24 @@ export default function AdminDashboard() {
     }
   };
 
-  // 2. Filter users based on status and search
+  // 2. Filter users based on search query
   useEffect(() => {
-    let filtered = users;
-
-    // Filter by status tab
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((u) => {
-        if (statusFilter === "submitted") {
-          return (
-            !u.status || u.status === "submitted" || u.status === "in_review"
-          );
-        }
-        return u.status === statusFilter;
-      });
+    if (!searchQuery) {
+      setFilteredUsers(users);
+      return;
     }
-
-    // Filter by search query
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
+    const q = searchQuery.toLowerCase();
+    setFilteredUsers(
+      users.filter(
         (u) =>
-          u.firstName?.toLowerCase().includes(query) ||
-          u.lastName?.toLowerCase().includes(query) ||
-          u.email?.toLowerCase().includes(query) ||
-          u.school?.toLowerCase().includes(query) ||
-          u.otherSchool?.toLowerCase().includes(query),
-      );
-    }
-
-    setFilteredUsers(filtered);
-  }, [statusFilter, searchQuery, users]);
-
-  // Get count for each status tab
-  const getTabCount = (status) => {
-    if (status === "all") return users.length;
-    if (status === "submitted") {
-      return users.filter(
-        (u) =>
-          !u.status || u.status === "submitted" || u.status === "in_review",
-      ).length;
-    }
-    return users.filter((u) => u.status === status).length;
-  };
-
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-    setStatusFilter(STATUS_TABS[newValue].value);
-    setSelectedUsers(new Set());
-  };
+          u.firstName?.toLowerCase().includes(q) ||
+          u.lastName?.toLowerCase().includes(q) ||
+          u.email?.toLowerCase().includes(q) ||
+          u.school?.toLowerCase().includes(q) ||
+          u.otherSchool?.toLowerCase().includes(q),
+      ),
+    );
+  }, [searchQuery, users]);
 
   // 3. Handle user selection (checkbox)
   const toggleUser = (userId) => {
@@ -212,44 +166,27 @@ export default function AdminDashboard() {
         </Box>
       ) : (
         <>
-          {/* Status Tabs */}
+          {/* Submitted Users Panel */}
           <Paper sx={{ mb: 3 }}>
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              variant="scrollable"
-              scrollButtons="auto"
+            <Box
               sx={{
+                p: 3,
                 borderBottom: 1,
                 borderColor: "divider",
-                "& .MuiTab-root": { textTransform: "none", fontWeight: 600 },
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
               }}
             >
-              {STATUS_TABS.map((tab) => (
-                <Tab
-                  key={tab.value}
-                  label={
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      {tab.label}
-                      <Chip
-                        label={getTabCount(tab.value)}
-                        size="small"
-                        color={
-                          tab.value === "accepted"
-                            ? "success"
-                            : tab.value === "rejected"
-                              ? "error"
-                              : tab.value === "waitlisted"
-                                ? "warning"
-                                : "default"
-                        }
-                        sx={{ height: 22, fontSize: "0.75rem" }}
-                      />
-                    </Box>
-                  }
-                />
-              ))}
-            </Tabs>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                Submitted
+              </Typography>
+              <Chip
+                label={users.length}
+                size="small"
+                sx={{ height: 22, fontSize: "0.75rem" }}
+              />
+            </Box>
 
             <Box sx={{ p: 3 }}>
               <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
@@ -383,7 +320,7 @@ export default function AdminDashboard() {
           </TableContainer>
 
           <Typography variant="body2" sx={{ mt: 2, color: "text.secondary" }}>
-            Showing {filteredUsers.length} of {users.length} total users
+            Showing {filteredUsers.length} of {users.length} submitted users
           </Typography>
         </>
       )}
