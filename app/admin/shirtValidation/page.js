@@ -133,7 +133,7 @@ export default function ShirtValidationPage() {
   };
 
   const notEnoughWorkshops =
-    userId != null && typeof workshopsNum === "number" && workshopsNum < 2;
+    userId != null && typeof workshopsNum === "number" && workshopsNum < 1;
 
   return (
     <Container maxWidth="sm" sx={{ py: 6, textAlign: "center" }}>

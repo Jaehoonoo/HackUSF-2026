@@ -25,6 +25,7 @@ export default function AdminDashboard() {
   const [selectedUsers, setSelectedUsers] = useState(new Set());
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   // 1. Load submitted users once on mount
@@ -154,6 +155,31 @@ export default function AdminDashboard() {
     }
   };
 
+  // 7. Export all applied users to Google Sheets
+  const handleExportToSheets = async () => {
+    const confirmed = confirm(
+      "This will export all applied users to Google Sheets. Continue?",
+    );
+    if (!confirmed) return;
+
+    setExportLoading(true);
+    try {
+      const res = await fetch("/api/exportToSheets", { method: "POST" });
+      const result = await res.json();
+
+      if (res.ok) {
+        alert(`✅ ${result.message}`);
+      } else {
+        alert(`❌ Export failed: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Export error:", error);
+      alert("An error occurred while exporting to Google Sheets");
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
@@ -237,6 +263,16 @@ export default function AdminDashboard() {
                     Clear Selection
                   </Button>
                 )}
+
+                <Button
+                  variant="contained"
+                  color="info"
+                  onClick={handleExportToSheets}
+                  disabled={exportLoading}
+                  sx={{ ml: "auto" }}
+                >
+                  {exportLoading ? "Exporting..." : "Export to Google Sheets"}
+                </Button>
               </Box>
             </Box>
           </Paper>
