@@ -7,16 +7,17 @@ import ProfileHeader from "./components/ProfileHeader";
 import { SiDiscord } from "react-icons/si";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page() {
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isLoaded } = useAuth();
   const router = useRouter();
 
-  if (isLoaded) {
-    if (!isSignedIn) {
-      router.push("/sign-in");
+  useEffect(() => {
+    if (isLoaded) {
+      router.push("/");
     }
-  }
+  }, [isLoaded, router]);
 
   return (
     <Box

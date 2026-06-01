@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,13 +11,11 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { SignedOut, SignedIn } from "@clerk/nextjs";
 import { FaDiscord } from "react-icons/fa";
 
 const sections = ["About", "Tracks", "Sponsors/Partners", "FAQs"];
 
 function Header() {
-  const router = useRouter();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -41,41 +38,6 @@ function Header() {
       const y = element.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
-  };
-
-  const handleLoginClick = () => {
-    handleCloseNavMenu();
-    router.push("/sign-in");
-  };
-
-  const handleProfileClick = () => {
-    handleCloseNavMenu();
-    router.push("/profile");
-  };
-
-  const applyButtonSx = {
-    pl: 3,
-    pr: 3,
-    textTransform: "none",
-    color: "white",
-    fontFamily: "var(--font-cinzel-bold)",
-    fontWeight: 700,
-    fontSize: {
-      xs: "0.9rem",
-      sm: "1.05rem",
-      md: "1.2rem",
-      lg: "1.3rem",
-    },
-    borderRadius: "20px",
-    boxShadow: "5px 5px 0px black",
-    border: "3px solid black",
-    backgroundColor: "#a63a36",
-    transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-    "&:hover": {
-      transform: "translate(3px, 3px)",
-      boxShadow: "0px 0px 0px black",
-      border: "3px solid black",
-    },
   };
 
   return (
@@ -259,45 +221,7 @@ function Header() {
                   </Typography>
                 </MenuItem>
               ))}
-              <Box
-                sx={{
-                  p: 1,
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 1,
-                  mr: 0.8,
-                }}
-              >
-                <SignedIn>
-                  <Button
-                    disableRipple
-                    onClick={() => {
-                      handleCloseNavMenu();
-                      router.push("/profile");
-                    }}
-                    sx={{
-                      ...applyButtonSx,
-                      width: "100%",
-                      color: "#fad37a",
-                    }}
-                  >
-                    Profile
-                  </Button>
-                </SignedIn>
-                <SignedOut>
-                  <Button
-                    disableRipple
-                    onClick={handleLoginClick}
-                    sx={{
-                      ...applyButtonSx,
-                      width: "100%",
-                      color: "#fad37a",
-                    }}
-                  >
-                    Login
-                  </Button>
-                </SignedOut>
-              </Box>
+
             </Menu>
           </Box>
           {/* <Box
@@ -405,34 +329,7 @@ function Header() {
                 {section}
               </Button>
             ))}
-            <SignedIn>
-              <Button
-                disableRipple
-                onClick={handleProfileClick}
-                sx={{
-                  ...applyButtonSx,
-                  my: 2,
-                  ml: 1,
-                  color: "#fad37a",
-                }}
-              >
-                Profile
-              </Button>
-            </SignedIn>
-            <SignedOut>
-              <Button
-                disableRipple
-                onClick={handleLoginClick}
-                sx={{
-                  ...applyButtonSx,
-                  my: 2,
-                  ml: 1,
-                  color: "#fad37a",
-                }}
-              >
-                Login
-              </Button>
-            </SignedOut>
+
             {/* MLH Trust Badge - Desktop */}
             <Box
               component="a"
