@@ -127,29 +127,23 @@ export default function Hero() {
         </Box>
         <Button
           variant="outlined"
+          disabled
           sx={{
             width: "clamp(150px, 20vw, 300px)",
             textTransform: "none",
-            color: "#fad37a",
+            color: "#fad37a !important",
             fontFamily: "var(--font-cinzel-bold)",
             fontWeight: 700,
             fontSize: "clamp(1rem, 2vw, 1.5rem)",
             borderRadius: "18px",
             boxShadow: "5px 5px 0px black",
-            border: "3px solid black",
-            backgroundColor: "#a63a36",
-            transition:
-              "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-
-            "&:hover": {
-              transform: "translate(3px, 3px)",
-              boxShadow: "0px 0px 0px black",
-              border: "3px solid black",
-            },
+            border: "3px solid black !important",
+            backgroundColor: "#a63a36 !important",
+            opacity: 0.6,
+            cursor: "default",
           }}
-          onClick={handleClick}
         >
-          Apply Now
+          See you next year!
         </Button>
       </Box>
       <Box
